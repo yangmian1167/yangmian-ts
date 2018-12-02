@@ -50,7 +50,7 @@ end
 
 
 t = {}
-t['tps存入我的账户'] = { 0xfbfbfb, "-64|450|0xe4484a,-66|605|0xf7585a,-24|811|0xed1a03,-13|863|0xffffff", 90, 504, 48, 594, 976}
+t['tips提现红包'] = {  0xc78a42, "78|-5|0xfed19f,-65|-222|0xee0000,161|-93|0xff675b", 90, 246, 532, 565, 862}
 t['主界面首页'] = { 0xfc5528, "11|22|0xf8431d,9|49|0xfebea8,114|11|0xd8d8d8,501|20|0xd8d8d8,497|56|0x999999", 90, 24, 1048, 615, 1138}
 t['主界面点我的'] = { 0xd8d8d8, "-10|10|0xd8d8d8,19|25|0xe1e1e1,8|29|0xfcfcfc,-15|49|0xaeaeae,19|64|0xc0c0c0", 90, 549, 1053, 600, 1132}
 t['主界面我的界面'] = { 0xfb4d23, "6|19|0xf9461e,-17|53|0xff7546,-142|25|0xd8d8d8,-149|53|0x9a9a9a", 90, 421, 1054, 613, 1133}
@@ -103,13 +103,13 @@ function reptjj()
 					
 				elseif 提交 then
 					if d("手机号登录界面_点击登录",true) then
-						up("淘集集复购","正在登陆")
-						提交 = false
-						登录成功 = true
 					end
+					up("淘集集复购","正在登陆")
+					提交 = false
+					登录成功 = true
 			
 				end
-			elseif d("tps存入我的账户",true) then
+			elseif d("tips提现红包",true) then
 			elseif d("主界面点我的",true) then
 			elseif d("登录",true) then
 			elseif d("选择其他方式登录",true) then

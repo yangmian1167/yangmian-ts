@@ -1,7 +1,7 @@
 require("TSLib")
 require("tsp")
 require("AWZ")
-
+--[[]]
 appbid = "com.baihe.online"
 
 
@@ -29,6 +29,8 @@ function login()
 	local timeline = os.time()
 	local timeout = math.random(150,180)
 	local logintimes = 0
+	local 完成数量 = 1
+	local 任务数量 = 100
 	while os.time() - timeline < timeout do
 		if active(appbid,5) then
 			if d('注册界面点登录',true) then
@@ -39,23 +41,30 @@ function login()
 				input(bhdata.data.password)
 				d('点击登录',true)
 				if d('封号不存在',true) then
-					return false
+					return true
 				elseif d('点击登录',true) then
 					logintimes = logintimes + 1
 					if logintimes > 20 then
-						return false
+						return true
 					end
 				end
 			elseif d('登录成功_本地相册') then
-				delay(2)
-				return true
+				if 任务数量 == 完成数量 then
+					toast("任务量完成")
+					lua_exit()
+					delay(1)
+				else
+					完成数量 = 完成数量 + 1
+					delay(2)
+					return true
+				end	
 			end	
 		end	
 		delay(1)
 	end
 	
 end
-
+--[[]]
 while true do
 	bhdata = (getId())
 	if bhdata ~= nil then
@@ -75,13 +84,7 @@ while true do
 		end
 	end
 end
-
-
-
-
-
-
-
+--]]--
 
 
 
