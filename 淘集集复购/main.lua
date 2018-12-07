@@ -37,7 +37,7 @@ end
 ---------------------------------全局变量-------------------------
 
 
-
+------上传数据到idfa888服务器------
 function idfaupdate()
 	local url = "http://idfa888.com/Public/idfa/?service=idfa.idfa"
 	local tb={}
@@ -51,6 +51,29 @@ function idfaupdate()
 	tb.account = var.account or var.awz_name
 	return post(url,tb)
 end
+
+-------向wenfree服务器获取随机地址------
+
+function wenfreegetinf()
+	local url = "http://wenfree.cn/api/Public/tjj/?service=Address.getOne"
+	local tc={}
+	tc.id = id
+	tc.name = address_name
+	tc.phone = address_phone
+	tc.sheng = address_sheng
+	tc.qu = address_qu
+	tc.ads = address_area
+	tc.note = note
+	tc.whos = whos
+
+	return post(url,tc)
+end
+
+
+
+
+
+
 
 phoneKey={
 	{114,756,0x000000}, 
@@ -77,6 +100,7 @@ end
 
 
 --------------------------小函数--------------------------
+
 
 function TIPs()
 	if d('tip_选择规格')then
@@ -216,7 +240,7 @@ while (true) do
 		delay(1)
 	end
 	vpnx()
---	delay(math.random(80,180))
+--	delay(math.random(120,240))
 end
 
 
@@ -224,7 +248,7 @@ end
 
 
 
-
+--print_r(wenfreegetinf())
 
 
 
