@@ -55,7 +55,7 @@ function orcText(t)
 	end
 	res['pwd']=res.ka1mima1..res.ka1mima2
 	
-	var.name = "畅享家卡密"
+	var.name = "京东E卡"
 	var.idfa = res.ka1
 	var.password = res.pwd
 	var.phone = var.phone
@@ -71,9 +71,9 @@ function orcText_(t)
 		res[k]=text
 		log(text)
 	end
-	var.name = "畅享家卡密1000"
-	var.idfa = res.ka
-	var.password = res.pwd
+	var.name = "积分卡券"
+	var.idfa = res_.ka
+	var.password = res_.pwd
 	var.phone = var.phone
 	idfaupdate()
 	keepScreen(false)
@@ -82,13 +82,13 @@ end
 
 local res={}
 ------------82元扫描-------------
-res.ka1={114, 608,407, 634}
-res.ka1mima1={475, 605,707, 638}
-res.ka1mima2={57, 642,116, 672}
+res.ka1={134, 530,462, 560}
+res.ka1mima1={532, 530,701, 563}
+res.ka1mima2={75, 571,241, 602}
 ------------21元扫描-------------
 res_={}
-res_.ka={115, 607,385, 634}
-res_.pwd={438, 606,525, 634}
+res_.ka={134, 530,417, 561}
+res_.pwd={489, 530,585, 562}
 
 ------------------上传idfa888----------------------
 function idfaupdate()
@@ -127,7 +127,8 @@ var = {}
 
 ---------------主要参数---------------------
 
-url = 'https://m.changyoyo.com/partner/index.htm#shareTo?inviteCode=224b0406e0761ddbae80458ea5c116d1'
+--url = 'https://m.changyoyo.com/partner/index.htm#shareTo?inviteCode=224b0406e0761ddbae80458ea5c116d1'
+url = 'https://m.changyoyo.com/partner/index.htm#shareTo?inviteCode=8cd4d82d628ce0f3b3a9b5129a9db76a'
 safaribid = 'com.apple.mobilesafari'
 zhifubao = 'com.alipay.iphoneclient'
 
@@ -161,14 +162,22 @@ t['我的票券界面'] = { 0xbfbfbf, "26|0|0x101010,2|23|0x000000,115|24|0x6565
 	t['我的票券界面_京东E卡30元']={ 0xe5d09d, "-456|-61|0xf7a6a1,-465|-36|0xf7a09b,-321|-116|0x333333,-174|-105|0x333333,-8|-107|0xd5d5d5", 90, 27, 183, 692, 962 } --多点找色
 	t['我的票券界面_京东e卡100元']={ 0x333333, "-302|28|0xca1729,-257|-35|0xc71325,-249|-8|0xcdc8ca,-224|35|0xe00824", 90, 71, 683, 553, 828 } --多点找色
 
-t['卡券详情界面'] = { 0x626262, "-12|12|0x000000,-2|29|0xdfdfdf,110|3|0x656565", 90, 306, 146, 444, 198}
-	t['卡券详情界面_京东e卡100元']={ 0xc71325, "-42|37|0xc81425,-3|84|0xc81425,-5|134|0x000000", 90, 284, 295, 504, 511 } --多点找色
-	t['卡券详情界面_1000积分']={ 0x1aa2ff, "11|16|0x1aa2ff,45|54|0x1aa2ff,19|116|0x000000", 90, 280, 315, 610, 526 } --多点找色
+
+t['查看券码']={ 0x2d2511, "62|-15|0xdfb856,-78|18|0xdfb856,-576|-163|0xea5b14,-483|-171|0xec5c15", 90, 36, 346, 734, 634 } --多点找色
+
+t['卡券包界面']={ 0xdbdbdb, "-12|13|0xa9a9a9,0|30|0xbcbcbc,78|29|0x767676,78|4|0x000000", 90, 322, 148, 426, 195 } --多点找色
+	t['卡券包界面_电子券']={ 0x999999, "0|17|0x9d9d9d,12|23|0xc9c9c9,80|23|0xb2b2b2,84|-5|0xa6a6a6", 90, 509, 226, 620, 273 } --多点找色
+	t['卡券包界面_京东e卡100元']={ 0x5e5e5e, "-265|-11|0xc71325,-239|14|0xcac1cb,-210|58|0xc81425,-242|73|0xc81326", 90, 70, 352, 636, 469 } --多点找色
+	t['卡券包界面_1000积分']={ 0x333333, "-365|6|0x1aa2ff,-329|-15|0x1aa2ff,-287|31|0x1aa2ff,-330|59|0x1aa2ff", 90, 68, 546, 612, 675 } --多点找色
+	
+t['卡券详情界面'] ={ 0x41454d, "-12|13|0x6c7076,1|29|0xffffff,112|2|0x6b6e74,110|29|0x8d8f94,109|29|0xd4d5d6", 90, 303, 147, 444, 192 } --多点找色
+	t['卡券详情界面_京东e卡100元']={ 0x000000, "0|-62|0xc81426,-22|-102|0xcf111d,41|-90|0xc71325,21|-74|0xcc9291", 90, 294, 272, 529, 419 } --多点找色
+	t['卡券详情界面_1000积分']={ 0x161616, "9|-50|0x1aa2ff,-28|-94|0x1aa2ff,9|-126|0x1aa2ff,49|-87|0x1aa2ff", 90, 285, 238, 457, 427 } --多点找色
 
 t['京东E卡30元立即购买']={ 0xffffff, "194|-30|0xd3b669,-123|13|0xe1cd99,-467|-6|0xd9ba6e,-459|27|0x6d6d6d", 90, 26, 1154, 707, 1328 } --多点找色
 t['京东E卡30元确认下单']={ 0x000000, "-5|0|0xa89152,-251|22|0xfde596,324|-17|0xd7ac45,-104|-76|0xd5b96d,249|-83|0xc4c0ab", 90, 70, 1062, 667, 1207 } --多点找色
 
-t['收银台界面_支付成功返回首页']={ 0xa8a8a8, "-255|-174|0xd3b669,-349|-176|0xd3b669,-451|-180|0xeccf84,-450|-141|0xf6be10,-385|0|0xffffff", 90, 98, 192, 661, 491 } --多点找色
+t['收银台界面_支付成功查看订单']={ 0x505050, "260|-105|0x000000,217|-291|0x000000,-62|-177|0xebce84,-60|-133|0xf5ba10", 90, 111, 118, 489, 497 } --多点找色
 
 t['首页_钱包']={ 0x393939, "-184|-15|0x52410b,-180|-17|0x55430b,-171|20|0xffc922,-462|-5|0x2d2c2c,6|35|0xa7a7a7", 90, 52, 1156, 711, 1330 } --多点找色
 t['钱包_我的票券']={ 0x333333, "259|497|0xffc922,269|576|0xffc922,427|568|0x232222,611|16|0x999999", 90, 77, 587, 722, 1330 } --多点找色
@@ -240,9 +249,9 @@ function rec()
 					else	
 						movet(407,1065,436,867,2)
 					end	
-				elseif 京东e卡100元key and d("我的票券界面_京东e卡100元",true) then
-				elseif d("我的票券界面_1000积分",true) then
-				elseif d("我的票券界面_电子券",true) then
+--				elseif 京东e卡100元key and d("我的票券界面_京东e卡100元",true) then
+--				elseif d("我的票券界面_1000积分",true) then
+--				elseif d("我的票券界面_电子券",true) then
 				
 				end
 			elseif d("京东E卡30元立即购买",true) then
@@ -252,13 +261,22 @@ function rec()
 				if d("卡券详情界面_京东e卡100元") then
 					orcText(res)
 					snapAndSave()
+					京东e卡100元key = false
 					d("返回箭头",true)
 				elseif d("卡券详情界面_1000积分") then
 					orcText_(res_)
 					snapAndSave()
+					back()
 					return true
 				end
-			elseif d("收银台界面_支付成功返回首页",true) then
+			elseif d("查看券码",true) then
+			elseif d("卡券包界面") then
+				if d("卡券包界面_电子券",true) then
+				elseif 京东e卡100元key and d("卡券包界面_京东e卡100元",true) then
+				elseif d("卡券包界面_1000积分",true) then
+				
+				end
+			elseif d("收银台界面_支付成功查看订单",true) then
 				京东30元key = false
 			elseif d("首页_钱包",true) then
 			elseif d("钱包_我的票券",true) then
@@ -291,15 +309,17 @@ function rec()
 			else
 				d("tips_打开",true)
 			end
-			delay(1)
+			
 		else
 			active(safaribid,5)
 		end	
+		delay(2)
 	end
 end	
 
 --[[]]
 while (true) do
+	vpnx()
 	if vpn()then
 		account_table = getwenfree()
 		var.phone = account_table.data.account
@@ -309,14 +329,11 @@ while (true) do
 		awzNew(safaribid)
 		openURL(url)
 		rec()
-		vpnx()
+	
 	end
 end
 
 --]]--
-
-
-
 
 
 
