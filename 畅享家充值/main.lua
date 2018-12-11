@@ -131,8 +131,8 @@ end
 
 ------------------------从wenfree获取-------------------------
 function getwenfree()
---	local url = "http://wenfree.cn/api/Public/tjj/?service=hbcy.getNoId"
-	local url = 'http://idfa888.com/Public/idfa/?service=Jfkj.getjfkj'
+	local url = "http://wenfree.cn/api/Public/tjj/?service=hbcy.getNoId"
+--	local url = 'http://idfa888.com/Public/idfa/?service=Jfkj.getjfkj'
 	local tc={}
 	return post(url,tc)
 end
@@ -498,37 +498,12 @@ function rec积分卡券()
 	end
 end	
 
---while (true) do
---	vpnx()
---	if vpn()then
---		delay(1)
---		account_table = getwenfree()
---		var.phone = account_table.data.account
---		var.password = account_table.data.password
---		var.id = account_table.data.id
---		var.ip = ''
-		
---		awzNew(safaribid)
---		delay(2)
---		log(url)
---		openURL(url)
---		delay(5)
---		rec积分卡券()
---	end
---end
-
-
-					
-
-					
-					
-
 while (true) do
 	vpnx()
 	if vpn()then
 		delay(1)
 		account_table = getwenfree()
-		var.phone = account_table.data.phone
+		var.phone = account_table.data.account
 		var.password = account_table.data.password
 		var.id = account_table.data.id
 		var.ip = ''
@@ -540,7 +515,13 @@ while (true) do
 		delay(5)
 		rec积分卡券()
 	end
-end					
+end
+
+
+					
+
+					
+			
 					
 					
 					
