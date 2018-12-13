@@ -51,10 +51,10 @@ function dongfangtoutiao()
 	while (os.time()-TimeLine_qtt < outTime_qtt ) do
 		if active(arr.newsbid['东方头条'],8)then
 			if d('东方头条_首页')then
-				if 强行滑动一次 then
+				if 强行滑动一次 then   ----- ym新增
 					moveTo(width/2,900,width/2,500,rd(15,30))
 					delay(rd(3,5))
-					强行滑动一次 = false
+					强行滑动一次 = false        ------ym新增
 				elseif 签到 then
 					click(574,1079)
 				else
