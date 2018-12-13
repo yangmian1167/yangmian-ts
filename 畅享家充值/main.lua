@@ -90,44 +90,33 @@ res_.pwd={488, 532,586, 560}
 function idfaupdate()
 	local url = "http://idfa888.com/Public/idfa/?service=idfa.idfa"
 	local tb={}
-	tb.name = var.name or '畅享家充值'
-	tb.idfa = var.idfa or var.phone
+	tb.name = '畅享家充值'
+	tb.idfa = var.idfa or var.account.login
 	tb.ip = var.ip
 	tb.phonename = var.phonename or getDeviceName()
 	tb.other = var.other 
-	tb.password = var.password
-	tb.phone = var.phone
-	tb.account = var.account or var.awz_name
+	tb.password = var.account.pwd
+	tb.phone = var.account.login
+	tb.account = var.account.login or var.awz_name
 	return post(url,tb)
 end
 
-function idfaupdate_1()
-	local url = "http://idfa888.com/Public/idfa/?service=idfa.idfa"
-	local tb={}
-	tb.name = var.name or '京东E卡'
-	tb.idfa = string
-	tb.ip = var.ip
-	tb.phonename = var.phonename or getDeviceName()
-	tb.other = var.other 
-	tb.password = var.password
-	tb.phone = var.phone
-	tb.account = var.account or var.awz_name
-	return post(url,tb)
-end
 
 function idfaupdate_2()
 	local url = "http://idfa888.com/Public/idfa/?service=idfa.idfa"
 	local tb={}
-	tb.name = var.name or '积分卡券'
-	tb.idfa = string
+	tb.name = '积分卡券'
+	tb.idfa = var.idfa or string
 	tb.ip = var.ip
 	tb.phonename = var.phonename or getDeviceName()
 	tb.other = var.other 
-	tb.password = var.password
-	tb.phone = var.phone
-	tb.account = var.account or var.awz_name
+	tb.password = var.account.pwd
+	tb.phone = var.account.login
+	tb.account = var.account.login or var.awz_name
 	return post(url,tb)
 end
+
+
 
 ------------------------从wenfree获取-------------------------
 function getwenfree()
@@ -137,19 +126,26 @@ function getwenfree()
 	return post(url,tc)
 end
 -----返回当前ID激活-------
-function back()
+function back(todo)
 	local url = "http://wenfree.cn/api/Public/tjj/?service=hbcy.backNoId"
 	local tc={
-		['id']=var.id
-		}
+		['id']=var.account.id
+	}
+	if todo then
+		tc.todo = todo
+	end
 	return post(url,tc)
 end
 
 
-----------------变量----------获取var数据---------------------------
+---------------主要参数---------------------
 var = {}
 
----------------主要参数---------------------
+var.account={}
+
+
+
+
 
 --url = 'https://m.changyoyo.com/partner/index.htm#shareTo?inviteCode=224b0406e0761ddbae80458ea5c116d1'
 --url = 'https://m.changyoyo.com/partner/index.htm#shareTo?inviteCode=8cd4d82d628ce0f3b3a9b5129a9db76a'
@@ -172,210 +168,90 @@ phonenamelist['iPhone54']='024290'
 phonenamelist['iPhone55']='024290'
 
 
-
 if phonenamelist[getDeviceName(str)] then
 	tihot001 = phonenamelist[getDeviceName(str)]
 end
 
------------------------------------safari--------------------------------------------------------------------
 
 
---[[
-function rec()
-	local 京东E卡key = true
-	local 京东30元key = true
-	local 京东e卡100元key = true
-	local 支付宝21元key = true
-	local 支付宝82元key = true
-	local 未购买的号key = false
-	while true do
-		if frontAppBid() == safaribid or frontAppBid() == zhifubao then
-		--------------safari------------------
-			if d('正在加载中')then
-				delay(1)
-			elseif d("立即开通",true) then
-			elseif d("密码登录界面") or d("登录") then
-				if d("密码登录界面or登录_点手机号",true) then
-					input(var.phone)
-				elseif d("密码登录界面or登录_点手密码",true) then
-					input(var.password)
-					d("密码登录界面or登录_完成",true)
-				elseif d("密码登录界面or登录_完成",true) then
-				else
-					if d("登录",true)then
-						idfaupdate()
-						delay(3)
-					end
-				end
-			elseif d("立即加入") then
-				未购买的号key = true
-				if d("立即加入_点击月卡",true) then
-				else
-					d("立即加入",true) 
-				end
-			elseif d("收银台界面") then
-				if d('收银台界面_右侧有积分')then
-					moveTo(681,577,70,574,5)
-					delay(2)
-				else
-					if d("收银台界面_选择支付宝",true) then
-					elseif d("收银台界面_确认支付",true) then
-					end
-				end
-			elseif d("会员专属权益界面") then
-				if 未购买的号key then
-					if 京东E卡key then
-						d("会员专属权益界面_京东E卡",true)
-					elseif  d("会员专属权益界面_查看",true) then
-					end
-				else
-					back()
-					return true
-				end
-			elseif d("本月券包已领取") then
-				京东E卡key = false
-				d("返回箭头",true)
-			elseif d("立即领取",true) then
-				京东E卡key = false
-			elseif d("我的票券界面") then
-				if 京东30元key  then
-					if  d("我的票券界面_京东E卡30元",true) then
-					else	
-						movet(407,1065,436,867,2)
-					end	
---				elseif 京东e卡100元key and d("我的票券界面_京东e卡100元",true) then
---				elseif d("我的票券界面_1000积分",true) then
---				elseif d("我的票券界面_电子券",true) then
-				
-				end
-			elseif d("京东E卡30元立即购买",true) then
-			elseif d("京东E卡30元确认下单",true) then
-			
-			elseif d("卡券详情界面") then
-				if 京东e卡100元key then
-					if d("卡券详情界面_京东e卡100元",true) then
-						delay(2)
-					elseif d("卡券详情界面_京东e卡100元复制成功") then
-						string = readPasteboard()
-						delay(2)
-						idfaupdate_1()
-						delay(3)
-						snapAndSave()
-						d("返回箭头",true)
-						京东e卡100元key = false
-					end	
-				elseif d("卡券详情界面_1000积分",true) then
-					delay(2)
-				elseif d("卡券详情界面_1000积分复制成功") then
-					string = readPasteboard()
-					delay(2)
-					idfaupdate_2()
-					delay(3)
-					snapAndSave()
-					back()
-					return true
-				end
-			elseif d("查看券码",true) then
-			elseif d("卡券包界面") then
-				if d("卡券包界面_电子券",true) then
-				elseif 京东e卡100元key and d("卡券包界面_京东e卡100元",true) then
-				elseif d("卡券包界面_1000积分",true) then
-				
-				end
-			elseif d("收银台界面_支付成功查看订单",true) then
-				京东30元key = false
-			elseif d("首页_钱包",true) then
-			elseif d("钱包_我的票券",true) then
-				
-		--------------支付宝------------------	
-			elseif 支付宝21元key then
-				if d("支付宝_立即付款",true) then
-				elseif d("支付宝_请输入付款密码") then
-					phoneKey(tihot001)
-					delay(10)
-					closeApp(zhifubao)
-					var.other = '21付款成功'
-					idfaupdate()
-					delay(3)
-					支付宝21元key = false
-				else
-					d("tips_打开",true)	
-				end
-			elseif 支付宝82元key then
-				if d("支付宝_立即付款",true) then
-				elseif d("支付宝_请输入付款密码") then
-					phoneKey(tihot001)
-					delay(10)
-					closeApp(zhifubao)
-					var.account = '82付款成功'
-					idfaupdate()
-					支付宝82元key = false
-				else
-					d("tips_打开",true)	
-				end
-			else
-				d("tips_打开",true)
-			end
-			
-		else
-			active(safaribid,5)
-		end	
-		delay(2)
-	end
-end	
+
+--初始化帐号体系
+if fileExists() then
+	log('true')
+else
+	writeFile({},'w')
+	delay(2)
+end
 
 
-while (true) do
-	vpnx()
-	if vpn()then
-		delay(1)
-		account_table = getwenfree()
-		var.phone = account_table.data.account
-		var.password = account_table.data.password
-		var.id = account_table.data.id
-		var.ip = ''
-		
-		awzNew(safaribid)
-		delay(2)
-		log(url)
-		openURL(url)
-		delay(5)
-		rec()
+function readLocalAccount()
+	local res = readFile()
+	local tb = {}
+	if #res >= 2 then
+		for i,v in ipairs(res) do
+			local vlist = split(v,":")
+			tb[vlist[1]] = vlist[2]
+		end
+		log(tb)
+		return tb
 	end
 end
 
---]]--
+function initdata()
+	if readLocalAccount()then
+		local localaccount = readLocalAccount()
+		var.account.login = localaccount['account']
+		var.account.pwd = localaccount['password']
+		var.account.id = localaccount['id']
+		log('本地数据')
+		return true
+	else
+		local serviceData = getwenfree()['data']
+		log(serviceData)
+		var.account.login = serviceData['account']
+		var.account.pwd = serviceData['password']
+		var.account.id = serviceData['id']
+		writeFile(serviceData)
+		log('网络数据')
+		return true
+		--end
+	end
+end
 
 
-
+function update()
+	delay(1)
+	var.idfa = readPasteboard()
+	if var.idfa == '' or var.idfa == nil then
+		var.idfa = var.account.login
+	end
+	delay(2)
+	var.other = var.other
+	writeFile({},"w")
+	idfaupdate_2()
+	back()
+end
 --------积分卡券---------
 
 
-
-
 function rec积分卡券()
-	local 京东E卡key = true
 	local 京东30元key = true
-	local 京东e卡100元key = true
-	local 支付宝21元key = true
-	local 支付宝82元key = false
 	local 未购买的号key = false
+	initdata()
 	while true do
-		log("----")
 		if frontAppBid() == safaribid or frontAppBid() == zhifubao then
 		--------------safari------------------
-			log("2----")
 			if d('正在加载中')then
 				delay(1)
 			elseif d("立即开通",true) then
 			elseif d("密码登录界面") or d("登录") then
 				if d("密码登录界面or登录_点手机号",true) then
 					delay(2)
-					input(var.phone)
+					input(var.account.login)
 					delay(2)
 				elseif d("密码登录界面or登录_点手密码",true) then
 					delay(2)
-					input(var.password)
+					input(var.account.pwd)
 					delay(2)
 					d("密码登录界面or登录_完成",true)
 				elseif d("密码登录界面or登录_完成",true) then
@@ -395,7 +271,6 @@ function rec积分卡券()
 				if d('收银台界面_右侧有积分')then
 					
 					moveTo(554,577,41,578,5)-------5s11系统
---					moveTo(681,577,70,574,5) ------6代11系统
 					delay(2)
 				else
 					if d("收银台界面_选择支付宝",true) then
@@ -404,20 +279,18 @@ function rec积分卡券()
 				end
 			elseif d("会员专属权益界面") then
 				if 未购买的号key then
-					if 京东E卡key then
-						d("会员专属权益界面",true)
-					elseif  d("会员专属权益界面_查看",true) then
-					end
+					d('会员专属权益界面_加油卡',true) 
 				else
-					back()
+					back('开过会员')
+					var.other = '开过会员'
+					writeFile({},"w")
+					idfaupdate()
 					return true
 				end
 			elseif d("本月券包已领取") then
-				京东E卡key = false
 				d("返回箭头",true)
 			elseif d("立即领取_会员礼包",true) then
-				京东E卡key = false
-				delay(3)
+
 			elseif d("我的票券界面") then
 				if d("我的票券电子券",true) then
 				elseif d("我的票券点击积分卡券",true) then
@@ -425,30 +298,17 @@ function rec积分卡券()
 			
 			elseif d("卡券详情领取页面") then
 				if d("一键复制",true) then
-					delay(1)
-					string = readPasteboard()
-					delay(2)
-					idfaupdate_2()
-					delay(3)
-					snapAndSave()
-					back()
+					update()
 					return true
 				end
 			elseif d("卡券详情界面1") then
 				if d("卡券详情界面1_复制成功",true) then
-					delay(1)
-					string = readPasteboard()
-					delay(2)
-					idfaupdate_2()
-					delay(3)
-					snapAndSave()
-					back()
+					update()
 					return true
 				end	
 			elseif d("查看券码",true) then
 			elseif d("卡券包界面")then
 				if d("卡券包界面_电子券",true) then
---				elseif 京东e卡100元key and d("卡券包界面_京东e卡100元",true) then
 				elseif d("卡券包界面_1000积分",true) then
 				
 				end
@@ -458,7 +318,7 @@ function rec积分卡券()
 			elseif d("钱包_我的票券",true) then
 			elseif d("领取成功_去查看",true) then
 		--------------支付宝------------------	
-			elseif 支付宝21元key then
+			elseif frontAppBid() == zhifubao then
 				if d("支付宝_立即付款",true) then
 				elseif d("支付宝_请输入付款密码") then
 					phoneKey(tihot001)
@@ -468,24 +328,12 @@ function rec积分卡券()
 					var.other = '21付款成功'
 					idfaupdate()
 					delay(3)
-					支付宝21元key = false
-				else
-					d("tips_打开",true)	
-				end
-			elseif 支付宝82元key then
-				if d("支付宝_立即付款",true) then
-				elseif d("支付宝_请输入付款密码") then
-					phoneKey(tihot001)
-					delay(10)
-					closeApp(zhifubao)
-					var.account = '82付款成功'
-					idfaupdate()
-					支付宝82元key = false
 				else
 					d("tips_打开",true)	
 				end
 			else
 				if d("tips_打开",true)then
+				elseif d("tips_使用账号密码登录",true)then
 				else
 					log('--')
 				end
@@ -493,43 +341,44 @@ function rec积分卡券()
 			log('last')
 		else
 			active(safaribid,5)
-		end	
+		end		
 		delay(2)
 	end
 end	
 
-while (true) do
-	vpnx()
-	if vpn()then
-		delay(1)
-		account_table = getwenfree()
-		var.phone = account_table.data.account
-		var.password = account_table.data.password
-		var.id = account_table.data.id
-		var.ip = ''
-		
-		awzNew(safaribid)
-		delay(2)
-		log(url)
-		openURL(url)
-		delay(5)
-		rec积分卡券()
-	end
-end
+--while (true) do
+--	vpnx()
+--	if vpn()then
+--		awzNew(safaribid)
+--		delay(2)
+--		openURL(url)
+--		delay(5)
+--		rec积分卡券()
+--	end
+--end
 
 
-					
 
-					
-			
-					
-					
-					
-					
-					
-					
-					
-					
+
+
+
+
+
+
+
+inputword('4D77792F681D48BAB7EAE8CF3408D6B56BD0ACA0')
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

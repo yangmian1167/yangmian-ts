@@ -1,6 +1,6 @@
 width,hight=getScreenSize()
 nLog(width..'*'..hight)
---nLog(frontAppBid() or '桌面')
+
 
 --深度打印一个表
 function print_r(t)
@@ -13,13 +13,13 @@ function print_r(t)
 			if (type(t)=="table") then
 				for pos,val in pairs(t) do
 					if (type(val)=="table") then
-						nLog(indent.."["..pos.."] => "..tostring(t).." {")
+						nLog(indent.."["..pos.."] = "..tostring(t).." {")
 						sub_print_r(val,indent..string.rep(" ",string.len(pos)+8))
-						nLog(indent..string.rep(" ",string.len(pos)+6).."}")
+						nLog(indent..string.rep(" ",string.len(pos)+6).."},")
 					elseif (type(val)=="string") then
-						nLog(indent.."["..pos..'] => "'..val..'"')
+						nLog(indent..'["'..pos..'"] = "'..val..'",')
 					else
-						nLog(indent.."["..pos.."] => "..tostring(val))
+						nLog(indent..'["'..pos..'"] = "'..tostring(val)..'"')
 					end
 				end
 			else
@@ -37,7 +37,7 @@ function print_r(t)
 end
 --解锁
 function lock()
-	flag = deviceIsLock();
+	local flag = deviceIsLock();
 	if flag ~= 0 then
 		unlockDevice(); --解锁屏幕
 	end
@@ -328,23 +328,9 @@ function moveTo_(x1,y1,x2,y2,setp,times)
 			end
 		end
 	end
-	touchUp(1, x2,y2)
+--	touchUp(1, x2,y2)
 end
---将指定文件中的内容按行读取
-function readFile(path)
-    local file = io.open(path,"r");
-    if file then
-        local _list = {};
-        for l in file:lines() do
-            table.insert(_list,l)
-        end
-        file:close();
-        return _list
-    end
-end
---list = readFile("/User/Media/TouchSprite/lua/wechat-reply.txt");
---参数说明：path为要读取文件的路径。
---返回值：返回一个table。
+
 --用http.get实现下载文件功能
 local sz = require("sz")
 local cjson = sz.json
@@ -366,16 +352,9 @@ function downFile(url, path)
 end
 --downFile("http://mu1234.applinzi.com/wechat-reply.txt","/User/Media/TouchSprite/lua/wechat-reply.txt")
 --检测指定文件是否存在
-function file_exists(file_name)
-    local f = io.open(file_name, "r")
-    return f ~= nil and f:close()
-end
---参数说明：path为要查找文件的路径。
---返回值：返回 true、false。
 function ip()
 	local http = require("szocket.http")
---	local res, code = http.request("http://ip.cn",30);
-	local res, code = http.request("http://pv.sohu.com/cityjson?ie=utf-8",30);
+	local res, code = http.request("http://ip.cn",30);
 	if code ~= nil then
 		local i,j = string.find(res, '%d+%.%d+%.%d+%.%d+')
 		return string.sub(res,i,j)
@@ -386,17 +365,40 @@ function rd(min,max)
 	local max = max or min
 	return math.random(min,max)
 end
+
+function fileExists(path)
+	local path = path or '/var/mobile/Media/TouchSprite/lua/account.txt'
+    local f = io.open(path, "r")
+    return f ~= nil and f:close()
+end
+--参数说明：path为要查找文件的路径。
+--返回值：返回 true、false。
 --文件按行写入--------------
-function writeFile(file_name,string,way)
-	string = string or "0.0.0.0" 
-	way = way or 'a'
-	local f = assert(io.open(file_name, way))
-	f:write(string.."\n")
+function writeFile(tables,way,path)
+	local path = path or '/var/mobile/Media/TouchSprite/lua/account.txt'
+	local way = way or 'a'
+	local tablesLen = 0
+	for k,v in pairs(tables) do
+		tablesLen = tablesLen + 1
+	end
+	local f = assert(io.open(path, way))
+	if tablesLen >= 1 then
+		for k,v in pairs(tables)do
+			if v == nil or v == '' or v == null then
+				v = 'null'
+			end
+			local txt = k ..":".. v.."\n"
+			f:write(txt)
+		end
+	else
+		f:write('')
+	end
 	f:close()
 end
 --文件按行写入--------------
 --将指定文件中的内容按行读取
 function readFile(path)
+	local path = path or '/var/mobile/Media/TouchSprite/lua/account.txt'
     local file = io.open(path,"r");
     if file then
         local _list = {};
@@ -407,9 +409,10 @@ function readFile(path)
         return _list
     end
 end
---list = readFile("/User/Media/TouchSprite/lua/1.txt");
+--list = readFile("/User/Media/TouchSprite/lua/wechat-reply.txt");
 --参数说明：path为要读取文件的路径。
 --返回值：返回一个table。
+
 function RandName(i)
 	local ret=""
 	local V={
@@ -552,7 +555,7 @@ function vpn()
 	local LineTime = os.time()
 	local OutTimes = 60
 	while (os.time()-LineTime<OutTimes) do
-		flag = getVPNStatus()
+		local flag = getVPNStatus()
 		if flag.active then
 			nLog("VPN 打开状态"..flag.status)
 			if flag.status == '已连接' then
@@ -564,8 +567,8 @@ function vpn()
 		mSleep(1000)
 	end
 end
-function VPNisOK()
-	flag = getVPNStatus()
+function vpnState()
+	local flag = getVPNStatus()
 	if flag.active then
 		nLog("VPN 打开状态"..flag.status)
 		if flag.status == '已连接' then
@@ -591,15 +594,15 @@ function post(url,arr)
 	local sz = require("sz")
 	local cjson = sz.json
 	local http = sz.i82.http
-	safari = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36'
-	headers = {}
+	local safari = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36'
+	local headers = {}
 	headers['User-Agent'] = safari
 	headers['Referer'] = url
 	headers_send = cjson.encode(headers)
 	post_send = cjson.encode(arr)
 	nLog(post_send)
 	post_escaped = http.build_request(post_send)
-	status_resp, headers_resp, body_resp = http.post(url, 5, headers_send, post_escaped)
+	local status_resp, headers_resp, body_resp = http.post(url, 5, headers_send, post_escaped)
 	if status_resp == 200 then
 --		dialog(body_resp)
 		local json = sz.json
@@ -617,7 +620,35 @@ function get(url)
 	end
 end
 
+function inputword(key)
+	for i = 1,string.len(key) do
+		nLog(string.sub(key,i,i))
+		inputkey = string.sub(key,i,i)
+		inputkey = tonumber(inputkey)
+		if type(inputkey) == 'number' then
+			--nLog('munber->'..inputkey)
+		else
+			inputkey = string.sub(key,i,i)
+			inputkey = string.lower(inputkey)
+		end
+		keyDown(inputkey)
+		keyUp(inputkey)
+		mSleep(100)
+	end
+end
+
 log('基础函数加载完成')
+local deskbid=frontAppBid();
+if deskbid == nil or deskbid == '' then
+	log('com.apple.springbord')
+else
+	log(deskbid)
+end
+
+
+
+
+
 
 
 
