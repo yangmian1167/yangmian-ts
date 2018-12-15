@@ -8,6 +8,8 @@ var={}
 --var.url = 'https://m.changyoyo.com/mall/?spm=3.1.3.0.0.066471544577301798.02000000.02000000#/goodsDetail?productId=JFJD1-S1000193'
 --var.url = 'https://m.changyoyo.com/mall/#/flashsale?productId=RZ2-S1000111'
 --var.url = 'https://m.changyoyo.com/mall/#/flashsale?productId=RZ33-S1000111'
+--var.url = 'https://m.changyoyo.com/mall/#/flashsale?productId=JFJD1-S1000193'
+--var.url = 'https://m.changyoyo.com/mall/#/flashsale?productId=RZ2-S1000111'
 var.url = 'https://m.changyoyo.com/mall/#/flashsale?productId=JFJD1-S1000193'
 var.bid={}
 var.bid.safari = 'com.apple.mobilesafari'
@@ -227,14 +229,15 @@ function buyJDEcard(urlKey)
 				elseif d('立即购买界面_立即购买',true)then
 				elseif d('卡券详情界面')then
 					if d('卡券详情界面_一键复制券码',true) or d('卡券详情界面_一键复制券码_上',true) then
-						var.name = '中石化油卡'
+--						var.name = '中石化油卡'
+						var.name = '京东e卡100元'
 						if update()then
 							reName(var.account.login)
 							return true
 						end
 					end
 				elseif d('<卡包券页面') and d('<卡包券页面_一键复制',true)then
-					var.name = '中石化92油卡'
+					var.name = '京东e卡100元'
 					if update()then
 						reName(var.account.login)
 						return true
@@ -247,7 +250,8 @@ function buyJDEcard(urlKey)
 				elseif d('<卡包券页面') and d('<卡包券页面_')then
 					if d('<卡包券页面_电子券',true)then
 					elseif d('<卡包券页面_中石化油卡_一键复制',true)then
-						var.name = '中石化油卡'
+--						var.name = '中石化油卡'
+						var.name = '京东e卡100元'
 						if update()then
 							reName(var.account.login)
 							return true

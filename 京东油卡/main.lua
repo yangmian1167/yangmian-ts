@@ -7,6 +7,9 @@ var={}
 --var.url = 'https://m.changyoyo.com/partner/index.htm#shareTo?inviteCode=224b0406e0761ddbae80458ea5c116d1'
 --var.url = 'https://m.changyoyo.com/mall/?spm=3.1.3.0.0.066471544577301798.02000000.02000000#/goodsDetail?productId=JFJD1-S1000193'
 --var.url = 'https://m.changyoyo.com/mall/#/flashsale?productId=RZ2-S1000111'
+--var.url = 'https://m.changyoyo.com/mall/#/flashsale?productId=RZ33-S1000111'
+--var.url = 'https://m.changyoyo.com/mall/#/flashsale?productId=JFJD1-S1000193'
+--var.url = 'https://m.changyoyo.com/mall/#/flashsale?productId=RZ2-S1000111'
 --var.url = 'https://m.changyoyo.com/mall/#/flashsale?productId=JFJD1-S1000193'
 var.url = 'https://m.changyoyo.com/mall/#/flashsale?productId=RZ2-S1000111'
 var.bid={}
@@ -17,7 +20,7 @@ var.todo = false
 var.account={}
 var.account.login=''
 var.account.pwd = ''
-var.name = '京东E卡'
+var.name = '京东油卡'
 var.alipay = '520000'
 
 local phonenamelist = {}
@@ -132,6 +135,7 @@ function phoneKey(str)
 	end
 end
 
+
 t={}
 t['正在加载']={ 0x007aff, "0|1|0x007aff", 80, 19, 95, 629, 135 } --多点找色
 t['立即开通']={ 0xdfc18f, "-223|-46|0xee7259,-287|27|0xde4f32", 90, 14, 890, 532, 1040 } --多点找色
@@ -198,19 +202,6 @@ function update()
 	end
 end
 
-function update()
-	delay(1)
-	var.idfa = readPasteboard()
-	delay(1)
-	snapAndSave()
-	var.other = var.other
-	if idfa888()then
-		writeFile({},"w")
-		backEcard()
-		return true
-	end
-end
-
 function buyJDEcard(urlKey)
 	local urlKey = urlKey or false
 	if urlKey then
@@ -239,14 +230,15 @@ function buyJDEcard(urlKey)
 				elseif d('立即购买界面_立即购买',true)then
 				elseif d('卡券详情界面')then
 					if d('卡券详情界面_一键复制券码',true) or d('卡券详情界面_一键复制券码_上',true) then
-						var.name = '中石化油卡'
+						var.name = '京东油卡'
+--						var.name = '京东e卡100元'
 						if update()then
 							reName(var.account.login)
 							return true
 						end
 					end
 				elseif d('<卡包券页面') and d('<卡包券页面_一键复制',true)then
-					var.name = '中石化92油卡'
+					var.name = '京东油卡'
 					if update()then
 						reName(var.account.login)
 						return true
@@ -259,7 +251,8 @@ function buyJDEcard(urlKey)
 				elseif d('<卡包券页面') and d('<卡包券页面_')then
 					if d('<卡包券页面_电子券',true)then
 					elseif d('<卡包券页面_中石化油卡_一键复制',true)then
-						var.name = '中石化油卡'
+						var.name = '京东油卡'
+--						var.name = '京东e卡100元'
 						if update()then
 							reName(var.account.login)
 							return true
@@ -335,12 +328,22 @@ function buyJDEcard(urlKey)
 		end
 end
 
-
 --key = '5A79F564A8304DFD973C27FF29B7D77E6DC0B24A'
 --inputword(key)
 --lua_exit()
 
---buyJDEcard(false)
+vpnx()
+while (true) do
+	if false or vpn()then
+		if false or awzNew(safaribid)then
+			buyJDEcard(true)
+		end
+	end
+	vpnx()
+	delay(3)
+end
+
+
 
 
 
