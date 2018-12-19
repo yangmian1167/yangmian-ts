@@ -16,7 +16,7 @@ var = {}
 
 id = '11904'
 safari = 'com.apple.mobilesafari'
-url = 'https://m.changyoyo.com/partner/index.html?from=singlemessage&isappinstalled=0#shareTo?inviteCode=5287915c80651c629439171351553733'
+url = 'https://m.changyoyo.com/partner/index.html#shareTo?inviteCode=8229c9506ab6120303800a652963f909'
 
 
 

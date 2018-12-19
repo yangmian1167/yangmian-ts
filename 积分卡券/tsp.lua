@@ -72,6 +72,10 @@ function log(txt,show,times)
 		print_r(txt)
 		return
 	end
+	if txt == nil or txt == '' then
+		nLog(txt)
+		return 
+	end
 	if show == 'all' then
 		toast(show,times)
 		nLog(txt)
@@ -648,27 +652,7 @@ end
 
 
 
-function get_task()
-	local sz = require("sz")
-	local cjson = sz.json
-	local http = sz.i82.http
-	local url = 'http://wenfree.cn/api/Public/tjj/?service=Tjj.gettask'
-	local postArr = {}
-	postArr.phonename = phonename or getDeviceName()
-	postArr.imei = phoneimei or sz.system.serialnumber()
-	local taskData = post(url,postArr)
-	
-	if taskData ~= nil then
 
-		if taskData.data == "新增手机" or taskData.data == "暂无任务" then
-			log(taskData.data,true)
-			delay(30)
-			return false
-		else
-			return taskData.data
-		end
-	end
-end
 
 
 

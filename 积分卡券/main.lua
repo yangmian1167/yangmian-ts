@@ -15,16 +15,13 @@ require("5sios11")
 
 
 function movet(x,y,x1,y1,time)
-local time = time or 2
-
-touchDown(x, y);    --在坐标 (150, 550)按下
-mSleep(30);
-touchMove(x1, y1);    --移动到坐标 (150, 600)，注意一次滑动的坐标间隔不要太大，不宜超过 50 像素
-mSleep(30);
-touchUp(x1, x1);
-
-delay(time)
-
+	local time = time or 2
+	touchDown(x, y);    --在坐标 (150, 550)按下
+	mSleep(30);
+	touchMove(x1, y1);    --移动到坐标 (150, 600)，注意一次滑动的坐标间隔不要太大，不宜超过 50 像素
+	mSleep(30);
+	touchUp(x1, x1);
+	delay(time)
 end
 
 
@@ -106,7 +103,7 @@ function idfaupdate_2()
 	local url = "http://idfa888.com/Public/idfa/?service=idfa.idfa"
 	local tb={}
 	tb.name = '积分卡券'
-	tb.idfa = var.idfa or string
+	tb.idfa = var.idfa or var.account.login
 	tb.ip = var.ip
 	tb.phonename = var.phonename or getDeviceName()
 	tb.other = var.other 
@@ -119,23 +116,50 @@ end
 
 
 ------------------------从wenfree获取-------------------------
-function getwenfree()
-	local url = "http://wenfree.cn/api/Public/tjj/?service=hbcy.getNoId"
---	local url = 'http://idfa888.com/Public/idfa/?service=Jfkj.getjfkj'
-	local tc={}
-	return post(url,tc)
+function getjfkj()
+	local url = 'http://wenfree.cn/api/Public/tjj/?service=Hbcy.getjfkj'
+	return get(url)
 end
 -----返回当前ID激活-------
-function back(todo)
-	local url = "http://wenfree.cn/api/Public/tjj/?service=hbcy.backNoId"
+function backjfkj(account,jfkj)
+	local url = "http://wenfree.cn/api/Public/tjj/?service=Hbcy.backjfkj"
 	local tc={
-		['id']=var.account.id
+		['account']=account,
+		['jfkj']= jfkj,
 	}
-	if todo then
-		tc.todo = todo
-	end
-	return post(url,tc)
+	log( post(url,tc))
 end
+
+function get_task()
+	local sz = require("sz")
+	local url = 'http://wenfree.cn/api/Public/tjj/?service=Tjj.gettask'
+	local postArr = {}
+	postArr.phonename = phonename or getDeviceName()
+	postArr.imei = phoneimei or sz.system.serialnumber()
+	local taskData = post(url,postArr)
+	
+	if taskData ~= nil then
+
+		if taskData.data == "新增手机" or taskData.data == "暂无任务" then
+			log(taskData.data,'all')
+			delay(30)
+			return taskData.data
+		else
+--			log(taskData.data)
+			return taskData.data
+		end
+	end
+
+end
+
+function back_pass(task_id,success)
+	local url = 'http://wenfree.cn/api/Public/tjj/?service=Tjj.backpass'
+	local postArr = {}
+	postArr.task_id = task_id
+	postArr.success = success
+	log( post(url,postArr) )
+end
+
 
 
 ---------------主要参数---------------------
@@ -149,7 +173,8 @@ var.account={}
 
 --url = 'https://m.changyoyo.com/partner/index.htm#shareTo?inviteCode=224b0406e0761ddbae80458ea5c116d1'
 --url = 'https://m.changyoyo.com/partner/index.htm#shareTo?inviteCode=8cd4d82d628ce0f3b3a9b5129a9db76a'
-url = 'https://m.changyoyo.com/partner/index.htm#/shareTo?inviteCode=5287915c80651c629439171351553733'
+url = 'https://m.changyoyo.com/partner/index.html#/shareTo?inviteCode=bf1e517d4c3f9194b07580abd035bae6'
+
 safaribid = 'com.apple.mobilesafari'
 zhifubao = 'com.alipay.iphoneclient'
 
@@ -171,8 +196,6 @@ phonenamelist['iPhone55']='024290'
 if phonenamelist[getDeviceName(str)] then
 	tihot001 = phonenamelist[getDeviceName(str)]
 end
-
-
 
 
 --初始化帐号体系
@@ -206,7 +229,7 @@ function initdata()
 		log('本地数据')
 		return true
 	else
-		local serviceData = getwenfree()['data']
+		local serviceData = getjfkj()['data']
 		log(serviceData)
 		var.account.login = serviceData['account']
 		var.account.pwd = serviceData['password']
@@ -214,7 +237,6 @@ function initdata()
 		writeFile(serviceData)
 		log('网络数据')
 		return true
-		--end
 	end
 end
 
@@ -229,7 +251,8 @@ function update()
 	var.other = var.other
 	writeFile({},"w")
 	idfaupdate_2()
-	back()
+	backjfkj(var.account.login,var.idfa)
+	back_pass(task_id,"ok")
 end
 --------积分卡券---------
 
@@ -281,7 +304,6 @@ function rec积分卡券()
 				if 未购买的号key then
 					d('会员专属权益界面_加油卡',true) 
 				else
-					back('开过会员')
 					var.other = '开过会员'
 					writeFile({},"w")
 					idfaupdate()
@@ -346,27 +368,29 @@ function rec积分卡券()
 	end
 end	
 
---while (true) do
---	vpnx()
---	if vpn()then
---		awzNew(safaribid)
---		delay(2)
---		openURL(url)
---		delay(5)
---		rec积分卡券()
---	end
---end
+
+while (true) do
+	local urltalbe = get_task()
+	log(urltalbe)
+	if type(urltalbe) == "table" then
+		task_id = urltalbe[1].task_id
+		url = urltalbe[1].work
+		vpnx()
+		delay(3)
+		if vpn()then
+			awzNew(safaribid)
+			delay(2)
+			openURL(url)
+			delay(5)
+			 rec积分卡券()
+		end
+
+	end
+end
 
 
 
 
-
-
-
-
-
-
-inputword('4D77792F681D48BAB7EAE8CF3408D6B56BD0ACA0')
 
 
 

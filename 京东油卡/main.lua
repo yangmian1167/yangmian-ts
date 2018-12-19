@@ -41,21 +41,19 @@ end
 
 --取号
 function getEcard()
---	local url = 'http://wenfree.cn/api/Public/tjj/?service=Tjj.getNoId'
-	local url = 'http://wenfree.cn/api/Public/tjj/?service=Hbcy.getNoId'
+	local url = 'http://wenfree.cn/api/Public/tjj/?service=hbcy.getdyktodo'
 	local date = get(url)
 	return date.data
 end
 --回传
-function backEcard()
-	local url = 'http://wenfree.cn/api/Public/tjj/?service=Hbcy.backNoId&id='..var.account.id
-	local date = get(url)
+function backEcard(account,jdyktodo)
+	local url = 'http://wenfree.cn/api/Public/tjj/?service=hbcy.backdyktodo'
+	local postStr = {}
+	postStr.account = account
+	postStr.dyktodo = jdyktodo
+	log(post(url,postStr))
 end
---回传
-function backEcard_()
-	local url = 'http://wenfree.cn/api/Public/tjj/?service=Hbcy.backNoId&id='..var.account.id..'&todo=即制购买'
-	local date = get(url)
-end
+
 --上传帐号
 function idfa888()
 	local url = "http://idfa888.com/Public/idfa/?service=idfa.idfa"
@@ -195,9 +193,9 @@ function update()
 	delay(1)
 	snapAndSave()
 	var.other = var.other
+	backEcard(var.account.login,var.idfa)
 	if idfa888()then
 		writeFile({},"w")
-		backEcard()
 		return true
 	end
 end
@@ -264,7 +262,6 @@ function buyJDEcard(urlKey)
 				elseif d('去付款界面',true)then
 					go_pay = go_pay + 1
 					if go_pay >= 10 then
-						backEcard_()
 						writeFile({},"w")
 						return false
 					end

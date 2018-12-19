@@ -4,13 +4,8 @@ require("tsp")
 
 
 var={}
---var.url = 'https://m.changyoyo.com/partner/index.htm#shareTo?inviteCode=224b0406e0761ddbae80458ea5c116d1'
---var.url = 'https://m.changyoyo.com/mall/?spm=3.1.3.0.0.066471544577301798.02000000.02000000#/goodsDetail?productId=JFJD1-S1000193'
---var.url = 'https://m.changyoyo.com/mall/#/flashsale?productId=RZ2-S1000111'
---var.url = 'https://m.changyoyo.com/mall/#/flashsale?productId=RZ33-S1000111'
---var.url = 'https://m.changyoyo.com/mall/#/flashsale?productId=JFJD1-S1000193'
---var.url = 'https://m.changyoyo.com/mall/#/flashsale?productId=RZ2-S1000111'
-var.url = 'https://m.changyoyo.com/mall/#/flashsale?productId=JFJD1-S1000193'
+
+var.url = 'https://m.changyoyo.com/mall/#/flashsale?productId=jingdg5-s1000193'
 var.bid={}
 var.bid.safari = 'com.apple.mobilesafari'
 var.bid.alipay = 'com.alipay.iphoneclient'
@@ -41,14 +36,17 @@ end
 --取号
 function getEcard()
 --	local url = 'http://wenfree.cn/api/Public/tjj/?service=Tjj.getNoId'
-	local url = 'http://wenfree.cn/api/Public/tjj/?service=Hbcy.getNoId'
+	local url = 'http://wenfree.cn/api/Public/tjj/?service=hbcy.getjdtodo'
 	local date = get(url)
 	return date.data
 end
 --回传
-function backEcard()
-	local url = 'http://wenfree.cn/api/Public/tjj/?service=Hbcy.backNoId&id='..var.account.id
-	local date = get(url)
+function backEcard(account,jdtodo)
+	local url = 'http://wenfree.cn/api/Public/tjj/?service=hbcy.backjtodo'
+	local postStr = {}
+	postStr.account = account
+	postStr.jdtodo = jdtodo
+	log(post(url,postStr))
 end
 --回传
 function backEcard_()
@@ -194,9 +192,9 @@ function update()
 	delay(1)
 	snapAndSave()
 	var.other = var.other
+	backEcard(var.account.login,var.idfa)
 	if idfa888()then
 		writeFile({},"w")
-		backEcard()
 		return true
 	end
 end
@@ -263,7 +261,6 @@ function buyJDEcard(urlKey)
 				elseif d('去付款界面',true)then
 					go_pay = go_pay + 1
 					if go_pay >= 10 then
-						backEcard_()
 						writeFile({},"w")
 						return false
 					end
