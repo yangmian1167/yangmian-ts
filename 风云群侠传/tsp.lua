@@ -68,10 +68,6 @@ function closeX(app_bid,times,way)
 end
 function log(txt,show,times)
 	local times = 1
-	if txt == nil or txt  == '' then
-		nLog("null")
-		return
-	end
 	if type(txt) == 'table' then
 		print_r(txt)
 		return

@@ -1,7 +1,7 @@
 alz_url = 'http://api.ipadh.cn/do.php'
 require("TSLib")
 require("tsp")
-token = '176ac85b-bad7-4f68-8d96-b0f89e71bb09'
+token = '12698a4b-ada8-4ffd-94ff-12d833f33aa0'
 
 function post_kfy(url,arr)
 	local sz = require("sz")
@@ -70,19 +70,17 @@ function GET_Phone(id)
 			log('获取失败-'..phone_list[2])
 			return false
 		end
-	else
-		log(kfydata)
 	end
 end
 
-function getMessage(id,phone)
+function GET_Message(id,phones)
 
 	local post = {}
 	post['action'] = 'getMessage'
 	post['sid'] = id
-	post['phone'] = phone
+	post['phone'] = phones
 	post['token'] = token
-	post['author'] = 'yangmian'
+
 	local kfydata = post_kfy(alz_url,post)
 	
 	if kfydata ~= nil then
@@ -101,83 +99,50 @@ function getMessage(id,phone)
 			delay(3)
 			return false
 		else
-			log('其它')
+			log(SMS_list[2])
 			delay(3)
 		end
 	end
 end
 
-function addBlacklist(id,phone,token)
-	--采用 cjson 构造请求头部 json
-	local sz = require("sz")
-	local cjson = sz.json
-	local http = sz.i82.http
-	headers = {}
-	headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36'
-	headers['Referer'] = alz_url
-	headers_send = cjson.encode(headers)
-	post = {}
+function ADD_Blacklist(id,phones,token)
+	
+	local post = {}
 	post['action'] = 'addBlacklist'
 	post['sid'] = id
-	post['phone'] = phone
+	post['phone'] = phones
 	post['token'] = token
-	post_send = cjson.encode(post)
-	post_escaped = http.build_request(post_send)
-	status_resp, headers_resp, body_resp = http.post(alz_url, 5, headers_send, post_escaped)
-	nLog(status_resp)
-	nLog(body_resp)
-	Black = split(body_resp,'|')
-	if Black[1] == '1' then
-		nLog('加入黑名单成功,phone = '..phone)
-		return true
+
+	local kfydata = post_kfy(alz_url,post)
+	if kfydata ~= nil then
+		Black = split(kfydata,'|')
+		if Black[1] == '1' then
+			nLog('加入黑名单成功,phone = '..phones)
+			return true
+		end
 	end
 end
 
-function GET_Phone_again(id,phone,token)
-	--采用 cjson 构造请求头部 json
-	local sz = require("sz")
-	local cjson = sz.json
-	local http = sz.i82.http
-	headers = {}
-	headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36'
-	headers['Referer'] = alz_url
-	headers_send = cjson.encode(headers)
-	post = {}
+function GET_Phone_Again(id,phones,token)
+	local post = {}
 	post['action'] = 'getPhone'
 	post['sid'] = id
 	post['token'] = token
-	post['vno'] = 1
-	post['phone'] = phone
-	post_send = cjson.encode(post)
-	post_escaped = http.build_request(post_send)
-	status_resp, headers_resp, body_resp = http.post(alz_url, 5, headers_send, post_escaped)
-	nLog(status_resp)
-	nLog(body_resp)
-	if status_resp == 200 then
-		phone_list = split(body_resp,'|')
-		phone = phone_list[2]
+	post['phone'] = phones
 
+	local kfydata = post_kfy(alz_url,post)
+	if kfydata ~= nil then
+		phone_list = split(kfydata,'|')
+		phone = phone_list[2]
 		if phone_list[1] == '1' then
-			log('成功取得手机号,phone = '..phone)
+			log('成功取得手机号,phone = '..phones)
 			return true
 		else
-			log('获取失败')
+			log('获取失败-'..phone_list[2])
 			return false
 		end
 	end
 end
 
---KFY()
---GET_Phone(id)
---[[
-id = 6611
-ALZ()
-mSleep(1000 * 2)
-GET_Phone(id,token)
---GET_Phone_again(id,token,'18741913940')
---getMessage(id,phone)
---addBlacklist(id,phone)
 
---]]
 nLog('爱乐赞OK')
-

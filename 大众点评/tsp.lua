@@ -68,16 +68,12 @@ function closeX(app_bid,times,way)
 end
 function log(txt,show,times)
 	local times = 1
-	if txt == nil or txt  == '' then
-		nLog("null")
-		return
-	end
 	if type(txt) == 'table' then
 		print_r(txt)
 		return
 	end
 	if show == 'all' then
-		toast(show,times)
+		toast(txt,times)
 		nLog(txt)
 	elseif show then
 		toast(txt,times)
@@ -370,6 +366,8 @@ function rd(min,max)
 	return math.random(min,max)
 end
 
+local path = '/var/mobile/Media/TouchSprite/lua/account.txt'
+local backPath = '/var/mobile/Media/TouchSprite/lua/back_account.txt'
 function fileExists(path)
 	local path = path or '/var/mobile/Media/TouchSprite/lua/account.txt'
     local f = io.open(path, "r")
@@ -378,6 +376,27 @@ end
 --参数说明：path为要查找文件的路径。
 --返回值：返回 true、false。
 --文件按行写入--------------
+function backWirteFile(tables,way,backPath)
+	local path = backPath
+	local way = way or 'a'
+	local tablesLen = 0
+	for k,v in pairs(tables) do
+		tablesLen = tablesLen + 1
+	end
+	local f = assert(io.open(path, way))
+	if tablesLen >= 1 then
+		for k,v in pairs(tables)do
+			if v == nil or v == '' or v == null then
+				v = 'null'
+			end
+			local txt = k ..":".. v.."\n"
+			f:write(txt)
+		end
+	else
+		f:write('')
+	end
+	f:close()
+end
 function writeFile(tables,way,path)
 	local path = path or '/var/mobile/Media/TouchSprite/lua/account.txt'
 	local way = way or 'a'
@@ -398,6 +417,7 @@ function writeFile(tables,way,path)
 		f:write('')
 	end
 	f:close()
+	backWirteFile(tables,'a',backPath)
 end
 --文件按行写入--------------
 --将指定文件中的内容按行读取
@@ -604,11 +624,10 @@ function post(url,arr)
 	headers['Referer'] = url
 	headers_send = cjson.encode(headers)
 	post_send = cjson.encode(arr)
-	nLog(post_send)
 	post_escaped = http.build_request(post_send)
 	local status_resp, headers_resp, body_resp = http.post(url, 5, headers_send, post_escaped)
 	if status_resp == 200 then
---		dialog(body_resp)
+		log(body_resp)
 		local json = sz.json
 		return json.decode(body_resp)
 	end

@@ -1,13 +1,17 @@
-alz_url = 'http://api.ipadh.cn/do.php'
+alz_url = 'http://api.ndd001.com/do.php'
 require("TSLib")
 require("tsp")
-token = '176ac85b-bad7-4f68-8d96-b0f89e71bb09'
+--token = '12698a4b-ada8-4ffd-94ff-12d833f33aa0'
+token = 'f8629ece-0246-4eda-935a-224fb45746a1'
+
+
+
 
 function post_kfy(url,arr)
 	local sz = require("sz")
 	local cjson = sz.json
 	local http = sz.i82.http
-	safari = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36'
+	local safari = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36'
 	headers = {}
 	headers['User-Agent'] = safari
 	headers['Referer'] = url
@@ -25,8 +29,8 @@ end
 function KFY()
 	local post = {}
 	post['action'] = 'loginIn'
-	post['name'] = 's-cgy5paih'
-	post['password'] = 'yangmian121'
+	post['name'] = 's-gozqerp3'
+	post['password'] = 'a135246'
 	
 	local kfydata = post_kfy(alz_url,post)
 
@@ -70,8 +74,6 @@ function GET_Phone(id)
 			log('获取失败-'..phone_list[2])
 			return false
 		end
-	else
-		log(kfydata)
 	end
 end
 
@@ -82,7 +84,7 @@ function getMessage(id,phone)
 	post['sid'] = id
 	post['phone'] = phone
 	post['token'] = token
-	post['author'] = 'yangmian'
+
 	local kfydata = post_kfy(alz_url,post)
 	
 	if kfydata ~= nil then
@@ -116,7 +118,7 @@ function addBlacklist(id,phone,token)
 	headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36'
 	headers['Referer'] = alz_url
 	headers_send = cjson.encode(headers)
-	post = {}
+	local post = {}
 	post['action'] = 'addBlacklist'
 	post['sid'] = id
 	post['phone'] = phone
@@ -142,7 +144,7 @@ function GET_Phone_again(id,phone,token)
 	headers['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36'
 	headers['Referer'] = alz_url
 	headers_send = cjson.encode(headers)
-	post = {}
+	local post = {}
 	post['action'] = 'getPhone'
 	post['sid'] = id
 	post['token'] = token
