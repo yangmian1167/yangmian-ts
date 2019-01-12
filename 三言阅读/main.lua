@@ -54,13 +54,14 @@ t['tips_广告界面']={ 0x222222, "-77|-17|0x222222,-78|17|0x222222", 90, 27, 4
 t['tips_弹窗访问位置']={ 0x007aff, "282|9|0x5ba8fd,274|-23|0xf9f9f9", 90, 73, 594, 541, 691 } --多点找色
 t['tips_分享微博']={ 0xf56362, "-21|0|0xe9eff2,-30|-39|0xea5d5c,41|18|0xea5d5c", 90, 16, 705, 627, 1054 } --多点找色
 t['tips_隐私政策']={ 0xffffff, "54|36|0xffb800,-327|-27|0xffffff", 90, 102, 879, 514, 982 } --多点找色
-
+t['tips_立即进入']={ 0xff9900, "-82|-15|0xffffff,112|32|0xffe395", 90, 212, 976, 428, 1063 } --多点找色
 function tips()
 	if d('tips_完成',true) then
 	elseif d('tips_广告界面',true) then
 	elseif d('tips_弹窗访问位置',true) then
 	elseif d('tips_分享微博',true) then
 	elseif d('tips_隐私政策',true) then
+	elseif d('tips_立即进入',true) then
 	else
 		click(49,84)
 		moveTo(480,714,113,807)
