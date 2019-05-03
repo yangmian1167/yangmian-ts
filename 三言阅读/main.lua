@@ -31,16 +31,6 @@ sylist = {
 
 
 
-
-
-
-
-
-
-
-
-
-
 t = {}
 
 t['三言首页']={ 0xff9900, "11|40|0x000000,283|15|0xff9900", 90, 13, 1041, 637, 1134 } --多点找色
@@ -144,19 +134,51 @@ function rea()
 	return true
 end
 
-while true do
-	vpnx()
-	if vpn() then
-		rea()
-		awz_next()	
+--while true do
+--	vpnx()
+--	if vpn() then
+--		rea()
+--		awz_next()	
+--	end
+--end
+
+
+
+main_path = '/var/mobile/awzdata/com.tongzheng.sylife/'
+--遍历文件
+function getList(path)
+    local a = io.popen("ls "..path);
+    local f = {};
+    for l in a:lines() do
+        table.insert(f,l)
+    end
+    a:close()
+    return f
+end
+
+list = getList(main_path)	--文件夹例表
+sonlist={
+	'/Library/Caches/default',
+	}
+
+
+
+
+function delFile(path)--帮你玩平台禁用此函数
+    os.execute("rm -rf "..path);
+end
+
+function 清理()
+	for i,v in ipairs(sonlist) do
+		for k,vv in pairs(list)do
+			all = main_path..vv..v
+			nLog(all)
+			delFile(all)
+		end
 	end
 end
 
-
-
-
-
-
+openURL("https://act-m.wandafilm.com/1708/8173/?cinemaCode=198")
 
 
 
