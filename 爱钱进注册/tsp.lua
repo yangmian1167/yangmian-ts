@@ -508,7 +508,7 @@ function myRand(rnType,rnLen,rnUL)
 	HexRan={"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f",
 		"A","B","C","D","E","F"}
 	myrandS=""
-	math.randomseed(rns..tostring(os.time()):reverse():sub(1, 6))
+--	math.randomseed(rns..tostring(os.time()):reverse():sub(1, 6))
 	if rnType==1 then --生成数字
 		myrandS=math.random(9)
 		for r1=1,rnLen-1 do
@@ -656,7 +656,7 @@ function inputword(key)
 		end
 		keyDown(inputkey)
 		keyUp(inputkey)
-		mSleep(500)
+		mSleep(100)
 	end
 end
 
