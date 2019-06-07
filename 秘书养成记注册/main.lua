@@ -14,7 +14,23 @@ require("playgame")
 
 
 
-url = 'http://advertisetrack.miaogame.cn/ios/download?flag=2&lid=10154389'
+url = 'http://advertisetrack.miaogame.cn/ios/download?flag=2&lid=10154385'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -28,8 +44,8 @@ url = 'http://advertisetrack.miaogame.cn/ios/download?flag=2&lid=10154389'
 while true do
 	vpnx()
 	if vpn() then
+		delay(3)
 		if awzNew() then
-			delay(3)
 			dialog(url)
 			if openU() then
 				delay(15)
