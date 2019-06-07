@@ -5,7 +5,8 @@ require("AWZ")
 
 
 
-url = 'http://x20.178kd.com/'
+--url = 'http://advertisetrack.miaogame.cn/ios/download?flag=2&lid=10154389'
+url = 'http://tle.aadbx.cn//7/?code=29e992ff397a058e'
 
 
 
