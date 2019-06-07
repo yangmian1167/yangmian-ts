@@ -81,3 +81,25 @@ function game()
 end	
 
 
+
+
+t['链接打开']={ 0x007aff, "31|1|0x007aff,-142|-2|0x007aff,-100|-4|0x007aff", 90, 335, 605, 547, 657 } --多点找色
+
+
+
+
+
+
+
+function openU()
+	openURL(url)
+	while true do
+		if d('链接打开',true) then
+			delay(20)
+			return true
+		else
+			
+		end	
+	end
+end
+
