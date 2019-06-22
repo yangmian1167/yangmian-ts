@@ -1,5 +1,5 @@
 w,h=getScreenSize()
-nLog(frontAppBid())
+
 function lock()
 	flag = deviceIsLock();
 	if flag == 0 then
@@ -24,15 +24,63 @@ function closeX(app_bid)
 	closeApp(app_bid,1)
 	mSleep(2000)
 end
-function log(txt,show,times)
-	local show = show or false
-	local times = times or 1
-	if show then
-		toast(txt,times)
+
+--深度打印一个表,可以单独调用
+function print_r(t)
+	local print_r_cache={}
+	local function sub_print_r(t,indent)
+		if (print_r_cache[tostring(t)]) then
+			nLog(indent.."*"..tostring(t))
+		else
+			print_r_cache[tostring(t)]=true
+			if (type(t)=="table") then
+				for pos,val in pairs(t) do
+					if type(pos) == "string" then
+						pos = "'"..pos.."'"
+					end
+					if (type(val)=="table") then
+						nLog(indent.."["..pos.."] = {   --"..tostring(t))
+						sub_print_r(val,indent..string.rep(" ",string.len(pos)+8))
+						nLog(indent..string.rep(" ",string.len(pos)+6).."},")
+					elseif (type(val)=="string") then
+						nLog(indent.."["..pos.."] = ".."'"..val.."',")
+					else
+						nLog(indent.."["..pos.."] = "..tostring(val)..",")
+					end
+				end
+			else
+				nLog(indent..tostring(t))
+			end
+		end
 	end
-	--boxshow(txt)
-	nLog(txt)
+	if (type(t)=="table") then
+		nLog("{  --"..tostring(t))
+		sub_print_r(t,"	")
+		nLog("}")
+	elseif (type(t)=="string") then
+		nLog(t)
+	end
 end
+
+--打印函数,日志函数
+function log(txt,show,times)
+    if txt == nil or txt == '' then txt = 'Null'end
+	local times = 1;
+	if type(txt) == 'table' then
+		print_r(txt)
+		if show then log('table',true) end
+    else
+        if show == 'all' then
+            toast(show,times)
+            nLog(txt)
+        elseif show then
+            toast(txt,times)
+        else
+            nLog(txt)
+        end
+	end
+end
+
 function click(x,y,times)
 	times = times or 1
 --	log("准备点击("..x..","..y..")")
@@ -515,4 +563,44 @@ function d(name,clicks,oder,logTxt,s,stayTime)
 	end
 end
 
+function post(url,arr)
+	local sz = require("sz")
+	local cjson = sz.json
+	local http = sz.i82.http
+	local safari = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36'
+	local headers = {}
+	headers['User-Agent'] = safari
+	headers['Referer'] = url
+	headers_send = cjson.encode(headers)
+	local post_send = cjson.encode(arr)
+	nLog(post_send)
+	local post_escaped = http.build_request(post_send)
+	local status_resp, headers_resp, body_resp = http.post(url, 5, headers_send, post_escaped)
+	if status_resp == 200 then
+--		dialog(body_resp)
+		local json = sz.json
+		return json.decode(body_resp)
+	end
+end
+
+function get(url)
+	local sz = require("sz")
+	local http = require("szocket.http")
+	local res, code = http.request(url);
+	if code == 200 then
+		local json = sz.json
+		return json.decode(res)
+	end
+end
+local sz = require("sz")
 nLog('基础函数OK')
+
+
+
+
+
+
+
+
+
+

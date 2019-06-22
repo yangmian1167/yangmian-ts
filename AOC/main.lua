@@ -1,8 +1,10 @@
 --unlockDevice()
+
 require("TSLib")
 require("tsp")
 require("AWZ")
-require("game_ui")
+
+t={}
 aoc={}
 require("rob")
 require("service")
@@ -17,6 +19,7 @@ require("ocr")
 local sz = require("sz")
 
 function UI(name1,name2,clicks,oder,s)
+--	log("name1-> ".. name1 .. "  name2->".. name2)
 	clicks = clicks or false
 	oder = oder or 1
 	s = s or 95
@@ -51,7 +54,6 @@ end
 function click(x,y,times)
 	times = times or 1
 --	log("准备点击("..x..","..y..")")
-
 	touchDown(1,x, y)
 	mSleep(50)
 	touchUp(1, x, y)
@@ -75,11 +77,9 @@ function 在地图界面(clicks,clickMun,stayTime)
 end
 
 
-t={}
 -----------------------------------------在图下的合集-----------------
 t['在地图界面_商店_领地_地图_任务']={ 0x9d5500, "-908|640|0x3e5dad,-1037|645|0x917444,-1153|654|0xdbff25", 90, 0, 0, 1333, 749 } --多点找色
 	t['在地图界面_声望奖励提示']={ 0xf4d765, "40|-4|0xca0e10,55|-19|0xcf2c20", 90, 111, 94, 198, 160 } --多点找色
-
 -----------------------------------------返回下的界面-----------------
 t['返回']={ 0xf4f491, "24|-17|0x2d6477,41|1|0x257370,28|9|0xb2c3c3,16|21|0x3c9871,-25|3|0x307b78", 90, 1, 1, 98, 63 } --返回图标
 	t['返回_设置界面']={ 0x2e5d17, "-3|-106|0x2d5f19,165|-107|0x4d8d27,168|-2|0x458626", 90, 1088, 80, 1304, 634 } --特征找到2个未激活的绿色按钮
@@ -87,20 +87,20 @@ t['返回']={ 0xf4f491, "24|-17|0x2d6477,41|1|0x257370,28|9|0xb2c3c3,16|21|0x3c9
 		t['返回_商城界面_宝箱翻页']={ 0xa19a6e, "-18|-32|0xe7e79c,-6|-63|0xd02e20", 90, 987, 360, 1057, 508 } --有点红点
 		t['返回_商城界面_宝箱页面']={ 0xc01c2d, "-307|-556|0xd90043,171|-556|0xd90043,-90|-540|0xffe200", 90, 260, 60, 955, 736 } --多点找色
 		t['返回_商城界面_商城']={ 0xffffff, "6|-18|0x6e3e1d,16|-35|0xd0c386,-34|2|0xccbf81", 90, 45, 75, 143, 168 } --多点找色
-
 	t['返回_城堡中']={ 0xeeee90, "0|6|0x0f323e,-11|19|0xb5a87a,8|19|0xacb8ad", 90, 97, 7, 155, 65 } --多点找色
 		t['返回_城堡中_右下角对话按钮']={ 0x154a51, "8|0|0xedeb8c,15|0|0x11474f,21|-12|0xf4f391", 90, 1242, 666, 1317, 738 } --多点找色
-
 	t['返回_深渊界面']={ 0xd96f09, "303|-635|0xff0000,509|-644|0x33f4ff", 90, 394, 7, 1222, 745 } --下一关, 为扩展准备的
-
 	t['返回_邮件界面']={ 0xdfffe5, "-761|658|0x93d9d9,-761|656|0x289b96,233|419|0xdcebea", 90, 12, 37, 1321, 742 } --多点找色
-
 	t['返回_任务界面']={ 0x487222, "90|-36|0x4a7b29,190|-1|0x2e692a,88|31|0x4a7b29", 90, 1077, 78, 1312, 417 } --多点找色
-		t['返回_任务界面_活跃激活']={ 0xfff064, "1|10|0xfc7708,1|-7|0xf9f3a1", 90, 59, 244, 108, 294 } --多点找色
-		
+		t['返回_任务界面_活跃激活']={ 0xfff281, "2|3|0xffe44f,1050|-13|0xb9e719", 90, 15, 208, 1322, 311 } --多点找色
+		t['返回_任务界面_伙伴']={ 0x2c6119, "-1|14|0x2c6319,-60|3|0x21eeff", 90, 1010, 406, 1267, 522 } --多点找色
 	t['返回_世界地图界面']={ 0x154a52, "6|0|0xedeb8f,6|-15|0xdee092,16|21|0xaa9d80", 90, 1240, 669, 1314, 734 } --右下角的对话框
-		
 	t['返回_公会界面']={ 0x2d6018, "2|96|0x2c5e17,4|202|0x2a6218,175|11|0x498926", 90, 1041, 77, 1295, 731 } --多点找色
+	t['返回_宝库界面']={ 0xedec9e, "-76|31|0xadae7f,-21|-12|0xdbdb99", 90, 574, 41, 1253, 157 } --多点找色
+		t['返回_宝库界面_宝箱激活']={ 0xffff91, "0|-8|0xffff91", 90, 746, 72, 807, 126 } --多点找色
+	
+	t['返回_活动中心_报名活动']={ 0x49c540, "84|-37|0xc62827,373|-516|0xf9e2af", 90, 328, 130, 1011, 695}
+	
 -----------------------------------------战斗界面下的东西----------------
 t['战斗界面_预设未展开']={ 0xfdfdfd, "25|0|0xfafbfb,12|21|0x48bf8b,12|23|0xd1fcea", 90, 1122, 63, 1169, 113 } --多点找色
 t['战斗界面_预设已展开']={ 0x369170, "17|2|0xffffff,31|-3|0x359071,16|-5|0x1c4d3d", 90, 1122, 63, 1169, 113 } --多点找色
@@ -108,10 +108,16 @@ t['战斗界面_预设已展开']={ 0x369170, "17|2|0xffffff,31|-3|0x359071,16|-
 
 t['弹窗_城堡内_资源列表']={ 0x74f0f7, "61|-123|0xf4d765", 90, 431, 101, 802, 353 } --多点找色
 t['弹窗_城堡内_科技完成']={ 0x45c446, "-106|-300|0xf4d765,100|2|0x2eb53e", 90, 485, 187, 825, 547 } --多点找色
+t['弹窗_宝箱领取']={ 0x83eb42, "341|-500|0x861400,-352|-502|0x861400", 90, 246, 41, 1106, 648 } --多点找色
+t['弹窗_双蓝按钮_右左']={ 0x28abbe, "-341|-4|0x27a5bd,124|-48|0x49acca,22|35|0xd6fff9,-485|-18|0x8bd7ec", 90, 313, 392, 1008, 534 } --
+t['弹窗_魔像弹窗']={ 0xde8e3d, "-298|14|0x7eeb40,-300|-500|0xcd2b07", 90, 473, 71, 1159, 681 } --多点找色
+t['弹窗_魔镜借兵']={ 0x8ef043, "-118|-568|0x00b053,152|-562|0xebe891", 90, 126, 73, 1238, 700 } --弹窗_魔镜借兵
+t['弹窗_公会技能']={ 0x47c642, "-56|33|0x5ed84d,73|-24|0x18894c", 90, 592, 652, 745, 730 } --多点找色
 
-
+t['弹窗_报名活动_选择参赛时间']={  0xf6971d, "-17|133|0x919f2a,0|271|0x34c996", 90, 525, 227, 667, 581}
 
 t['结算界面_战斗胜利']={ 0x5dda3d, "-410|-11|0x27a2bd,347|-21|0xf2f293", 90, 311, 638, 1255, 731}
+
 
 -------------------------------------------------------以下的旧的取色
 
@@ -129,7 +135,7 @@ aoc['在地图中']={}
 
 aoc['返回']={}
 	aoc['返回']['返回图标']={{37,29,0xf1f093}, }
-		aoc['返回']['任务界面']={{157,23,0x0f161e}, {159,23,0xfbfbfb}, {196,34,0x0b131d}, {194,33,0xfefefe}, }
+		aoc['返回']['任务界面']={ 0xd1d1d1, "-3|31|0x7a7c7e,61|31|0x44484c,63|1|0x474b4f", 90, 139, 13, 220, 53 } --多点找色
 			aoc['返回']['感叹号']={ 0x42ffce, "6|-23|0x39fbca,13|-64|0x00ffdb", 90, 113, 103, 195, 713}
 			aoc['返回']['任务蓝色']={ 0x22ffd3, "", 90, 108, 560, 206, 711}
 			
@@ -145,8 +151,6 @@ aoc['返回']={}
 				aoc['返回']['可领龙币']={ 0xd3b862, "16|-13|0xcc2922", 90, 377, 154, 994, 214}
 				aoc['返回']['可领龙币_钱袋']={ 0xfcfa8f, "29|-31|0xcc2822", 90, 1031, 580, 1152, 686}
 				
-			
-				
 		aoc['返回']['在世界地图上']={{1274,689,0xe2df8c}, {1277,686,0x10363b}, }
 			aoc['返回']['前往']={ 0x28681e, "-2|0|0x51d03d,-2|24|0x99f44a", 90, 197, 8, 1214, 741}
 			aoc['返回']['在城堡中']={{124,15,0xf4f190},{124,21,0x102e3b},}
@@ -156,7 +160,7 @@ aoc['返回']={}
 		aoc['返回']['宝箱界面']={{200,25,0x2c2725}, {200,27,0xffffff}, {200,30,0x110b07}, }
 		aoc['返回']['商城界面']={{1131,25,0x00be9f}, {910,22,0xedea7c}, }
 			aoc['返回']['商城']={{194,28,0x201a18}, {191,28,0xffffff}, {187,28,0x120a08}, }
-				aoc['返回']['金币可以购买']={ 0xe8df74, "-1|5|0xd49a2d,-1|16|0xc1802a,-10|26|0xe7dd67,16|17|0xd49629,15|30|0xcca72b", 90, 148, 355, 1031, 696}
+				aoc['返回']['金币可以购买']={ 0xe8df74, "-1|5|0xd49a2d,-1|16|0xc1802a,-10|26|0xe7dd67,16|17|0xd49629,15|30|0xcca72b", 90, 148, 355, 900, 696}
 				aoc['返回']['金币可以购买2']={ 0xe9e776, "-10|26|0xedde78,15|19|0xcd8d2c,17|33|0xcaa32c", 90, 81, 254, 1054, 432}
 				aoc['返回']['3折稀有']={ 0xe78a10, "-11|0|0xfad955,-75|-17|0xb88130,-1|157|0xad5a10,-54|204|0xf7f6f6", 90, 345, 438, 1047, 710}
 				aoc['返回']['最右端']={ 0xb2fdfd, "3|7|0x447fa0,-268|27|0xc8a77f,-456|-10|0xffffa5", 90, 369, 180, 1036, 397}
@@ -215,13 +219,11 @@ aoc['返回']={}
 			aoc['返回']['魔镜遇怪']={ 0xcd2b22, "0|12|0xffdf9b", 90, 0, 262, 41, 302}
 			
 			--------------------深渊设置-----------------------------------------------------------------------------------
-		aoc['返回']['城堡中_深渊']={ 0xffffff, "-5|-60|0xe5db77,40|-65|0xcd2921", 90, 138, 627, 365, 729}
+		aoc['返回']['城堡中_深渊']={ 0xe4e198, "-61|-11|0x144e55,8|-42|0xd3321c,-43|-33|0xddcd53", 90, 131, 621, 513, 748 }
 		aoc['返回']['返回_深渊界面_返回_龙巢_地图']={ 0xf0f093, "20|617|0xf1f193,1246|616|0xf3f293,1249|609|0x153d50", 90, 1, 1, 1332, 748}
 			aoc['返回']['返回_深渊界面_英雄宝箱']={ 0xb6730c, "-3|-12|0xfffff8,-13|-4|0xf9e67d,12|-4|0xf8e57a", 90, 105, 43, 1247, 587}
 		
-		
-		
-			
+
 aoc['car'] = {}
 	aoc['car']['人物定位']={ 0xe7e4eb, 
 		"-11|0|0x373d5e,12|0|0x373d5e,18|0|0xffffff,-16|0|0xffffff", 90, 111, 4, 1223, 743}
@@ -244,7 +246,7 @@ aoc['car']['无体力劫车']={{1070,513,0xf2f1f2},{1070,507,0x333c4a},{1154,517
 	aoc['car']['封号']={{696,471,0x44c83c},{693,471,0x23661f},{666,476,0x2a6a1e},{662,476,0x55d43d},}
 	
 aoc['换服']={}
-	aoc['换服']['在地图上'] ={{1217,28,0xa15900}, {168,657,0xf1e199}, {67,668,0xd3ff16}, }
+	aoc['换服']['在地图上']={ 0xdcff28, "125|-5|0xf9eba5,1154|-650|0x974f00", 90, 0, 0, 1333, 749 } --多点找色
 		aoc['换服']['帐号管理']={{1180,257,0x2d6720},{1183,257,0x173310},{1185,257,0x9eba94},}
 		aoc['换服']['设置功能选择']={{283,275,0x29a0bd},{780,277,0x2aa5c0},{782,558,0x29a5c1},}
 			--选服,绑定,礼包
@@ -338,7 +340,7 @@ aoc['新手']['战斗界面中']={{39,30,0xf4f494}, {57,23,0xeef191}, }
 aoc['新手']['战斗界面中_新手']={{40,32,0xf1f192}, {48,32,0x2db8ab}, {58,25,0xe5df8a}, }
 
 	aoc['新手']['战斗准备']={ 0x00ffea, "52|3|0x1852a3,111|4|0x8f132c,155|-3|0xff6f98", 90, 464, 2, 883, 96}
-	aoc['新手']['寻找英雄']={ 0xffdd77, "39|-2|0xf6c244,16|-21|0xffdd77,19|21|0xfff9c2,29|15|0xe1b538", 80, 111, 3, 1318, 738}
+	aoc['新手']['寻找英雄']={ 0xffde78, "43|8|0xf4c244,12|-19|0xffe177,31|-19|0xf0c844", 90, 120, 8, 1294, 714 } --多点找色
 	aoc['新手']['招兵确定']={{694,547,0x4bcfac},{603,513,0x2c9abd},{663,486,0x248eb2},}
 	aoc['新手']['战斗胜利']={{883,720,0xaaf74d},{837,701,0x6be041},{825,658,0x3ead56},}
 	aoc['新手']['英雄结算画面']={{678,721,0x49ceaf},{627,683,0x2598b9},{761,686,0x1876a4},}
@@ -354,7 +356,7 @@ aoc['新手']['战斗界面中_新手']={{40,32,0xf1f192}, {48,32,0x2db8ab}, {58
 		aoc['新手']['找到目标ios9']={ 0x9bada1, "0|-5|0x94a694,0|6|0xa0b1ab", 80, 832, 105, 1004, 255}
 		aoc['新手']['任务激活']={ 0xffffee, "-1|18|0x152836,4|31|0xfefebd", 80, 832, 105, 1004, 255}
 		aoc['新手']['任务未激活ios9']={ 0xfafbf3, "1|12|0xffffc7",80, 832, 105, 1004, 255 }
-		aoc['新手']['世界地图']={{1280,686,0x144753}, {1279,676,0xf3f392}, {1262,659,0x10585d}, }
+		aoc['新手']['世界地图']={ 0xf1f191, "7|6|0x12424a,-15|-23|0x10575c", 90, 1217, 646, 1326, 744 } --多点找色
 			aoc['新手']['前往']={ 0x96f446, "-1|-31|0x226121,-5|-41|0xffffff", 90, 396, 115, 1040, 719}
 	aoc['新手']['地图']={ 0xdb0401, "0|5|0xffffff,1|19|0xf9da20", 90, 180, 664, 248, 732}
 		aoc['新手']['黄色感叹号']={ 0xfffc0c, "0|13|0x383e5e,0|19|0xfffc0c,1|29|0xffcd07", 90, 283, 67, 1174, 641}
@@ -433,7 +435,7 @@ aoc['other']={}
 	aoc['other']['蓝色按钮在中间_']={ 0x3ac2bb, "-59|-21|0x29a1be,-2|-48|0x1e87af", 90, 523, 457, 826, 735}
 	aoc['other']['绿色按钮在中间下面_']={ 0x85ec42, "-78|-24|0x47bd4f,-2|-53|0x34a55c", 90, 512, 606, 821, 732}
 	
-
+	
 aoc['宝箱']={}
 	aoc['宝箱']['未展开']={ 0x20ae95, "-7|0|0x49d0b7,0|2|0x1cb396", 90, 0, 350, 28, 398}
 	aoc['宝箱']['展开']={  0x22aa96, "5|0|0x21aa95", 90, 229, 341, 262, 402}
@@ -486,7 +488,7 @@ aoc['聊天']={}
 	
 aoc['回城']={}
 	aoc['回城']['回城展开']={ 0x21aa94, "734|291|0xf7f794,835|304|0xf7f693,976|-353|0xab6300", 90, 0, 0, 1333, 749}
-	aoc['回城']['回城展开_技能']={ 0x131113, "11|-24|0xf4f593,-15|7|0xcec580,-4|16|0xf2f293,70|-4|0xffffff", 90, 18, 258, 199, 568}
+	aoc['回城']['回城展开_技能']={ 0x131113, "11|-24|0xf4f593,-15|7|0xcec580,-4|16|0xf2f293,70|-4|0xffffff", 75, 18, 258, 199, 568}
 	aoc['回城']['弹窗回城']={ 0xf8fff8, "-30|-80|0xd0b755,-78|-10|0xc3a155,27|-5|0xbb9058,-19|10|0xbbffee", 90, 228, 157, 379, 373}
 
 
@@ -536,7 +538,14 @@ function other()
 	elseif UI('other','遗迹扫荡_无卷',true,1)then
 	elseif UI('新手','英雄结算画面',true,1)then
 	elseif UI('新手','战斗胜利',true,1)then
-	elseif UI_pic('other','触摸魔镜',true,1)then	
+	elseif UI_pic('other','触摸魔镜',true,1)then
+		delay(1)
+		if d('弹窗_魔镜借兵',false,1)then
+			click(208,278)
+			click(208,278)
+			click(208,278)
+			d('弹窗_魔镜借兵',true,1)
+		end
 	elseif UI('other','魔镜好东西',true,1)then
 	elseif UI('other','得到配方',true,1)then	
 	elseif UI('other','宝箱奖励',true,1)then	
@@ -552,8 +561,10 @@ function other()
 		UI('other','开始旅程',true,1)
 		delay(8)
 	elseif UI('新手','招兵确定',true,1)then
-	elseif UI_pic('宝箱','展开',true)then
+	elseif d('弹窗_魔像弹窗')then
+		click(40,40)
 	elseif UI('other','绿色赠品',true,1)then
+	elseif d('弹窗_报名活动_选择参赛时间',true)then
 	elseif UI('other','捡到英雄',true,1)then
 	elseif UI_pic('other','领取_',true,1)then
 	elseif UI_pic('other','绿色按钮_',true,1)then
@@ -567,15 +578,10 @@ function other()
 	elseif UI_pic('other','蓝色按钮在中间_',true,1)then
 	elseif UI_pic('other','蓝绿按钮___',true,1)then
 	elseif UI_pic('other','绿色按钮在中间下面_',true,1)then
+	elseif d('弹窗_双蓝按钮_右左',true,1)then
 	elseif d('结算界面_战斗胜利',true,1)then
-
-	elseif UI('other','启动画面',false,1)then
-		启动画面 = 启动画面 or 1
-		启动画面 = 启动画面 + 1
-		if 启动画面 > 30 then
-			closeX(app)
-			启动画面 = 0
-		end
+	elseif d('弹窗_公会技能',true,1)then
+	elseif UI_pic('宝箱','展开',true)then
 	else
 		other_click_mun = other_click_mun  or 1
 		other_click_mun = other_click_mun + 1
@@ -589,11 +595,9 @@ function other()
 end
 
 function awz_re_name(txt)
-	if values.oneormore == '0' then
+	if iphonename ~= 'noawz' and values.oneormore == '0' then
 		if setting[16] then
 			reName(getOnlineName()..'/'..txt)
-		else
-			reName(txt)
 		end
 	end
 end
@@ -654,121 +658,200 @@ aoc['返回']['战争学院界面_选择']={ 0xf4d765, "-616|10|0xf4d765,-810|-4
 	aoc['返回']['下一章']={ 0x9b936e, "-19|37|0xdada9c,-20|-39|0x738282", 90, 1262, 300, 1330, 448}
 	aoc['other']['战力不足']={{839,473,0x27a8bf},{841,473,0x14535e},{522,481,0x3f6935},{521,481,0xffffff},}
 	
-
 --delay(2)
+--地图()
+--lua_exit()
 --d('返回_邮件界面')
 ----战争学院()
 --lua_exit()
 
+
 --awzNew()
 --reName(newName)
-轮回 = 0
-主线 = tonumber(values.game_main)
-iphonename = getDeviceName()
-imei = sz.system.serialnumber()
-awz_mun,idfa = getTrueName_awz()
+--dragon()
+--lua_exit()
 
+function all()
+	package.loaded['game_ui'] = nil
+	require("game_ui")
+	轮回 = 0
 
-while (true) do
-	log(主线)
-	if 主线 == 0 then		--创号
-		if backhome()then
-			awz_re_name('回城成功')
-		end
-	elseif 主线 == 1 then		--换服
-		if service()then
-			awz_re_name('换服成功')
-		end
-	elseif 主线 == 2 then		--新手
-		if newplay()then
-			awz_re_name('过完新手')
+	function UIinit()
+		UIdata = getTokenUi()
+		if UIdata and UIdata.delivery then
+			dialog("启用token配置",2)
+--			log(UIdata)
 		else
-			awz_re_name('过完超时')
+--			log('查看手机web设置','all')
+			UIdata = getImeiUi()
+			if UIdata and UIdata.delivery then
+				dialog('启用手机web配置',2)
+--				log(UIdata)
+			else
+				UIdata = false
+				dialog('启用手机本地UI配置',2)
+			end
 		end
-	elseif 主线 == 3 then		--礼包
-		if gift()then
-			awz_re_name('领券成功')
-		else
-			awz_re_name('领券超时')
-		end
-	elseif 主线 == 4 then		--升城
-		if city()then
-			awz_re_name('-需要会员')
-		else
-			awz_re_name('-木材不足')
-		end
-	elseif 主线 == 5 then		--开图
-		if map() then
-			awz_re_name('-开地图')
-		else
-			awz_re_name('-开图超时')
-		end
-	elseif 主线 == 6 then		--主线
-		city()
-		auto_get()
-		awz_re_name('主线轮回')
-	elseif 主线 == 7 then		--采矿
-		采矿数量 = 0
-		city()
-		arm()
-		auto_get()
-		awz_re_name('矿('..采矿数量)
-	elseif 主线 == 8 then		--遗迹 
-		if auto_fire()then
-			awz_re_name('-遗迹')
-		end
-	elseif 主线 == 9 then		--遗迹 
-		auto_get()
-		awz_re_name('矿>'..采矿数量)
-	elseif 主线 == 10 then		--劫车
-		战争学院()
-		awz_re_name('战争学院')
-	elseif 主线 == 11 then		--清理
-		清理()
-		dialog('清理完成', 0)
-		lua_exit()
-	elseif 主线 == 12 then		--辅助打野
-		help()
-	elseif 主线 == 13 then		--造兵
-		arm()
-		awz_re_name('-造兵')
-	elseif 主线 == 14 then		--全部
-		if auto_all()then
-			awz_re_name('-清理任务')
-		end	
-	elseif 主线 == 15 then		--全部
-		if ad()then
-			awz_re_name('广告成功')
-		else
-			awz_re_name('广告超时')
+		if UIdata then
+			log('格式化web UI')
+			local mainlist ={
+				['0回城']=0,['1换服']=1,['2新手']=2,['3兑券']=3,['4修墙']=4,['5开图']=5,['6暂无']=6,
+				['7主线']=7,['8返击']=8,['9遗迹']=9,['10战争学院']=10,['11清理']=11,['12开龙']=12,['13造兵']=13,['14散兵']=14,['15广告']=15}
+			values.game_main = mainlist[UIdata.game_main]
+			local herolist = {['阿瓦隆']=0,['安德烈']=1,['艾微尔']=2}
+			values.hero = herolist[UIdata.hero]
+			setting = {}
+			for k,v in pairs(UIdata.setting) do
+				local uisetting = split(v,",")
+				setting[tonumber(uisetting[1])] = true
+			end
+			local worldlist = {['桑多瑞']=0,['葛雷']=1,['利萨姆']=2,['达姆斯']=3,['莉维塔']=4,['夏亚']=5}
+			values.world = worldlist[UIdata.world]
+			local kejilist = {['枪']=0,['弓']=1,['剑']=2,['骑']=3,['牧']=4,['车']=5}
+			values.keji_setting=kejilist[UIdata.keji_setting]
+			local yiji_armlist = {['0']=0,['1']=1,['2']=2,['3']=3,['4']=4,['5']=5,['6']=6,['7']=7,['8']=8,['近1']=9,['近2']=10,['全上']=11}
+			values.yiji_arm = yiji_armlist[UIdata.yiji_arm]-1
+			if #UIdata.kuang_setting>0 then
+				kuang_setting = {}
+				for k,v in pairs(UIdata.kuang_setting) do
+					local uisetting = split(v,",")
+					kuang_setting[tonumber(uisetting[1])] = true
+				end
+			end
+			values.xchange = UIdata.xchange
+			values.ad = UIdata.ad
+			log(values)
 		end
 	end
-	
-	if values.oneormore == '1' then
-		log('单机版')
-	else
-		轮回 = 轮回 + 1
-		if setting[5] then
-			repeat
-				delay(2)
-				awz_next()	
-				awz_mun,idfa = getTrueName_awz()
-				awz_mun_list = strSplit(awz_mun,'/')
-				LastName = awz_mun_list[1]
-			until LastName == 'RecordID:Art of Conquest'
+
+--	Armybuilding()
+--	lua_exit() 
+	while (true) do
+		UIinit()
+		主线 = tonumber(values.game_main)
+		log('主线功能->'..主线,true)
+		
+		iphonename = getDeviceName()
+		imei = sz.system.serialnumber()
+		if iphonename == "noawz" then
+			
 		else
-			awz_next()
+			imei = sz.system.serialnumber()
 			awz_mun,idfa = getTrueName_awz()
 		end
-		toast(轮回,1)
-		delay(2)
-	end
+
 	
-	清理()
+		if 主线 == 0 then		--创号
+			if backhome()then
+				awz_re_name('回城成功')
+			end
+		elseif 主线 == 1 then		--换服
+			if service()then
+				awz_re_name('换服成功')
+			end
+		elseif 主线 == 2 then		--新手
+			if newplay()then
+				awz_re_name('过完新手')
+			else
+				awz_re_name('过完超时')
+			end
+		elseif 主线 == 3 then		--礼包
+			if gift()then
+				awz_re_name('领券成功')
+			else
+				awz_re_name('领券超时')
+			end
+		elseif 主线 == 4 then		--升城
+			awz_re_name(fixWall())
+		elseif 主线 == 5 then		--开图
+			if map() then
+				awz_re_name('-开地图')
+			else
+				awz_re_name('-开图超时')
+			end
+		elseif 主线 == 6 then		--主线
+			city()
+			auto_get()
+			awz_re_name('主线轮回')
+		elseif 主线 == 7 then		--采矿
+			采矿数量 = 0
+			city()
+			arm()
+			Pantheon()
+			auto_get()
+			awz_re_name('矿('..采矿数量)
+		elseif 主线 == 8 then		--遗迹 
+			if attck()then
+				awz_re_name('成功反击')
+			else
+				awz_re_name('反击超时')
+			end
+		elseif 主线 == 9 then		--遗迹 
+			auto_get()
+		elseif 主线 == 10 then		--劫车
+			战争学院()
+			awz_re_name('战争学院')
+		elseif 主线 == 11 then		--清理
+			清理()
+			dialog('清理完成', 60)
+			lua_exit()
+		elseif 主线 == 12 then		--辅助打野
+			dragon()
+		elseif 主线 == 13 then		--造兵
+			awz_re_name(Armybuilding())
+		elseif 主线 == 14 then		--散兵
+			awz_re_name(dismiss())
+		elseif 主线 == 15 then		--全部
+			if ad()then
+				awz_re_name('广告成功')
+			else
+				awz_re_name('广告超时')
+			end
+		end
+	
+		clearOneAccount()
+		if values.oneormore == '1' then
+			log('单机版')
+		else
+			轮回 = 轮回 + 1
+			if setting[5] then
+				repeat
+					delay(2)
+					awz_next()
+					delay(2)
+					awz_mun,idfa = getTrueName_awz()
+					awz_mun_list = strSplit(awz_mun,'/')
+					LastName = awz_mun_list[1]
+				until LastName == 'RecordID:Art of Conquest'
+			else
+				iphonename = getDeviceName()
+				if iphonename == "noawz" then
+					log('next')
+					openURL("IGG://cmd/nextrecord");
+					delay(2)
+				else
+					awz_next()
+				end
+			end
+			toast(轮回,1)
+			delay(2)
+			
+		end
+	end
 end
 
 
+--auto_get()
+--lua_exit()
 
+while (true) do
+	local ret,errMessage = pcall(all)
+	if ret then
+	else
+		dialog(errMessage, 10)
+		mSleep(2000)
+	end
+end
 
 
 

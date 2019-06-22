@@ -1,6 +1,9 @@
 
 
-
+if t==nil then
+	t={}
+end
+t['宝箱_宝库木头']={ 0xca9355, "-45|49|0x8c4811,-48|56|0xc59255,-56|99|0x875717,27|-49|0xb77b2b", 90, 91, 172, 1236, 570 } --多点找色
 ----------------------------------------------------开宝箱---------------------------
 function box()
 	local time_line = os.time()
@@ -13,20 +16,29 @@ function box()
 		elseif UI_pic('宝箱','展开',false)then
 			UI_pic('宝箱','宝库',true)
 		elseif UI('返回','返回图标',false,1)then
-			if UI('返回','宝库界面',false,1)then
-				if (UI('返回','宝库界面_宝箱')) then
+			if d('返回_宝库界面',false,1)then
+				if d('宝箱_宝库木头',true)then
+					local mt = os.time()
+					while (UI_pic('宝箱','开启10次',true) or UI_pic('宝箱','开启1次',true)) do
+						if os.time()-mt > 15 then break	end
+					end
+				elseif (d('返回_宝库界面_宝箱激活')) then
 					if not(UI_pic('宝箱','宝库_无物品'))then
 						return true
 					end
-					click(167,252)
-					if UI_pic('宝箱','开启10次',true) or UI_pic('宝箱','开启1次',true)then end
+					if UI_pic('宝箱','开启10次',true) or UI_pic('宝箱','开启1次',true)then 
+					else
+						click(167,252)
+					end
 				else
 					click(771,91)
 				end
 			else
 				UI('返回','返回图标',true,1)
 			end
-		elseif UI('宝箱','领取',true,1)then
+		elseif d('弹窗_宝箱领取',true,1)then
+		else
+			click(20,20)
 		end
 		mSleep(1000)
 	end
@@ -47,7 +59,7 @@ end
 
 function city()
 	local 计时 = os.time()
-	local 超时 = 60*3
+	local 超时 = 60*5
 	优先主城 = setting[13]
 	不造仓库的轮回 = 0
 	开箱一次 = true
@@ -58,6 +70,7 @@ function city()
 	show = {}
 	城市中的爵位 = true
 	修墙一次 = true
+	活动计时 = os.time()
 	
 	while (os.time()-计时<超时) do
 		if active(app,5)then
@@ -79,9 +92,11 @@ function city()
 					delay(5)
 					UI('返回','返回图标',true,1)
 				end
-			elseif (UI('返回','挑战赛界面') or UI_pic('返回','活动中心界面')) and not(d('返回_城堡中'))  then
+			elseif os.time() - 活动计时 < 45 and  (UI('返回','挑战赛界面') or UI_pic('返回','活动中心界面')) and not(d('返回_城堡中'))  then
 				if not(UI_pic('返回','跨服公会战')) and UI_pic('返回','可以领奖',true)then
+					click(892,541)
 					mSleep(1000)
+				elseif d('返回_活动中心_报名活动',true)then
 				elseif UI('返回','活动中心可以抽奖',true)then
 				elseif UI_pic('返回','活动右侧例表',true)then
 					right_red_tips = right_red_tips or 1
@@ -105,11 +120,11 @@ function city()
 				end
 			elseif setting[1] and d('返回_商城界面')then
 				if d('返回_商城界面_宝箱翻页',true,1)then
-				elseif d('返回_商城界面_宝箱页面',true,1)and UI_pic('返回','免费宝箱',false)then
-					click(40,40,2)
-					click(40,40,2)
-					click(40,40,2)
-					click(40,40,2)
+				elseif UI_pic('返回','免费宝箱',false)and d('返回_商城界面_宝箱页面',true,1)then
+					click(40,40,1.5)
+					click(40,40,1.5)
+					click(40,40,1.5)
+					click(40,40,1.5)
 				elseif UI_pic('返回','宝箱红点',true)then
 				elseif d('返回_商城界面_商城')then
 					if 商店购买() then
@@ -139,16 +154,7 @@ function city()
 				end
 
 				--点击城堡-----------------------------------------
-			elseif d('返回_城堡中') and d('返回_城堡中_右下角对话按钮')then
-				if 主线 == 4 and 修墙一次 then
-					墙list={{11,371,0x1fa893}, {54,371,0xccc27d}, {592,252,0xe5fff7}, {987,527,0x36bcbd}, }
-					for i,v in ipairs(墙list) do
-						click(v[1],v[2],2)
-					end
-					click(20,40)
-					修墙一次= false
-				end
-				
+			elseif d('返回_城堡中') and d('返回_城堡中_右下角对话按钮')then				
 				if 上传信息 and values.oneormore ~= '1' then
 					get_info(aoc_zy['city'])
 					click(622,75,2)
@@ -160,6 +166,8 @@ function city()
 						show['idfa']=idfa
 						show['awz']= awz_mun
 						show['who']= values.who
+						show['token']= llsGameToken()
+						show['account']= AccountInfo()
 						
 						for k,v in pairs(show) do
 							log(k..":"..v)
@@ -225,7 +233,11 @@ function city()
 					return false
 				else
 					delay(1)
-					if 优先主城 and UI_pic('城堡','主城建筑',true)then
+					t['城堡中_城墙']={ 0xb17642, "-52|-64|0xace8ca,33|-48|0xab7347,57|-36|0x718d81,46|-40|0xccf6d3,-66|80|0xa4c9c1,-42|85|0x73abc1", 90, 174, 548, 1267, 747 }
+					t['城堡中_建筑展开_新建筑']={ 0xf4d765, "-33|-6|0x4ad434,40|-6|0x46d436,3|21|0x008c3d", 90, 165, 551, 1330, 591 }
+					if d('城堡中_城墙',true)then
+					elseif d('城堡中_建筑展开_新建筑',true)then
+					elseif 优先主城 and UI_pic('城堡','主城建筑',true)then
 					elseif UI_pic('城堡','非主城建筑',true)then		--非主城
 					elseif UI_pic('城堡','主城建筑',true)then
 					end
@@ -257,7 +269,8 @@ function city()
 					采集信息 = false
 					keepScreen(false)
 				end
-			elseif setting[22] and UI_pic('在地图中','活动奖励',true)then					--活动中心
+			elseif setting[22] and os.time() - 活动计时 < 20  and UI_pic('在地图中','活动奖励',true)then					--活动中心
+				活动计时 = os.time()
 			elseif setting[0] and UI_pic('城堡','邮件提醒',true,1)then		--邮件提示
 			elseif setting[1] and UI('城堡','商城红点',true,1)then		--商城提示
 			elseif 开箱一次 and setting[19] then
@@ -265,7 +278,7 @@ function city()
 				开箱一次 = false
 			end
 			在地图界面(true,2,stayTime)
-		elseif UI_pic('城堡','成功为会员',true,2)then
+		elseif UI_pic('城堡','成功为会员',false,2)then
 			return true
 		else
 			log('tip')

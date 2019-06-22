@@ -35,10 +35,12 @@ function 找金币()
 					k[7]=739
 				end
 			end
+			keepScreen(true)
 			for i = 1,30 do
 				for jj,kk in pairs(地图金币)do
 					if c_pic(kk,jj,true)then
 						log('>('..x..','..y)
+						keepScreen(false)
 						delay(1)
 						if UI_pic('地图','前往',true)then
 							return true
@@ -59,12 +61,13 @@ function 找金币()
 					k[7] = k[7]+28
 				end
 			end
-		
+			keepScreen(false)
 		end
 		
 	end
 	
 	--结果是 0,1,2,3
+	keepScreen(true)
 	if 开图次数 %2 == 0 then
 		
 		for map_x = 0,10 do
@@ -81,6 +84,7 @@ function 找金币()
 			for jj,kk in pairs(地图金币)do
 				if c_pic(kk,jj,true)then
 					log('>('..x..','..y)
+					keepScreen(false)
 					delay(1)
 					if UI_pic('地图','前往',true)then
 						return true
@@ -111,6 +115,7 @@ function 找金币()
 			for jj,kk in pairs(地图金币)do
 				if c_pic(kk,jj,true)then
 					log('>('..x..','..y)
+					keepScreen(false)
 					delay(1)
 					if UI_pic('地图','前往',true)then
 						return true
@@ -126,7 +131,7 @@ function 找金币()
 		end
 		
 	end
-	
+	keepScreen(false)
 end
 
 

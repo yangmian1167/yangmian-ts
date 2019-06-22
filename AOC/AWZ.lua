@@ -2,7 +2,7 @@ require("TSLib")
 awzbid = 'AWZ'
 
 function locks()
-	flag = deviceIsLock();
+	local flag = deviceIsLock();
 	if flag == 0 then
 	--	log("未锁定");
 	else
@@ -12,7 +12,7 @@ end
 function activeawz(app,t)
 	t = t or 0.5
 	locks()
-	bid = frontAppBid();
+	local bid = frontAppBid();
 	if bid ~= app then
 		nLog(app.."，准备启动")
 		runApp(app)
@@ -120,7 +120,6 @@ end
 function awzNew()
 	timeLine = os.time()
 	outTime = 60 * 0.5
-
 	while (os.time()-timeLine < outTime) do
 		if activeawz(awzbid,3)then
 		elseif newRecord() then
@@ -212,8 +211,6 @@ function getOnlineName()
 			end
 		end	
 	end
-	
-	
 	timeLine = os.time()
 	outTime = 60 * 0.5
 	while (os.time()-timeLine < outTime) do
@@ -235,6 +232,11 @@ function getTrueName_awz()
 		local sz = require("sz");
 		local http = require("szocket.http");
 		local res, code = http.request("http://127.0.0.1:1688/cmd?fun=getcurrentrecordparam");
+		
+		nLog(res)
+		nLog(code)
+		
+		
 		if code == 200 then
 			local resJson = sz.json.decode(res);
 			local result = resJson.result;
@@ -251,13 +253,13 @@ function getTrueName_awz()
 	while (os.time()-timeLine < outTime) do
 		if activeawz(awzbid,3)then
 		else
-			awz_name  , awz_idfa = getTrueName()
+			awz_name,awz_idfa = getTrueName()
 			if awz_name and awz_idfa then
 				nLog("awz_name->"..awz_name)
 				nLog("awz_idfa->"..awz_idfa)
 				return awz_name,awz_idfa
 			else
-				nLog("net work is not")
+				dialog("没有取到参数",2)
 				closeApp(awzbid)
 				mSleep(1000)
 			end
@@ -266,4 +268,25 @@ function getTrueName_awz()
 	end
 end
 
+
+
+
+
+
 nLog('AWZ 加截完成')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

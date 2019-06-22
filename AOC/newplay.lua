@@ -116,7 +116,7 @@ end
 function 地图()
 	if UI_pic('新手','地图',true)then
 		if UI('返回','返回图标',false,1)then
-			if UI('新手','世界地图')then
+			if UI_pic('新手','世界地图')then
 				if UI_pic('新手','黄色感叹号',true)then
 					if UI_pic('新手','前往',true)then
 						delay(3)
@@ -132,7 +132,8 @@ end
 
 function 任务()
 	if UI('返回','返回图标',false,1)then
-		if UI('返回','任务界面',false,1)then
+--		if UI_pic('返回','任务界面',false,1)then
+		if UI_pic('返回','任务界面',false,1)then
 			if UI_pic('新手','领取奖励',true)then
 			elseif UI_pic('新手','找到目标',true)then
 			elseif UI_pic('新手','任务激活',true)then
@@ -143,7 +144,7 @@ function 任务()
 			if UI_pic('新手','前往',true)then
 				delay(2)
 			end
-		elseif UI('新手','世界地图',false,1)then
+		elseif UI_pic('新手','世界地图',false,1)then
 			if UI_pic('新手','前往',true)then
 				delay(2)
 			else
@@ -259,10 +260,11 @@ function newplay()
 		if active(app,5)then
 		elseif UI('新手','战斗界面中_新手',false,1)  or UI('新手','战斗界面中',false,1) then
 			new_other()
-		elseif UI('在地图中','在地图界面',false,3)then
+		elseif 在地图界面(clicks,clickMun,stayTime)then
 			toast('有领地',1)
 			return true
-		elseif UI('换服','在地图上')then
+		elseif UI_pic('换服','在地图上')then
+			上兵统计 = 0
 			other_mun = 0
 			local 新手四个方向={{666,254,0xc6d1d7}, {750,286,0xddeffa}, {764,360,0xe4e4e6}, {742,418,0xc8d1d8}, 
 					{668,458,0xc6cfd9}, {583,389,0x787f89}, {560,340,0x8d7c87}, {594,278,0x9ca6b2}, }
