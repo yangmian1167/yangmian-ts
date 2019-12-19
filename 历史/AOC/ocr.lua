@@ -23,7 +23,7 @@ aoc_zy['资源']['crystal']={{  857,  296,0x192a39}, { 1000,  338,0x142336}, }
 aoc_zy['资源']['mobi']={{  391,  488,0x132c46},{  532,  526,0x13304a},}
 
 aoc_zy['set']={}
-aoc_zy['set']['fight'] ={{373,411,0x103a62},{529,452,0x103b62},}		--战力
+aoc_zy['set']['fight'] ={{140,537,0x770011}, {258,575,0x650f12}, }		--战力
 aoc_zy['set']['world']={{486,186,0x154261},{568,208,0x0e2c3f},}			--服
 aoc_zy['set']['gid']={{514,129,0x184662}, {668,153,0x1f4b63}, }			--游戏id
 
@@ -60,6 +60,7 @@ function get_info(t)
 		nLog('K--'..k.."--"..show[k])
 	end
 end
+
 --取帐号token
 function llsGameToken()
 	local appbid = 'com.lilithgame.sgame'
@@ -112,7 +113,6 @@ function getImeiUi()
 	postArr.s="Wgetui.getUiByimei"
 	postArr.imei = sz.system.serialnumber()
 	postArr.whos = UI_v.whos
-	postArr.name = getDeviceName()
 	local imeiwebuidata = post(url,postArr)
 	if imeiwebuidata and type(imeiwebuidata.data) == "table" then
 		local sz = require("sz")
@@ -130,27 +130,18 @@ function getTokenUi()
 	postArr.s="Wgetui.getUiBytoken"
 	postArr.token = llsGameToken()
 	postArr.whos = UI_v.whos
-	postArr.name = getDeviceName()
+--	postArr.token = 'Z2oJ5c0b2DqQdXLhYMUwnsXZ2ZzSKBGn'
 	local imeiwebuidata = post(url,postArr)
 	if imeiwebuidata and type(imeiwebuidata.data) == "table" then
+--		log(imeiwebuidata)
 		local sz = require("sz")
 		local json = sz.json
 		if type(imeiwebuidata.data.webui)== 'string' and string.len(imeiwebuidata.data.webui) > 10 then
+--		if imeiwebuidata.data.webui ~= '' and imeiwebuidata.data.webui ~= nil then
 			return json.decode(imeiwebuidata.data.webui)
 		end
 	end
 end
---根据帐号取 脚本设置
-function call_back()
-	local sz = require("sz")
-	local url = 'http://dajin.yzdingding.com/phalapi/public/'
-	local postArr = {}
-	postArr.s="Wadd.Call_back"
-	postArr.token = llsGameToken()
-	postArr.whos = UI_v.whos
-	log(post(url,postArr))
-end
-
 
 --UI_v={}
 --UI_v.whos = "ouwen000"
@@ -161,57 +152,11 @@ end
 --log(getImeiUi())
 
 
---取帐空闲帐号
-function AccountInfoBack()
-	
-	local sz = require("sz")
-	local url = 'http://dajin.yzdingding.com/phalapi/public/'
-	local postArr = {}
-	postArr.s="App.Wadd.Get_rest"
-	postArr.whos = UI_v.whos
---	postArr.whos = "ouwen000"
-	local game_data = post(url,postArr)
-
-	local json = sz.json	
-	if game_data then
---		game_date = json.decode(game_date)
-		log(game_data)
-		log(game_data.data.account)
-		local game_arr = strSplit(game_data.data.account,"|")
-		app_token = game_arr[1]
-		app_uid = game_arr[2]
-		player_id = game_arr[3]
-	end
-	
-	local appbid = 'com.lilithgame.sgame'
-	local AccountInfo = appDataPath(appbid).."/Documents/AccountInfo.json"
-
---	app_token = "qCOcHlziQlIVaEKWUlhwA37lme6PjEbt"
---	app_uid = "19430454"
---	player_id = "E76A9205-BCE5-4F51-B746-CB5D83E6AE3C"
-	
-	local account_ = {}
-	account_['app_token'] = app_token
-	account_['user_password'] = ""
-	account_['app_uid'] = app_uid
-	account_['player_id'] = player_id
-	account_['nickname'] = "游客"
-	account_['user_type'] = 1
 
 
-	
-	account_ = json.encode(account_)
-	account_ = "["..account_.."]"
 
-	log(account_)
-	
-	writeFileString(AccountInfo,account_)
-	closeApp(appbid)
-	mSleep(2000)
-end
 
---AccountInfoBack()
---inputText("66A910713D8049C680271A25506D29D6812A3437")
+
 
 
 

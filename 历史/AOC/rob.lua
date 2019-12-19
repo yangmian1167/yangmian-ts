@@ -19,22 +19,31 @@ function yiji_other()
 				{1222,536,0x0d0f05},
 			}
 			--values.yiji_arm 预设编号(0,1,2,3)设置1,设置2,设置3,全上
-			if tonumber(UIdata.arm_setting) >= 11 then
+			if tonumber(UIdata.arm_setting) >= 10 then
 				if c_p(aoc['新手']['超出队伍'],'超出队伍',false)then
-					click(178,31) 		--撤回
+					click(178,31) --撤回
+					if 主线 == 12 then
+						t['战斗_上龙']={ 0xf0c589, "98|8|0xeabc91", 90, 365, 644, 789, 678}
+						if d('战斗_上龙')then
+							click(x+60,y)
+						end
+					end
 					click(1238,673)		--攻击
 					delay(2)
 				else
 					上兵统计 = 上兵统计 + 1
-					log("上兵统计->"..上兵统计)
 					if 上兵统计 >= 18 then
 						if UI_pic('战斗','可以出战',true,1)then
 							delay(2)
+						else
+							return '战斗失败'
 						end
 					else
-						clickhero_n = clickhero_n or 7
-						clickhero_n = clickhero_n +1
-						click(1086-clickhero_n%8*98,663,0.2) 	--点英雄
+						if UI_pic('战斗','受伤英雄',false)then
+							return '战斗失败'
+						else
+							click(1086,663,0.2) 	--点英雄
+						end
 					end
 				end
 			else
@@ -116,14 +125,14 @@ function touch_move_look()
 	touchUp(1, h/2,w/2-155)
 end
 
---[[]]
+
 function find_kuang()
 	
 	t['任务菜单未激活']={ 0x4a8526, "-86|26|0x2c621b,-85|-28|0x2c611c,-65|4|0x16310e", 90, 1086, 107, 1308, 198 } --多点找色
 	d('任务菜单未激活',true)
 	
 	if UI_pic('新手','领取奖励',true)then
-		return false
+		find_kuang()
 	end
 	
 	aoc['返回']['感叹号'][7] = 670
@@ -149,29 +158,15 @@ function find_kuang()
 			aoc['资源']['水晶']={ 0xe240d3, "", 90, x+f_x, y+f_y, x+f_x_x,y+f_x_y}
 			aoc['资源']['密银']={ 0x50f7ec, "14|-4|0xafffb0,19|8|0xb9ffa2", 90, x+f_x, y+f_y, x+f_x_x,y+f_x_y}
 			aoc['返回']['指向目标地']={ 0x9ea495, "1|29|0x999f82", 90, x+686, y-54, x+841, y+29}
---			aoc['资源']['魔镜']={ 0xf7f9fa, "1|0|0x15425a,3|0|0xd9e0e4,-3|0|0xe3e8eb,-3|7|0xe3e8eb", 90, x+75, y-17, x+558, y+26}
+			aoc['资源']['魔镜']={ 0xf7f9fa, "1|0|0x15425a,3|0|0xd9e0e4,-3|0|0xe3e8eb,-3|7|0xe3e8eb", 90, x+75, y-17, x+558, y+26}
 			local zy_mun = 0
 			for k,v in pairs(aoc['资源'])do
 				if k == '水' or k == '密银' or k == '魔镜' then
 					if c_pic(v,k,false)then
-						if UIdata.resource.water and k == '水' then
-							zy_mun = zy_mun + 1
-						elseif UIdata.resource.silver and k == '密银' then
-							zy_mun = zy_mun + 1
-						end
 						zy_mun = zy_mun + 1
-					end			
+					end
 				else
 					if c_p(v,k,false)then
-						if UIdata.resource.wood and k == "木" then
-							zy_mun = zy_mun + 1
-						elseif UIdata.resource.gold and k == "金" then
-							zy_mun = zy_mun + 1
-						elseif UIdata.resource.blood and k == "血钻" then
-							zy_mun = zy_mun + 1
-						elseif UIdata.resource.crystal and k == "水晶" then
-							zy_mun = zy_mun + 1
-						end
 						zy_mun = zy_mun + 1
 					end
 				end
@@ -205,32 +200,7 @@ function find_kuang()
 	end
 	delay(0.8)
 end
---]]
 
---[[
-function find_kuang()
-	
-	if UI_pic('新手','领取奖励',true) then
-	
-	elseif UIdata.resource.wood  and d('任务下_木',true) then
-	elseif UIdata.resource.blood  and d('任务下_血钻',true) then
-	elseif UIdata.resource.silver  and d('任务下_秘银',true) then
-	elseif UIdata.resource.crystal  and d('任务下_水晶',true) then
-	elseif UIdata.resource.gold and d('任务下_金',true) then
-	elseif UIdata.resource.water  and d('任务下_水',true) then
-	elseif UIdata.mj and d('任务下_魔镜',true) then
-	else
-		log('上滑动一次')
-		if touch_move_look() then
-			log('还有任务')
-		else
-			return '没有任务'
-		end
-		delay(0.8)
-	end
-	
-end	
---]]
 
 function auto_get()
 	if not(UIdata.work)then
@@ -449,7 +419,7 @@ end
 if t == nil then
 	t={}
 end
-t['返回_巨龙巢穴']={0x1c2329, "6|-4|0xffffff,6|17|0x0b141e,6|23|0xffffff,-134|-1|0x1b2028,-140|-5|0xffffff,-134|11|0x23282f,-134|13|0xffffff",90,3,0,310,58} --多点找色
+t['返回_巨龙巢穴']={ 0xc70804, "-4|-14|0xc50203,-2|-3|0xf40300", 90, 906, 20, 1083, 55 } --多点找色
 t['返回_巨龙巢穴_孵化']={ 0x2aacc3, "-51|-18|0x2c92b7,40|15|0x3cc2ba", 90, 503, 467, 645, 519 } --多点找色
 t['返回_巨龙巢穴_抚养']={ 0x29aabf, "48|17|0x3bc3ba,238|-2|0x26a5c0,321|-4|0x136ca3", 90, 339, 454, 823, 529 } --多点找色
 t['返回_巨龙巢穴_喂养界面']={ 0x2c6117, "-3|-104|0x2c6217,6|61|0x2e611c,171|-87|0x246623", 90, 1007, 119, 1273, 578 } --多点找色
@@ -458,7 +428,7 @@ t['返回_巨龙巢穴_喂养界面']={ 0x2c6117, "-3|-104|0x2c6217,6|61|0x2e611
 	t['返回_巨龙巢穴_喂养界面_进阶']={ 0x57db39, "-44|-18|0x42c046,-80|-32|0x25f8ff", 90, 853, 610, 1004, 692 } --多点找色
 t['返回_巨龙巢穴_开赋界面']={ 0xb2e41b, "2|-106|0x2c6119,7|105|0x2f6218,7|202|0x2e6318", 90, 1030, 144, 1241, 552 } --多点找色	
 	t['返回_巨龙巢穴_开赋界面_升级']={ 0xffffff, "0|-4|0x145360,6|0|0x29a6b9", 90, 761, 246, 1013, 685 }
-	t['返回_巨龙巢穴_开赋界面_进阶']={0x370000, "-5|-7|0xfc231d,-2|-13|0xc40000,5|11|0xc20201,29|17|0x259cb9,48|49|0xffffff",90,804,242,1021,738} --多点找色
+	t['返回_巨龙巢穴_开赋界面_进阶']={ 0xc50a05, "3|-2|0x7d0101,-9|-25|0xca0806", 90, 821, 330, 1006, 447 } --多点找色
 t['弹窗_巨龙升级']={ 0xeea40b, "8|25|0xfcd702,-57|-8|0xebebec,-34|-32|0xcd580d", 90, 825, 600, 1040, 674 } --多点找色
 t['弹窗_英雄选择']={ 0xcbc899, "-57|-79|0xebbd92,58|-84|0xebbd92,0|-172|0xfefecc", 90, 31, 272, 1208, 486 } --多点找色
 t['弹窗_天赋进阶']={ 0x29a7bf, "-202|-176|0xcc100c,-330|-2|0x27a5bd", 90, 329, 212, 1003, 524 } --多点找色
@@ -476,81 +446,79 @@ function dragon()
 	优先天赋_ = true
 	优先龙巢_ = true
 	
-	if UIdata.dragon then
-		while ((os.time()-计时<超时 )) do
-			if active(app,5)then
-			elseif UI('在地图中','在地图界面',true,2)then
-			elseif UI('返回','返回图标',false,1) and not(UI('新手','战斗界面中',false,1)) then
-				if d('返回_城堡中')then
-					if d('返回_城堡中_深渊按钮',true)then
-						delay(math.random(3,5))
-					else
-						if d('返回_城堡中_龙巢位置',true)then
-							click(x,y+80)
-						end
-					end
-				elseif d('返回_深渊界面') then
-					if 优先龙巢_ and d('返回_深渊界面_龙巢位置',true) then
-						优先龙巢_ = false
-					else
-						local heroTime = os.time()
-						local Nohero_ = true
-						while os.time()-heroTime < 8 do
-							if d('返回_深渊界面_可选英雄',true)then
-								Nohero_ = false
-								break
-							end
-						end
-						d('返回_深渊界面_下一关',true)
-							
-					end
-				elseif d('返回_巨龙巢穴')then
-						if d('返回_巨龙巢穴_开赋界面')then
-							if d('返回_巨龙巢穴_开赋界面_升级',true)then
-							elseif d('返回_巨龙巢穴_开赋界面_进阶',true)then
-							else
-								click(1097,194)
-							end
-							优先天赋_ = false
-						elseif d('返回_巨龙巢穴_喂养界面')then
-							if 优先天赋_ then
-								click(1178,299)
-							else
-								if d('返回_巨龙巢穴_喂养界面_喂养_',true)then
-								elseif d('返回_巨龙巢穴_喂养界面_喂养',true)then
-								elseif d('返回_巨龙巢穴_喂养界面_进阶',true)then
-								else
-									UI('返回','返回图标',true,1)
-									UI('返回','返回图标',true,1)
-								end
-							end
-						elseif d('返回_巨龙巢穴_孵化',true)then
-						elseif d('返回_巨龙巢穴_抚养',true)then
-						else
-							click(256,603)
-						end
-				elseif d('返回_迷途之渊',true)then
+	while ((os.time()-计时<超时 )) do
+		if active(app,5)then
+		elseif UI('在地图中','在地图界面',true,2)then
+		elseif UI('返回','返回图标',false,1) and not(UI('新手','战斗界面中',false,1)) then
+			if d('返回_城堡中')then
+				if d('返回_城堡中_深渊按钮',true)then
+					delay(math.random(3,5))
 				else
-					UI('返回','返回图标',true,1)
+					if d('返回_城堡中_龙巢位置',true)then
+						click(x,y+80)
+					end
 				end
-			elseif UI('other','战斗失败',true,2)then
-				return true
-			elseif d('弹窗_巨龙升级',true)then
-				优先天赋_ = true
-			elseif d('弹窗_天赋进阶',true)then
-			elseif d('弹窗_英雄选择')then
-				click(x,y-80)
+			elseif d('返回_深渊界面') then
+				if 优先龙巢_ and d('返回_深渊界面_龙巢位置',true) then
+					优先龙巢_ = false
+				else
+					local heroTime = os.time()
+					local Nohero_ = true
+					while os.time()-heroTime < 8 do
+						if d('返回_深渊界面_可选英雄',true)then
+							Nohero_ = false
+							break
+						end
+					end
+					d('返回_深渊界面_下一关',true)
+						
+				end
+			elseif d('返回_巨龙巢穴')then
+					if d('返回_巨龙巢穴_开赋界面')then
+						if d('返回_巨龙巢穴_开赋界面_升级',true)then
+						elseif d('返回_巨龙巢穴_开赋界面_进阶',true)then
+						else
+							click(1097,194)
+						end
+						优先天赋_ = false
+					elseif d('返回_巨龙巢穴_喂养界面')then
+						if 优先天赋_ then
+							click(1178,299)
+						else
+							if d('返回_巨龙巢穴_喂养界面_喂养_',true)then
+							elseif d('返回_巨龙巢穴_喂养界面_喂养',true)then
+							elseif d('返回_巨龙巢穴_喂养界面_进阶',true)then
+							else
+								UI('返回','返回图标',true,1)
+								UI('返回','返回图标',true,1)
+							end
+						end
+					elseif d('返回_巨龙巢穴_孵化',true)then
+					elseif d('返回_巨龙巢穴_抚养',true)then
+					else
+						click(256,603)
+					end
+			elseif d('返回_迷途之渊',true)then
 			else
-				f_yiji = yiji_other()
-				if f_yiji == '战斗失败' then
-					return true
-				elseif f_yiji then
-					other()
-					nLog('other')
-				end
+				UI('返回','返回图标',true,1)
 			end
-			mSleep(500)
+		elseif UI('other','战斗失败',true,2)then
+			return true
+		elseif d('弹窗_巨龙升级',true)then
+			优先天赋_ = true
+		elseif d('弹窗_天赋进阶',true)then
+		elseif d('弹窗_英雄选择')then
+			click(x,y-80)
+		else
+			f_yiji = yiji_other()
+			if f_yiji == '战斗失败' then
+				return true
+			elseif f_yiji then
+				other()
+				nLog('other')
+			end
 		end
+		mSleep(500)
 	end
 end
 

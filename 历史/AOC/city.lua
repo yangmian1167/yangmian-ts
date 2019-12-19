@@ -46,14 +46,12 @@ end
 
 function 商店购买()
 	if UIdata.shop then
-		if UI_pic('返回','金币可以购买1',false) or UI_pic('返回','金币可以购买2',false) then
+		if UI_pic('返回','金币可以购买',false)then
 			金币不足 = {0xff4b4b,"",90,x+29,y-3,x+136,y+35}
 			if c_p(金币不足,'金币不足',false) then
 				return false
 			else
-				if UI_pic('返回','金币可以购买1',true) then
-				elseif UI_pic('返回','金币可以购买2',true) then
-				end
+				UI_pic('返回','金币可以购买',true)
 			end
 		end
 	end
@@ -75,19 +73,13 @@ function city()
 	show = {}
 	local 城市中的爵位 = true
 	local 修墙一次 = true
-	local 商店滑动key = 0
 	local 活动计时 = os.time()
 	
 	while (os.time()-计时<超时) do
 		if active(app,5)then
-		elseif d('返回') then
+		elseif d('返回')then
 			if d('返回_深渊界面')then
-				if d('返回_深渊界面_上阵英雄')then
-					x,y = findMultiColorInRegionFuzzy( 0x202841, "2|27|0x20223a,-12|-23|0x6b4d76,44|51|0x3d3551,15|53|0x814c6b", 90, 86, 96, 1275, 618)
-					click((x+10),(y+10))
-					delay(2)
-					click(631,392)
-				elseif UI_pic('返回','返回_深渊界面_英雄宝箱',true)then
+				if UI_pic('返回','返回_深渊界面_英雄宝箱',true)then
 					delay(2)
 				else
 					local right_left ={{1196,171,0xe7b646}, {1231,376,0xe1ad3c}, {1088,560,0xf0bf4b}, 
@@ -139,16 +131,12 @@ function city()
 				elseif UI_pic('返回','宝箱红点',true)then
 				elseif d('返回_商城界面_商城')then
 					if 商店购买() then
---					elseif UI_pic('返回','最右端',false)then
-					elseif 商店滑动key > 9 then
+					elseif UI_pic('返回','最右端',false)then
 						toast('购买完成',1)
 						UI('返回','返回图标',true,1)
 					else
 						moveTo(600,375,400,375,10)
-						商店滑动key = 商店滑动key + 1
 					end
-				elseif d('返回_商城界面_会员翻页',true)then
-				elseif d('返回_商城界面_补给红点',true)then
 				else
 					UI('返回','返回图标',true,1)
 				end
@@ -255,13 +243,9 @@ function city()
 					elseif UI_pic('城堡','主城建筑',true)then
 					end
 				end
-				
+
 			else
-				if d('返回_城防内容tips',true) then
-				else
-					log('1------------------------')
-					UI('返回','返回图标',true,1)
-				end
+				UI('返回','返回图标',true,1)
 			end
 
 		elseif 在地图界面(false,clickMun,stayTime)then

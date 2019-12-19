@@ -6,21 +6,10 @@ function new_other()
 	if UI('新手','战斗界面中_新手',false,1)  or UI('新手','战斗界面中',false,1) then
 		if UI_pic('新手','战斗准备',false,1)then
 			
-			预设位置={
-				{1045,162,0x0a0c04},
-				{1220,166,0x0d0e08},
-				{1041,257,0x060c07},
-				{1220,252,0xffffff},
-				{1048,350,0xdbdbdb},
-				{1227,348,0x090c08},
-				{1044,442,0x0d0f05},
-				{1222,443,0x111609},
-				{1044,536,0x0d0f05},
-				{1222,536,0x0d0f05},
-			}
+			预设位置={{1045,162,0x0a0c04},{1220,166,0x0d0e08},{1041,257,0x060c07},
+				{1220,252,0xffffff},{1048,350,0xdbdbdb},{1227,348,0x090c08},{1044,442,0x0d0f05},{1222,443,0x111609},}
 			--values.yiji_arm 预设编号(0,1,2,3)设置1,设置2,设置3,全上
-			log(UIdata.arm_setting)
-			if tonumber(UIdata.arm_setting) then
+			if tonumber(values.yiji_arm) then
 				if c_p(aoc['新手']['超出队伍'],'超出队伍',false)then
 					click(178,31)		--撤回
 					click(1238,673)		--攻击
@@ -34,32 +23,21 @@ function new_other()
 							return '战斗失败'
 						end
 					else
-						if UI_pic('新手','战斗_选择2级兵',false)then
-							click( 810,  614) 	--点兵
-							delay(2)
-							click( 810,  614) 	--点兵
-							delay(2)
-							click( 810,  614) 	--点兵
-							delay(2)
-							click( 810,  614) 	--点兵
-							delay(2)
-							click( 810,  614) 	--点兵
-							delay(2)
-							click(1086,663) 	--点英雄
-							delay(2)
-							click(1086,663) 	--点英雄
-							delay(2)
-							click(1086,663) 	--点英雄
+						if UI_pic('战斗','受伤英雄',false)then
+							return '战斗失败'
 						else
-							click(1086,663,0.2) 	--点英雄
-							log('点英雄')
+							if UI_pic('新手','战斗_选择2级兵',true)then
+								click(1086,663,0.2) 	--点英雄
+							else
+								click(1086,663,0.2) 	--点英雄
+							end
 						end
 					end
 				end
 			else
 				if UI('other','预设未展开',true,1)then
 				elseif UI('other','预设展开',false,1)then
-					click(预设位置[tonumber(UIdata.arm_setting)][1],预设位置[tonumber(UIdata.arm_setting)][2])
+					click(预设位置[tonumber(values.yiji_arm)+1][1],预设位置[tonumber(values.yiji_arm)+1][2])
 					delay(2)
 					if UI('other','可以战斗',true,1)then
 						delay(2)
@@ -121,17 +99,9 @@ function new_other()
 	elseif UI('other','聊天退出',true,1)then
 	elseif UI('other','暂停界面',true,1)then
 	elseif UI('other','选择国家界面')then
-		if d('龙牙大陆选国界面') then
-			龙牙国家选择 = tonumber(UIdata.world)
-			click(t['龙牙国家位置'][龙牙国家选择][1],t['龙牙国家位置'][龙牙国家选择][2])
-			d('龙牙大陆选国界面_进入',true)
-			delay(4)
-			click(903,488) ---不在原公会国家点确认 
-		elseif UIdata.new then	
-			国家选择 = tonumber(UIdata.world)
-			click(aoc['国家位置'][国家选择][1],aoc['国家位置'][国家选择][2])
-			UI('other','选国界面',true,1)
-		end
+		国家选择 = tonumber(UIdata.world)
+		click(aoc['国家位置'][国家选择][1],aoc['国家位置'][国家选择][2])
+		click(1048,662)
 	elseif UI('other','开始旅程',false,2)then
 		英雄选择 = tonumber(UIdata.hero)
 		click(aoc['英雄位置'][英雄选择][1],aoc['英雄位置'][英雄选择][2])

@@ -149,14 +149,13 @@ function attck()
 				{1222,536,0x0d0f05},
 			} --多点比色
 
-			if UIdata.arm_setting == '11' then
+			if values.yiji_arm == '10' then
 				for i = 1,20 do
 					click(1076-math.random(0,3)*117,662)
 					d('弹窗_体力',true)
 				end
 			else
---				click(预设位置[tonumber(UIdata.arm_setting)+1][1],预设位置[tonumber(UIdata.arm_setting)+1][2])
-				click(预设位置[tonumber(UIdata.arm_setting)][1],预设位置[tonumber(UIdata.arm_setting)][2])
+				click(预设位置[tonumber(values.yiji_arm)+1][1],预设位置[tonumber(values.yiji_arm)+1][2])
 				delay(3)
 			end
 			click(1212,661)	--开始 战斗力位置
@@ -167,7 +166,7 @@ function attck()
 			elseif d('弹窗_公会_攻击_',true,1)then
 			elseif d('弹窗_开战',true,1)then
 				delay(3)
-				return awz_re_name("反击成功")
+				return true
 			else
 				if other() then
 					click(97,33)
@@ -176,7 +175,6 @@ function attck()
 		end
 		delay(1)
 	end
-	awz_re_name("反击失败")
 end
 
 t['在地图_技能']={ 0x6c6a49, "14|-19|0xf6f694,207|-3|0x22a695", 90, 1, 110, 263, 658 } --多点找色
@@ -189,7 +187,7 @@ function fixWall()
 		return false
 	end
 	local TimeLine = os.time()
-	local usedTime = 40*1
+	local usedTime = 35*1
 	while (os.time()-TimeLine < usedTime) do
 		if active(app,5)then
 		elseif 在地图界面(false,clickMun,stayTime)then
@@ -198,7 +196,7 @@ function fixWall()
 		elseif d('弹窗_技能选择框')then	
 			if d('弹窗_技能选择框_使用',true)then
 				delay(15)
-				return awz_re_name("修复成功")
+				return '修复成功'
 			elseif d('弹窗_技能选择框_城门修复',true)then
 			else
 				return '没有技能'
@@ -209,7 +207,7 @@ function fixWall()
 			other()
 		end
 	end
-	return awz_re_name("修复超时or不要修复")
+	return '修复超时or不要修复'
 end
 
 
@@ -318,7 +316,7 @@ t['弹窗_神石宝库']={ 0xdfffe5, "-320|41|0xffffff,-505|0|0x82a8a7", 90, 166
 function Pantheon()
 	local 计时 = os.time()
 	local 超时 = 60*15
-	if UIdata.citySetting.wsd then
+	if setting[6] then
 		while (os.time()-计时< 超时) do
 
 			if active(app,3)then
