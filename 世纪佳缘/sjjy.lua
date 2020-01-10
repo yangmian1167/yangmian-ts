@@ -4,6 +4,7 @@
 
 require("TSLib")
 require("tsp")
+require("AWZ")
 
 
 
@@ -120,24 +121,47 @@ function rdclicks(x,y,n)
 		click(x,y,0.5)
 	end
 end
-t={}
+
 t['手机号注册界面']={ 0x4f98d6, "-199|-445|0x363839,-205|-447|0xfefefe,-571|7|0x4a95d5,-569|14|0xffffff,-569|16|0x4a95d5", 90, 48, 55, 702, 570 } --多点找色
 	t['手机号注册界面_获取验证码']={ 0xffffff, "-105|-14|0xffffff,-220|-18|0xf85e74,144|31|0xf83d84", 90, 79, 578, 671, 703 } --多点找色
+	t['完成界面']={ 0xb2b3b3, "0|12|0x373a3b,-143|12|0x363a3b,-595|0|0xff2581,-574|2|0xffffff", 90, 43, 1246, 710, 1312 } --多点找色
 function reg()
 	local timeline = os.time()
-	local outTimes = 60 * 3
-	
+	local outTimes = 60 * 1
+	local 手机号 = true
+	local 短信 = false
 	var.password  = "AaDd112211"
 	local fix_info = false
 	
 	while os.time()-timeline < outTimes do
 		if active(var.appbid,5) then
 			if d('手机号注册界面') then
-				click(354,326)
-				input(phone)
-				if d('手机号注册界面_获取验证码',true) then
-					click(187,437)
-					input(sms)
+				if 手机号 then
+					var.phone = dxcode.getPhone()
+					if var.phone then
+						click(354,326)
+						input[3](var.phone)
+						手机号 = false
+						短信 = true
+					end
+				elseif 短信 then	
+					if d('手机号注册界面_获取验证码',true) then
+					else	
+						var.sms = dxcode.getMessage()
+						if var.sms then
+							input[3](var.sms)
+							click(187,437)
+							input[3](sms)
+							短信 = false
+							提交 = true
+							up('点击注册')
+						end	
+					end
+				end
+			elseif 提交 then
+				if d('完成界面') then
+					up('注册完成')
+					return true
 				end
 			end	
 		end
@@ -148,35 +172,144 @@ function reg()
 end
 
 
-function up()
-	local url = 'http://ssffzz.com/api/Public/idfa/'
+t['填资料1界面']={ 0x000000, "-10|-12|0xfefefe,285|4|0x000000,290|16|0xfefefe,296|19|0x000000,303|19|0xfefefe", 90, 29, 134, 362, 208 } --多点找色
+	t['填资料1界面_请输入昵称']={ 0xd9d9d9, "-13|-3|0xd9d9d9,-28|-8|0xd9d9d9,-89|1|0xd9d9d9,-98|-1|0xd9d9d9", 90, 176, 386, 334, 432 } --多点找色
+	t['填资料1界面_男女比例']={ 0xfed9e7, "-380|2|0xdaeeff,-348|46|0xd1edff,24|48|0xfedfe4", 90, 114, 471, 623, 569 } --多点找色
+	t['填资料1界面_生日未选择']={ 0xd9d9d9, "6|8|0xd9d9d9,82|-4|0xf3f3f3,84|6|0xdadada,84|17|0xdbdbdb", 90, 545, 607, 644, 651 } --多点找色
+	t['填资料1界面_地区未选择']={ 0xd9d9d9, "6|8|0xd9d9d9,82|-4|0xf3f3f3,84|6|0xdadada,84|17|0xdbdbdb", 90, 544, 701, 645, 739 } --多点找色
+	t['填资料1界面_下一步']={ 0x333333, "0|-2|0x979797,-44|-9|0x333333,29|-3|0x353535", 90, 605, 58, 713, 109 } --多点找色
+t['填资料2界面']={ 0x000000, "-2|0|0xa2a2a2,-3|1|0xfefefe,285|19|0x000000,287|20|0x545454,290|20|0xfefefe", 90, 19, 130, 339, 204 } --多点找色	
+	t['填资料2界面_身高未选择']={ 0xefefef, "-2|-21|0xf8f8f8,-85|-18|0xf4f4f4,-88|2|0xf5f5f5,-9|5|0xe4e4e4", 95, 545, 389, 643, 431 } --多点找色
+	t['填资料2界面_学历未选择']={ 0xe0e0e0, "0|7|0xd9d9d9,8|21|0xdcdcdc,79|-4|0xd9d9d9,76|7|0xffffff", 95, 540, 484, 652, 520 } --多点找色
+	t['填资料2界面_月薪未选择']={ 0xe0e0e0, "0|7|0xd9d9d9,8|21|0xdcdcdc,79|-4|0xd9d9d9,76|7|0xffffff", 95, 546, 576, 646, 612 } --多点找色
+	t['填资料2界面_婚史未选择']={ 0xe0e0e0, "0|7|0xd9d9d9,8|21|0xdcdcdc,79|-4|0xd9d9d9,76|7|0xffffff", 95, 546, 666, 646, 704 } --多点找色
+t['完成']={ 0x2099ff, "11|4|0x1493ff,35|16|0x1c97ff,21|10|0x2b9eff,37|-1|0xa2d4ff", 90, 649, 837, 718, 881 } --多点找色
+	t['完成_生日']={ 0x696969, "-6|12|0xa1a1a1,51|27|0x333333,51|0|0x4e4e4e,51|-1|0xffffff", 90, 342, 839, 405, 875 } --多点找色	
+	t['完成_所在地区']={ 0xbebebe, "-2|26|0xaeaeae,123|0|0x737373,124|25|0x949494,98|-1|0x848484", 90, 305, 838, 441, 877 } --多点找色
+	t['完成_身高']={ 0xe8e8e8, "1|0|0xb3b3b3,-11|20|0xc0c0c0,49|3|0xa2a2a2,47|29|0xb6b6b6", 90, 337, 836, 413, 878 } --多点找色
+	t['完成_学历']={ 0x868686, "-4|6|0xbdbdbd,4|28|0xb5b5b5,56|2|0x646464,51|28|0xaaaaaa", 90, 340, 839, 411, 874 } --多点找色
+	t['完成_月薪']={ 0xc7c7c7, "1|0|0x4e4e4e,-3|26|0xb1b1b1,55|1|0x6a6a6a,52|27|0x939393", 90, 344, 838, 407, 879 } --多点找色
+	t['完成_婚史']={ 0x969696, "-2|0|0x606060,-4|28|0x787878,53|4|0x7b7b7b,56|26|0xe9e9e9", 90, 334, 837, 413, 879 } --多点找色
+	
+	
+t['上传头像_跳过']={ 0x363839, "-424|88|0x000000,-417|89|0xfefefe,-361|356|0xd8d8d8,-317|385|0xfefefe", 90, 30, 57, 725, 652 } --多点找色	
+function 填资料()
+	local timeline = os.time()
+	local outTimes = 60 * 2
+	local 比例男 = math.random(1,100)
+	while os.time()-timeline < outTimes do
+		if active(var.appbid,5) then
+			if d('填资料1界面') then
+				if d('填资料1界面_下一步',true) then
+				elseif d('填资料1界面_请输入昵称') then
+					click(586,409)
+				elseif d('填资料1界面_男女比例') then
+					
+					if 比例男 < 50 then
+						click(167,520)
+					else
+						click(516,510)
+					end	
+				elseif d('填资料1界面_生日未选择',true) then
+				elseif d('填资料1界面_地区未选择',true) then
+				end
+			elseif d('填资料2界面') then
+				if d('填资料2界面_身高未选择',true) then
+				elseif d('填资料2界面_身高未选择' ,true) then
+				elseif d('填资料2界面_学历未选择' ,true) then
+				elseif d('填资料2界面_月薪未选择' ,true) then
+				elseif d('填资料2界面_婚史未选择' ,true) then
+				end	
+			elseif d('完成') then
+				if d('完成_生日') then
+					local 随机1 = math.random(1,5) 
+					local 随机2 = math.random(1,10) 
+					local 随机3 = math.random(1,10) 
+					for i = 1 , 随机1 do
+						click(234,1055)
+					end	
+					for i = 1 , 随机2 do
+						click(381,1058)
+					end	
+					for i = 1 , 随机3 do
+						click(518,1052)
+					end	
+					d('完成',true)
+				elseif d('完成_所在地区') then
+					local 随机4 = math.random(1,10) 
+					local 随机5 = math.random(1,10) 
+					for i = 1 , 随机4 do
+						click(201,1178)
+					end
+					for i = 1 , 随机5 do
+						click(547,1186)
+					end	
+					d('完成',true)
+				elseif d('完成_身高') then
+					if 比例男 < 50 then
+						for i = 1 ,math.random(4,8) do
+							moveTo(387,1114,386,915)
+						end
+					else
+						for i = 1 ,math.random(3,4) do
+							moveTo(387,1114,386,915)
+						end
+					end
+					d('完成',true)
+				elseif d('完成_学历') then
+					for i = 1 , math.random(1,5) do
+						click(379,1185)
+					end	
+					d('完成',true)
+				elseif d('完成_月薪') then	
+					for i = 1 , math.random(1,4) do
+						click(379,1185)
+					end	
+					d('完成',true)
+				elseif d('完成_婚史') then
+					click(379,1185)
+					d('完成',true)
+				else
+					d('完成',true)
+				end	
+
+			else
+				d('上传头像_跳过',true)
+			end	
+		end
+		delay(1)
+	end
+end
+
+
+function up(other)
+	local url = 'http://wenfree.cn/api/Public/idfa/?service=idfa.idfa'
 	local postdate = {}
-	postdate.service = 'Idfa.Idfa'
+--	postdate.service = 'Idfa.Idfa'
 	postdate.name = '世纪佳缘'
 	postdate.idfa = var.phone
 	postdate.password = var.password
-	postdate.other = '注册成功'
-	post(url,postdate)
+	postdate.other = other
+	log(post(url,postdate))
 	-- body
 end
-
 require("AWZ")
 
-
-
---if awzNew()then
-	if reg()then
-		up()
-	end
+--vpn.off()
+--if vpn.on() then
+--	if awzNew()then
+--		if reg()then
+--			填资料()
+--		end
+--	end
 --end
+--填资料()
 
 
 
 
 
-
-
-
+input[3]('478C84B982344BF3B119E17B458E03326689EC4D')
 
 
 

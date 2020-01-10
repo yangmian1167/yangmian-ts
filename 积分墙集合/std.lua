@@ -14,7 +14,7 @@ function up(name,other)
 	idfalist.name = name
 	idfalist.idfa =	idfa or 'ceshizhunebi2'
 	idfalist.ip = ip or get_ip() or "192.168.1.1" 
-	idfalist.account = account
+	idfalist.account = bid[name]['keyword'] or account
 	idfalist.password = password
 	idfalist.phone = phone
 	idfalist.other = other
@@ -177,7 +177,7 @@ function callbackapi(name)
 			if callbackid ~= nil then
 				if checkidfa(name)then
 					if clickidfa(name,true)then
-						delay(rd(5,10))
+						delay(rd(60,90))
 						newidfa(name,1)
 					end
 				end
@@ -196,7 +196,7 @@ function activeapi(name)
 		udid = strSplit(tb[4],':')[2]
 		if checkidfa(name)then
 			if clickidfa(name)then
---				delay(rd(5,10))
+				delay(rd(60,90))
 --				vkey = rd(100,100)
 --				nLog(vkey)
 --				if vkey > 40 then
@@ -222,7 +222,7 @@ t['实名认证']={ 0x515151, "7|-8|0x515151,-9|-9|0x515151,-320|-11|0xf8663d,-2
 
 function newidfa(name)
 	local TIMEline = os.time()
-	local OUTtime = rd(20,25)
+	local OUTtime = rd(180,190)
 	while os.time()- TIMEline < OUTtime do
 		if active(bid[name]['appbid'],4)then
 			nLog('进入循环')
@@ -273,7 +273,7 @@ end
 
 function main(v)
 	----------------------------------
-	if vpn() then
+	if false or vpn() then
 		if true or checkip()then
 			nLog(v)
 			work = v.work
@@ -285,7 +285,8 @@ function main(v)
 			bid[work]['appbid']=v.appbid
 			bid[work]['appid']=v.appid
 			nLog("act")
-			model = tostring(readFile("/var/mobile/model.txt")[1])
+--			model = tostring(readFile("/var/mobile/model.txt")[1])
+			model = 'iPhone10,2'
 			nLog(model)
 			callback_key = false
 			ip = get_ip()

@@ -1,6 +1,8 @@
-require("TSLib")
-awzbid = 'ALS'
 
+
+
+require("TSLib")
+local awzbid = 'ALS'
 function locks()
 	local flag = deviceIsLock();
 	if flag == 0 then
@@ -12,7 +14,7 @@ end
 function activeawz(app,t)
 	t = t or 0.5
 	locks()
-	local bid = frontAppBid();
+	bid = frontAppBid();
 	if bid ~= app then
 		nLog(app.."，准备启动")
 		runApp(app)
@@ -20,11 +22,10 @@ function activeawz(app,t)
 		return true
 	end
 end
-
 function awz()
 	openURL("IGG://cmd/newrecord");
 	mSleep(3000)
-	logTxt = '/var/mobile/iggresult.txt'
+	local logTxt = '/var/mobile/iggresult.txt'
 	out_time = os.time()
 	while os.time()-out_time <= 10 do
 		if activeawz(awzbid,2)then
@@ -43,7 +44,21 @@ function awz()
 		mSleep(1000* 3)
 	end
 end
-
+function awz_()
+	openURL("IGG://cmd/open");
+	mSleep(2000)
+	local logTxt = '/var/mobile/iggresult.txt'
+	local out_time = os.time()
+	while os.time()-out_time <= 10 do
+		if activeawz(awzbid,2)then
+		else
+			openURL("IGG://cmd/newrecord");
+			mSleep(3000)
+			return true
+		end
+		mSleep(1000* 3)
+	end
+end
 function awz_next()
 	function nextrecord()
 		local sz = require("sz");
@@ -55,13 +70,9 @@ function awz_next()
 			nLog("the result is: " .. result);
 			if tonumber(result) == 1 then
 				return true
-			elseif tonumber(result) == 200 then
-				closeApp(frontAppBid())
-				delay(2)
 			end
 		end	
 	end
-	
 	out_time = os.time()
 	while os.time()-out_time <= 10 do
 		if activeawz(awzbid,2)then
@@ -71,8 +82,6 @@ function awz_next()
 		mSleep(1000* 2)
 	end
 end
-
-
 function renameCurrentRecord(name)
 	local sz = require("sz");
 	local http = require("szocket.http");
@@ -80,7 +89,7 @@ function renameCurrentRecord(name)
 	if code == 200 then
 		local resJson = sz.json.decode(res);
 		local result = resJson.result;
-		--nLog("the result is: " .. result);
+		nLog("the result is: " .. result);
 		return true
 	end	
 end
@@ -96,7 +105,6 @@ function reName(newName)
 	end
 	nLog('重命令超时')
 end
-
 function newRecord()
 	local sz = require("sz");
 	local http = require("szocket.http");
@@ -116,7 +124,6 @@ function newRecord()
 		end
 	end	
 end
-
 function awzNew()
 	timeLine = os.time()
 	outTime = 60 * 0.5
@@ -129,8 +136,6 @@ function awzNew()
 	end
 	nLog('新机超时')
 end
-
-
 function setCurrentRecordLocation(location)
 	local sz = require("sz");
 	local http = require("szocket.http");
@@ -138,17 +143,15 @@ function setCurrentRecordLocation(location)
 	if code == 200 then
 		local resJson = sz.json.decode(res);
 		local result = resJson.result;
-		--toast("the result is: " .. result, 2);
+		toast("the result is: " .. result, 2);
 		if tonumber(result) == 1 then
 			return true
 		end
 	end	
 end
-
 function NewPlace(location)
 	timeLine = os.time()
 	outTime = 60 * 0.5
-
 	while (os.time()-timeLine < outTime) do
 		if activeawz(awzbid,3)then
 		elseif setCurrentRecordLocation(location) then
@@ -158,7 +161,6 @@ function NewPlace(location)
 	end
 	nLog('设置超时')
 end
-
 --("116.7361382365_39.8887921413_北京老胡同")
 function getAll()
 	local sz = require("sz");
@@ -167,13 +169,12 @@ function getAll()
 	if code == 200 then
 		local resJson = sz.json.decode(res);
 		local result = resJson.result;
-		--toast("the result is: " .. result, 2);
+		toast("the result is: " .. result, 2);
 		if tonumber(result) == 1 then
 			return #readFile('/var/mobile/iggrecords.txt')
 		end
 	end	
 end
-
 function getAllmun()
 	timeLine = os.time()
 	outTime = 60 * 0.5
@@ -186,11 +187,7 @@ function getAllmun()
 	end
 	nLog('设置超时')
 end
-
-
-
-----获取当前名
-
+--获取当前名
 function getOnlineName()
 	function getName()
 		local sz = require("sz");
@@ -199,15 +196,10 @@ function getOnlineName()
 		if code == 200 then
 			local resJson = sz.json.decode(res);
 			local result = resJson.result;
-			--nLog("the result is: " .. result);
+			nLog("the result is: " .. result);
 			if tonumber(result) == 1 then
-				jg = readFile('/var/mobile/iggparams.txt')
-		
-				nLog(jg[1])
-				awz_online_name = strSplit(jg[1],'/')
-				awz_online_name[2] = awz_online_name[2] or 'AOC'
-				nLog(awz_online_name[2])
-				return awz_online_name[2]
+				local jg = readFile('/var/mobile/iggparams.txt')
+				return jg
 			end
 		end	
 	end
@@ -222,85 +214,32 @@ function getOnlineName()
 	end
 	nLog('设置超时')
 end
------获取当前设备参数
-function get_curren()
-		local sz = require("sz");
-		local http = require("szocket.http");
-		local res, code = http.request("http://127.0.0.1:1688/cmd?fun=getcurrentrecordparam");
-		nLog(res)
-		nLog(code)
-		if code == 200 then
-			local resJson = sz.json.decode(res);
-			local result = resJson.result;
-			if tonumber(result) == 1 then
-				jg = readFile('/var/mobile/iggparams.txt')
-				return jg
-			end
-		end	
-end
-
 function getTrueName_awz()
-	local awz_name
-	local awz_idfa
 	function getTrueName()
 		local sz = require("sz");
 		local http = require("szocket.http");
 		local res, code = http.request("http://127.0.0.1:1688/cmd?fun=getcurrentrecordparam");
-		
-		nLog(res)
-		nLog(code)
-		
-		
 		if code == 200 then
 			local resJson = sz.json.decode(res);
 			local result = resJson.result;
-			--nLog("the result is: " .. result);
+			nLog("the result is: " .. result);
 			if tonumber(result) == 1 then
 				jg = readFile('/var/mobile/iggparams.txt')
 				return jg[1],jg[4]		--name,idfa
 			end
 		end	
 	end
-
 	timeLine = os.time()
 	outTime = 60 * 0.5
 	while (os.time()-timeLine < outTime) do
 		if activeawz(awzbid,3)then
 		else
-			awz_name,awz_idfa = getTrueName()
-			if awz_name and awz_idfa then
-				nLog("awz_name->"..awz_name)
-				nLog("awz_idfa->"..awz_idfa)
-				return awz_name,awz_idfa
-			else
-				dialog("没有取到参数",2)
-				closeApp(awzbid)
-				mSleep(1000)
-			end
+			return getTrueName()
 		end
 		mSleep(1000)
 	end
 end
-
-
-
-
-
-
 nLog('AWZ 加截完成')
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
