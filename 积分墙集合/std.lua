@@ -16,6 +16,7 @@ function up(name,other)
 	idfalist.ip = ip or get_ip() or "192.168.1.1" 
 	idfalist.account = bid[name]['keyword'] or account
 	idfalist.password = password
+	idfalist.appid = bid[name]['appid']
 	idfalist.phone = phone
 	idfalist.other = other
 	return post(url,idfalist)
@@ -177,7 +178,7 @@ function callbackapi(name)
 			if callbackid ~= nil then
 				if checkidfa(name)then
 					if clickidfa(name,true)then
-						delay(rd(60,90))
+						delay(rd(60,65))
 						newidfa(name,1)
 					end
 				end
@@ -196,7 +197,7 @@ function activeapi(name)
 		udid = strSplit(tb[4],':')[2]
 		if checkidfa(name)then
 			if clickidfa(name)then
-				delay(rd(60,90))
+				delay(rd(60,65))
 --				vkey = rd(100,100)
 --				nLog(vkey)
 --				if vkey > 40 then
@@ -207,7 +208,8 @@ function activeapi(name)
 --					newplayer(name)
 --				end
 				if activeidfa(name)then
-					up(name,bid[name]['keyword'].."-激活成功")
+--					up(name,bid[name]['keyword'].."-激活成功")
+					up(name,bid[name]['keyword'].."-awz测试")
 				end
 			end
 		end

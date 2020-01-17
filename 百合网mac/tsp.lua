@@ -1,31 +1,12 @@
-w,h=getScreenSize()
+require("TSLib")
+--  wenfree lua tsp
+--  lua 基础封装
 
-function lock()
-	flag = deviceIsLock();
-	if flag == 0 then
-	--	log("未锁定");
-		return true
-	else
-		unlockDevice(); --解锁屏幕
-	end
-end
-function active(app_bid,t)
-	t = t or 0.5
-	if lock()then
-		if app_bid == frontAppBid() then
-			return true
-		else
-			nLog('RunApp'..app_bid)
-			runApp(app_bid)
-			mSleep(t*1000)
-		end
-	end
-end
-function closeX(app_bid)
-	nLog("杀掉 "..app_bid.." 进程")
-	closeApp(app_bid,1)
-	mSleep(2000)
-end
+--定义全局变量
+versions = 1.0
+
+G ={}       --定义全局变量G
+G.w,G.h =  getScreenSize()
 
 --深度打印一个表,可以单独调用
 function print_r(t)
@@ -53,7 +34,6 @@ function print_r(t)
 			else
 				nLog(indent..tostring(t))
 			end
-			mSleep(50)
 		end
 	end
 	if (type(t)=="table") then
@@ -84,79 +64,63 @@ function log(txt,show,times)
 	end
 end
 
-function click(x,y,times)
-	times = times or 1
---	log("准备点击("..x..","..y..")")
-	touchDown(1, x+math.random(-3,3), y+math.random(-3,3))
-	mSleep(50)
-	touchUp(1, x+math.random(-3,3), y+math.random(-3,3))
-	mSleep(1000*times)
-end
-function delay(times)
-	times = times or 1
-	mSleep(times*1000)
-end
-function c_pic(t,name,clicks)
-	x,y = findMultiColorInRegionFuzzy(t[1],t[2],t[3],t[4],t[5],t[6],t[7])
-	if x > 0 and y > 0 then
-		clicks = clicks or false
-		if clicks then
-			click(x,y)
-			nLog("点图-->"..name)
-		else
-			nLog("找到-->"..name)
-		end
-		return true
+--解锁
+function lock()
+	flag = deviceIsLock();
+	if flag ~= 0 then
+		unlockDevice(); --解锁屏幕
 	end
 end
-function f_pic(t,name)
-	x,y = findMultiColorInRegionFuzzy(t[1],t[2],t[3],t[4],t[5],t[6],t[7])
-	if x > 0 and y > 0 then
-		nLog("找到-->"..name)
+
+--app在前端
+function active(app,times)
+	local times = times or 5
+	lock()
+	local bid = frontAppBid();
+	if bid ~= app then
+		log(app.."，准备启动")
+		runApp(app)
+		mSleep(times*1000)
+	elseif bid == app then
+		log("在前端")
 		return true
 	end
 end
 
-function c_p(t,name,clicks)
-	if t[2] == "" then
-		x,y= findColorInRegionFuzzy(t[1],t[3],t[4],t[5],t[6],t[7])
+--杀掉一个app
+function closeX(app_bid,way,times)
+	local times = times or 1
+	log("kill "..app_bid)
+	if way then
+		closeApp(app_bid,1)
 	else
-		x,y= findColorInRegionFuzzy(t[1],t[2],t[3],t[4],t[5],t[6])
+		closeApp(app_bid)
 	end
-	if x >0 and y >0 then
-		clicks = clicks or false
-		if clicks then
-			nLog("单点击-->"..name)
-			click(x,y)
-		else
-			nLog("单点-->"..name)
-		end
-		return true
-	end
+	mSleep(times*1000)
 end
-function f_p(t,name)
-	x,y= findColorInRegionFuzzy(t[1],t[2],t[3],t[4],t[5],t[6])
-	if x >0 and y >0 then
-		nLog("单点-->"..name)
-		return true
-	else
-		nLog('没有-->'..name)
+
+--点击函数,点击的x,y 留停时间,按压时间,日志文字
+function click(x,y,times,stayTime,logtxt)
+	local times = times or 1
+	local stayTime = stayTime or 0.05
+	if logtxt then
+		nLog("准备点击->"..logtxt.."("..x..","..y..")")
 	end
+	local offset_x = math.random(-3,3)
+	local offset_y = math.random(-3,3)
+	x = x + offset_x
+	y = y + offset_y
+	touchDown(1, x, y)
+	mSleep(stayTime * 1000)
+	touchUp(1, x, y)
+	mSleep(times * 1000)
 end
----找图-----
-function c_tu(t,clicks)
-	clicks = clicks or false
-	x, y = findImageInRegionFuzzy(t[1] ..".png", 80, t[2], t[3], t[4], t[5], 0xffffff);
-	if x ~= -1 and y ~= -1 then
-		if clicks then
-			click(x,y)
-			log('点击图片->'..t[1])
-		else
-			log('找到图片-->'..t[1])
-		end
-		return true
-	end
+--延迟函数
+function delay(times)
+	local times = times or 1
+	mSleep(times*1000)
 end
+
 --单点模糊比色
 function isColor(x,y,c,s)
     local fl,abs,s= math.floor,math.abs, s or 90
@@ -167,12 +131,124 @@ function isColor(x,y,c,s)
         return true
     end
 end
---输入---
---function input(txt,times)
---	local times = times or 0.2
---	inputText(txt)
---	mSleep(1000*times)
---end
+
+--区域单点找色
+function c_p(name,dj)
+	if t[2] == "" then
+		x,y = findColorInRegionFuzzy(t[1],t[3],t[4],t[5],t[6],t[7])
+	else
+		x,y = findColorInRegionFuzzy(t[1],t[2],t[3],t[4],t[5],t[6])
+	end
+	if x >0 and y >0 then
+		dj = dj or false
+		if dj then
+			nLog("点击色点-->"..name)
+			click(x,y)
+		else
+			nLog("找到单色-->"..name)
+		end
+		return true
+	end
+end
+
+--多点找色,name,是否点击,位置(位置,可以是表),点击后停留,hd是否滑动,滑动位置和步长表格,拓展参数(表格 {orient=1})
+function 多点找色(name,clicks,order,stayTime,hd,hdtable,orient)
+	local clicks = clicks or false
+	local order = order or 1
+	local stayTime = stayTime or 1
+	local hd = hd or false
+	local arr = {}
+	if t[name] then
+	    arr = t[name]
+	else
+	    dialog(name.."-->报错", 60)
+	    return false
+	end
+	keepScreen(true)
+    if orient then
+        x,y = findMultiColorInRegionFuzzy(arr[1],arr[2],arr[3],arr[4],arr[5],arr[6],arr[7],orient)
+    else
+	    x,y = findMultiColorInRegionFuzzy(arr[1],arr[2],arr[3],arr[4],arr[5],arr[6],arr[7])
+	end
+	keepScreen(false)
+	if x > 0 and y > 0 then
+	    if hd then
+	        moveTo(hdtable[1],hdtable[2],hdtable[3],hdtable[4],hdtable[5])
+	        delay(stayTime)
+	    else
+            if clicks then
+                local new_arr2 = split(arr[2],',')
+                for i,v in pairs(new_arr2)do
+                    new_arr2[i]=split(v,'|')
+                end
+                if type(order) == 'table' then
+                    click(order[1],order[2],stayTime)
+                else
+                    if order == 1 then
+                        click(x,y)
+                    else
+                        click(x+new_arr2[order-1][1],y+new_arr2[order-1][2])
+                    end
+                end
+                if type(order) ~= 'table' then
+                    log("点击-->( "..name..' )->'..order)
+                end
+            else
+                log("找到-->"..name)
+            end
+        end
+		return true
+	end
+end
+
+--多点验证比色
+function 多点比色(name,clicks,order,stayTime,hd,hdtable,orient)
+	local oder = oder or 1
+	local clicks = clicks or false
+	local hd = hd or false
+	local stayTime = stayTime or 1
+	local arr = {}
+    if t[name] then
+        arr = t[name]
+    else
+	    dialog(name.."-->报错", 60)
+	    return false
+    end
+    keepScreen(true)
+	for i,v in ipairs(arr) do
+		if not(isColor(v[1],v[2],v[3],s)) then
+		    keepScreen(false)
+			return false
+		end
+	end
+	log('多点比色成功-->'..name)
+	if hd then
+        moveTo(hdtable[1],hdtable[2],hdtable[3],hdtable[4],hdtable[5])
+        delay(stayTime)
+	else
+        if clicks then
+            if type(oder) == "table" then
+                click(order[1],order[2],stayTime)
+            else
+                click(arr[oder][1],arr[oder][2],1,stayTime)
+            end
+        end
+    end
+	keepScreen(false)
+	return true
+end
+--多点验证比色-end
+
+--比色合集d
+function d(name,clicks,order,stayTime,hd,hdtable,orient)
+--	print_r(t[name])
+	if type(t[name][1]) == 'table' then
+		return 多点比色(name,clicks,order,stayTime,hd,hdtable,orient)
+	else
+		return 多点找色(name,clicks,order,stayTime,hd,hdtable,orient)
+	end
+end
+
 --输入函数
 input = {
     function(txt,delayTimes)
@@ -208,95 +284,15 @@ input = {
         delay(delayTimes)
     end
 }
---多点验证比色
-function done(tables,name,clicks,oder,s)
-	oder = oder or 1
-	clicks = clicks or false
-	s = s or 95
-	for i,v in ipairs(tables) do
-		if isColor(v[1],v[2],v[3],s) then
-		else
-			return false
-		end
-	end
-	nLog(name or '未命名')
-	if  clicks then
-		click(tables[oder][1],tables[oder][2])
-	end
-	return true
-end
---多点验证比色-end
---function moveTo(x1,y1,x2,y2,setp,times)
---	setp = setp or 10
---	times = times or 50
---	touchDown(1, x1, y1)
---	mSleep(times)
---	if x1==x2 then
---		if y2 > y1 then
---			for x = y1,y2,setp do
---				touchMove(1, x1, x)
---				mSleep(times)
---			end
---		elseif y2 < y1 then
---			for x = y1,y2,setp*(-1)do
---				touchMove(1, x1, x)
---				mSleep(times)
---			end
---		end
---	elseif y1==y2 then
---		if x2>x1 then
---			for x = x1,x2,setp do
---				touchMove(1, x, y1)
---				mSleep(times)
---			end
---		elseif x2<x1 then
---			for x = x1,x2,setp*(-1)do
---				touchMove(1, x, y1)
---				mSleep(times)
---			end
---		end
---	else
---		local k = ((y2-y1)/(x2-x1))
---		if x1 < x2 then
---			touchDown(1, x1,y1)
---			for x = x1+1, x2, setp do
---				touchMove(1, x, (k*(x-x1))+y1 )
---				mSleep(times)
---			end
---		else
---			touchDown(1, x1,y1)
---			for x = x1+1, x2, setp*(-1)do
---				touchMove(1, x, (k*(x-x1))+y1 )
---				mSleep(times)
---			end
---		end
---	end
---	touchUp(1, x2,y2)
---end
---//向上滑动
---将指定文件中的内容按行读取
-function readFile(path)
-    local file = io.open(path,"r");
-    if file then
-        local _list = {};
-        for l in file:lines() do
-            table.insert(_list,l)
-        end
-        file:close();
-        return _list
-    end
-end
---list = readFile("/User/Media/TouchSprite/lua/wechat-reply.txt");
---参数说明：path为要读取文件的路径。
---返回值：返回一个table。
+
 --用http.get实现下载文件功能
-local sz = require("sz")
-local cjson = sz.json
-local http = sz.i82.http
 function downFile(url, path)
-    status, headers, body = http.get(url)
+    local sz = require("sz")
+    local cjson = sz.json
+    local http = sz.i82.http
+    local status, headers, body = http.get(url)
     if status == 200 then
-        file = io.open(path, "wb")
+        file = io.open(path, "w+")
         if file then
             file:write(body)
             file:close()
@@ -316,21 +312,17 @@ function file_exists(file_name)
 end
 --参数说明：path为要查找文件的路径。
 --返回值：返回 true、false。
-function get_ip()
-	local http = require("szocket.http")
-	local res, code = http.request("http://pv.sohu.com/cityjson?ie=utf-8",30);
-	if code ~= nil then
-		local i,j = string.find(res, '%d+%.%d+%.%d+%.%d+')
-		return string.sub(res,i,j)
-	end
-end
+
 --文件按行写入--------------
 function writeFile(file_name,string,way)
-	way = way or 'a'   --w or a
+	local string = string or "0.0.0.0"
+	way = way or 'a'
 	local f = assert(io.open(file_name, way))
-	f:write(string)
+	f:write(string.."\n")
 	f:close()
 end
+
+--文件按行写入--------------
 --将指定文件中的内容按行读取
 function readFile(path)
     local file = io.open(path,"r");
@@ -365,10 +357,11 @@ function split(str,delim)
 	table.insert (t, string.sub (str, start))
 	return t
 end
+
 --[[
 例子：
 a = "12334|3444te|2344555"
-b = str_cut(a,"|") 
+b = str_cut(a,"|")
 将字符串a以"|"为标示风格，结果存入数组b
 各位同学可以自行打印一下b的内容看看结果
 --]]
@@ -385,7 +378,6 @@ b = str_cut(a,"|")
 　　以上三个参数，用不到的参数就不用填，用不到的参数你设置了不会出错，但也不会生效。
 　　比如手机号只要一个rnType参数就行，生成数字就只要rnType、rnLen参数
 　　如果随机结果有字母，且不区分大小写的话，也不用rnUL参数
- 
 　　脚本最后有示例，直接调试下就看出来效果了
 ]]
 function myRand(rnType,rnLen,rnUL)
@@ -399,7 +391,9 @@ function myRand(rnType,rnLen,rnUL)
 	HexRan={"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f",
 		"A","B","C","D","E","F"}
 	myrandS=""
-	math.randomseed(rns..tostring(os.time()):reverse():sub(1, 6))
+	local sz = require("sz")
+	local socket = require ("szocket")
+	math.randomseed(rns..tostring(socket.gettime()):reverse():sub(1, 6))
 	if rnType==1 then --生成数字
 		myrandS=math.random(9)
 		for r1=1,rnLen-1 do
@@ -424,7 +418,7 @@ function myRand(rnType,rnLen,rnUL)
 			myrandS=myrandS..math.random(0,9)
 		end
 		if rnType==5 then
-			local mailheader={"@qq.com","@hotmail.com","@sohu.com"} --自行增减
+			local mailheader={"@qq.com","@hotmail.com","@sohu.com","@163.com","@gmail.com"} --自行增减
 			myrandS=myrandS..mailheader[math.random(#mailheader)]
 		end
 	elseif rnType==6 then --生成16进制
@@ -461,16 +455,6 @@ end
 --nLog(myRand(6,9))
 --nLog(myRand(7,3))
 
-function boxshow(txt)
-	adbox = adbox or 0
-	if adbox == 0 then
-		adbox = 1
-		fwShowWnd("wid",0,0,0,0,1)
-		mSleep(2000)
-	end
-	fwShowTextView("wid","textid",txt,"center","FF0000","FFDAB9",10,0,h-150,w-200,h,w-120,0.5)
-	--fwShowTextView("wid","textid","这是一个文本视图","center","FF0000","FFDAB9",0,20,0,0,200,100,0.5)
-end
 --vpn函数整合
 vpn ={
 	on = function()
@@ -505,151 +489,50 @@ vpn ={
 			end
 		end
 	}
-function vpnx()
-	setVPNEnable(false)
-	delay(1)
-end
-function vpn()
-	计时 = os.time()
-	超时 = 60 * 2
-	while (os.time()-计时<=超时) do
-		setVPNEnable(true)
-		mSleep(2000)
-		flag = getVPNStatus()
-		if flag.active then
-			nLog("VPN 打开状态"..flag.status)
-			if flag.status == '已连接' then
-				return true
-			end
-		else
-			nLog("VPN 关闭状态"..flag.status)
-		end
+--获取ip地址函数
+function ip()
+	local http = require("szocket.http")
+	local res, code = http.request("http://pv.sohu.com/cityjson?ie=utf-8",30);
+	if code ~= nil then
+		local i,j = string.find(res, '%d+%.%d+%.%d+%.%d+')
+		if i ~= nil and j ~= nil then return string.sub(res,i,j) end
 	end
-end
-
-function VPNisOK()
-	flag = getVPNStatus()
-	if flag.active then
-		nLog("VPN 打开状态"..flag.status)
-		if flag.status == '已连接' then
-			return true
-		end
-	else
-		nLog("VPN 关闭状态"..flag.status)
-	end
-end
-
-function beforeUserExit()
-	close_VPN()
 end
 ---------------VPN---------------
-function inputword(key)
-	for i = 1,string.len(key) do
-		nLog(string.sub(key,i,i))
-		inputkey = string.sub(key,i,i)
-		inputkey = tonumber(inputkey)
-		if type(inputkey) == 'number' then
-			--nLog('munber->'..inputkey)
-		else
-			inputkey = string.sub(key,i,i)
-			inputkey = string.lower(inputkey)
-		end
-		keyDown(inputkey)
-		keyUp(inputkey)
-		mSleep(100)
+--展示一个文本框函数
+function boxshow(txt,x1,y1,x2,y2)
+	adbox__ = adbox__ or 0
+	if adbox__ == 0 then
+		adbox__ = 1
+		fwShowWnd("wid",0,0,0,0,1)
+		mSleep(2000)
 	end
+	fwShowTextView("wid","textid",txt,"center","FF0000","FFDAB9",10,0,x1,y1, x2,y2,0.5)
+	--fwShowTextView("wid","textid","这是一个文本视图","center","FF0000","FFDAB9",0,20,0,0,200,100,0.5)
 end
 
-
-
-function 多点找色(name,dj,order,logTxt,stayTime)
-	local dj = dj or false
-	local order = order or 1
-	local arr = t[name]
-	
-	x,y = findMultiColorInRegionFuzzy(arr[1],arr[2],arr[3],arr[4],arr[5],arr[6],arr[7])
-	if x > 0 and y > 0 then
-		if dj then
-			local new_arr2 = split(arr[2],',')
-			for i,v in pairs(new_arr2)do
-				new_arr2[i]=split(v,'|')
-			end
---			print_r(new_arr2)
-			if order == 1 then
-				click(x,y)
-			else
-				click(x+new_arr2[order-1][1],y+new_arr2[order-1][2])
-			end
-			if type(name) ~= 'table' then
-				log("点击-->( "..order..' )->'..name)
-			end
-		else
-			if type(name) ~= 'table' then
-				log("找到-->( "..order..' )->'..name)
-			end
-		end
-		if logTxt then 	
-			nLog(logTxt) 
-		end
-		return true
-	end
-end
-
---多点验证比色
-function 多点比色(name,clicks,oder,logTxt,s,stayTime)
-	local oder = oder or 1
-	local clicks = clicks or false
-	local s = s or 85
-	local arr = t[name]
-	for i,v in ipairs(arr) do
-		if not(isColor(v[1],v[2],v[3],s)) then
-			return false
-		end
-	end
-	if logTxt then
-		nLog(logTxt)
-	else
-		if type(name) == 'table' then
-			nLog(name[1]..'->'..name[2])
-		else
-			nLog('多点比色成功-->'..name)
-		end
-	end
-	if clicks then
-		click(arr[oder][1],arr[oder][2],1,stayTime)
-	end
-	return true
-end
---多点验证比色-end
-function d(name,clicks,oder,logTxt,s,stayTime)
---	print_r(t[name])
-	if type(t[name][1]) == 'table' then
-		return 多点比色(name,clicks,oder,logTxt,s,stayTime)
-	else
-		return 多点找色(name,clicks,oder,logTxt,stayTime)
-	end
-end
-
+--post函数
 function post(url,arr)
 	local sz = require("sz")
 	local cjson = sz.json
 	local http = sz.i82.http
-	local safari = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36'
-	local headers = {}
+	safari = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36'
+	headers = {}
 	headers['User-Agent'] = safari
 	headers['Referer'] = url
 	headers_send = cjson.encode(headers)
-	local post_send = cjson.encode(arr)
-	nLog(post_send)
-	local post_escaped = http.build_request(post_send)
-	local status_resp, headers_resp, body_resp = http.post(url, 5, headers_send, post_escaped)
+	post_send = cjson.encode(arr)
+--	log(post_send)
+	post_escaped = http.build_request(post_send)
+	status_resp, headers_resp, body_resp = http.post(url, 5, headers_send, post_escaped)
 	if status_resp == 200 then
-		print_r(body_resp)
+--		log(body_resp)
 		local json = sz.json
 		return json.decode(body_resp)
 	end
 end
 
+--get函数
 function get(url)
 	local sz = require("sz")
 	local http = require("szocket.http")
@@ -659,15 +542,71 @@ function get(url)
 		return json.decode(res)
 	end
 end
-local sz = require("sz")
-nLog('基础函数OK')
 
-
-
-
-function rd(n,k)
-	return math.random(n,k)
+--小随机函数
+rd = function(min,max)
+    if max then
+        if min >= max then
+            return math.random(max,min)
+        else
+            return math.random(min,max)
+        end
+    else
+        return math.random(min)
+    end
 end
+
+
+log('基础函数加载完成')
+local deskbid__ = frontAppBid();
+if deskbid__ == nil or deskbid__ == '' then
+	log('com.apple.springbord')
+else
+	log(deskbid__)
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

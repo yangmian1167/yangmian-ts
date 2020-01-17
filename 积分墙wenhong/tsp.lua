@@ -369,7 +369,7 @@ function downFile(url, path)
 end
 --downFile("http://mu1234.applinzi.com/wechat-reply.txt","/User/Media/TouchSprite/lua/wechat-reply.txt")
 --检测指定文件是否存在
-function ip()
+function get_ip()
 	local http = require("szocket.http")
 	local res, code = http.request("http://ip.cn",30);
 	if code ~= nil then

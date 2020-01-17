@@ -190,5 +190,4 @@ end
 
 --]]
 
---log(get_curren())
 

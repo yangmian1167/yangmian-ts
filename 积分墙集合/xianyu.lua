@@ -20,7 +20,7 @@
 
 
 
-package.loaded['AWZ'] = nil
+--package.loaded['AWZ'] = nil
 require("TSLib")
 require("AWZ")
 require("ALS")
@@ -138,38 +138,64 @@ function app()
 		end
 		delay(1)
 	end
+	return true
 end
 
-function all()
 
+
+function back_pass(task_id,success)
+	local url = 'http://wenfree.cn/api/Public/tjj/?service=Tjj.backpass'
+	local postArr = {}
+	postArr.task_id = task_id
+	postArr.success = success
+	nLog( post(url,postArr) )
+end
+
+
+
+
+
+function main(v)
+	nLog(v)
+	work = v.work
+	task_id = v.task_id
+	bid={}
+	bid[work]={}
+	bid[work]['adid']=v.adid
+	bid[work]['keyword']=v.keyword
+	bid[work]['appbid']=v.appbid
+	bid[work]['appid']=v.appid
+	nLog("act")
+--	model = tostring(readFile("/var/mobile/model.txt")[1])
+--	nLog(model)
+--	callback_key = false
+--	ip = get_ip()
+	----------------------------------
 	vpnx()
-	delay(2)
-	if false or vpn()then
-		awzNew()
-		start()
-		if (idfa_idfaPc())then
-			up(jfq.name,'排重成功')
-			if(idfa_click())then
-				up(jfq.name,'点击成功')
-				app()
-			end
-		end
+	delay(3)
+	if vpn() then
+		delay(3)
+--		if false or checkip()then
+--			if v.json == "回调" then
+--				callback_key = true
+--			end
+			other_txt = ''
+			if awzNew() then
+				start()
+				if (idfa_idfaPc())then
+					up(jfq.name,'排重成功')
+					if(idfa_click())then
+						up(jfq.name,'点击成功')
+						if app() then
+							back_pass(task_id,"ok")
+						end
+					end
+				end
+			end	
+--		end
+		delay(2)
 	end
 end
-
-while (true) do
-	local ret,errMessage = pcall(all)
-	if ret then
-	else
-		log(errMessage)
-		dialog(errMessage, 10)
-		mSleep(2000)
-	end
-end
-
-
-
-
 
 
 
