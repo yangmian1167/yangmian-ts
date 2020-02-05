@@ -24,11 +24,11 @@ function game()
 	local 城内查询超时key = 0
 	while true do
 		if active(appbid,5) then
-			find_arrow()
+			找箭头合集()
 			
 			if d('主界面下') then
 				if d('主界面下_城内') then
-					find_button() 
+					城内按钮集合() 
 					if d('主界面下_城内_主城天黑了') then
 						logs('天黑了升城休息,准备采矿')
 						delay(3)
@@ -44,7 +44,7 @@ function game()
 				else
 					click(687,1289)
 				end
-			elseif ganme_tips() then
+			elseif game_tips() then
 				return true
 			else
 				tips弹窗()
@@ -60,11 +60,11 @@ end
 --function 全局升级()
 --	key = 1
 --	if active(appbid,5) then
---		if ganme_tips() then
+--		if game_tips() then
 --		elseif d('主界面下') then
 --			if d('主界面下_城内') then
---				if find_button() then
---				elseif find_arrow() then
+--				if 城内按钮集合() then
+--				elseif 找箭头合集() then
 --				else
 --					click(687,1289)
 --					delay(1)
@@ -77,7 +77,7 @@ end
 --				click(687,1289)
 --			end	
 --		else
---			if find_arrow() then
+--			if 找箭头合集() then
 --			elseif tips弹窗() then
 --			else
 
@@ -99,10 +99,10 @@ function 全局升级()
 					if 弹出主城 then
 						click(687,1289)
 						弹出主城 = false
-					elseif find_arrow() then
-					elseif find_button() then
+					elseif 找箭头合集() then
+					elseif 城内按钮集合() then
 						return false
-					elseif find_building() then
+					elseif 城内建筑集合() then
 					else
 						move(movelist[key])
 						key = key + 1
@@ -111,7 +111,7 @@ function 全局升级()
 					click(687,1289)
 				end
 			else
-				if ganme_tips() then
+				if game_tips() then
 					return true
 				elseif tips弹窗() then
 				end	
@@ -131,9 +131,10 @@ end
 --	end
 --end
 
-
-
+--d('主界面下')
+game()
 while true do
-全局升级() 
+--全局升级() 
+城内按钮集合()
 end
 

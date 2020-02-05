@@ -8,7 +8,7 @@ end
 
 
 --找箭头合集
-function find_arrow()
+function 找箭头合集()
 	if(d("tip_向下箭头",true,1))then
 		click(x,y+50);
 		return true	
@@ -28,19 +28,10 @@ end
 
 
 --城内按钮集合
-function find_button()
+function 城内按钮集合()
 	keepScreen(true)
 	if d('主界面下_城内_升级按钮',true) then
---		return true
 	elseif d('主界面下_城内_主城升级按钮',true) then
---		return true
-	elseif d('主界面下_城内_详情加速急速按钮') then
-		return true
-	elseif d('主界面下_城内_详情加速按钮') then
-		return true
-	elseif d('主界面下_城内_闪光升级按钮1',true) then
-	elseif d('主界面下_城内_闪光升级按钮',true) then
---		return true
 	elseif d('主界面下_城内_独立详情按钮') then
 		return true
 	elseif d('城内提示图标',true) then
@@ -50,7 +41,7 @@ function find_button()
 	return false
 end	
 --城内建筑集合
-function find_building()
+function 城内建筑集合()
 	if 升级铁仓key and d('主界面下_城内_仓库铁',true) then
 			升级铁仓key = false
 			return true
@@ -74,8 +65,8 @@ function find_building()
 end
 
 
---与主城挂钩tips
-function ganme_tips()
+--与主城内挂钩tips
+function game_tips()
 	if d('gametips_返回箭头下') then
 		if d('gametips_驻扎管理界面') then
 			if d('gametips_驻扎管理界面_驻扎',true) then
@@ -96,11 +87,7 @@ function ganme_tips()
 		else
 			d('gametips_返回箭头下',true)
 		end	
-	elseif d('gametips_丰收界面') then
-		if d('gametips_丰收界面_使用',true) then
---			return true
-		elseif d('gametips_返回箭头下',true) then
-		end	
+	elseif d('gametips_丰收界面使用',true) then
 	elseif d('gametips_新的工程车弹窗',true) then
 		click(687,1289)
 		return true
