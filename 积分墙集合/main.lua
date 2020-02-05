@@ -1,5 +1,4 @@
 require("TSLib")
-require("AWZ")
 require("tsp")
 require("nameStr")
 

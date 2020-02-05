@@ -13,6 +13,7 @@ function active(app_bid,t)
 	t = t or 0.5
 	if lock()then
 		if app_bid == frontAppBid() then
+--			nLog('在前端')
 			return true
 		else
 			nLog('RunApp'..app_bid)
@@ -74,7 +75,7 @@ function log(txt,show,times)
 		if show then log('table',true) end
     else
         if show == 'all' then
-            toast(show,times)
+            toast(txt,times)
             nLog(txt)
         elseif show then
             toast(txt,times)
@@ -559,6 +560,9 @@ function inputword(key)
 		mSleep(100)
 	end
 end
+
+
+
 
 
 

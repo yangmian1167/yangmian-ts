@@ -1,26 +1,5 @@
 require("TSLib")
-require('tsp')
-
---检测机器安装AWZ/ALS
-function awzbidname()
-	local table = getInstalledApps()
-	for k , v in ipairs(table) do
-		if v == 'AWZ' then
-			 awzbid = 'AWZ'	
-			 return true
-		elseif v == 'ALS' then
-			awzbid = 'ALS'
-			return true
-		end
-	end
-	if awzbid == nil or awzbid == 'Null' or awzbid == '' then
-		awzbid = 'AWZ'
-		log('本机未安装AWZ/ALS')
-		return true
-	end	
-end
-awzbidname()
-log(awzbid)
+awzbid = 'ALS'
 
 function locks()
 	local flag = deviceIsLock();
@@ -302,7 +281,16 @@ end
 
 
 
-nLog('AWZ 加截完成')
+nLog('ALS 加截完成')
+
+
+
+
+
+
+
+
+
 
 
 
