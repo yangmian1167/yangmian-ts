@@ -1,3 +1,4 @@
+
 --tips无用弹窗	
 function tips弹窗()
 	if d('tips_招募英雄弹窗',true) then
@@ -23,6 +24,7 @@ function 找箭头合集()
 	elseif d('tip_左下角感叹号2',true)then
 		return true
 	end
+--	logs('找箭头合集结束')
 	return false
 end
 
@@ -31,6 +33,7 @@ end
 function 城内按钮集合()
 	keepScreen(true)
 	if d('主界面下_城内_升级按钮',true) then
+	elseif d('主界面下_城内_详情升级按钮',true) then
 	elseif d('主界面下_城内_主城升级按钮',true) then
 	elseif d('主界面下_城内_独立详情按钮') then
 		return true
@@ -38,6 +41,7 @@ function 城内按钮集合()
 		return true
 	end
 	keepScreen(false)
+--	logs('城内按钮集合结束')
 	return false
 end	
 --城内建筑集合
@@ -61,6 +65,7 @@ function 城内建筑集合()
 			升级电仓key = false
 			return true
 	end
+--	logs('城内建筑集合结束')
 	return false
 end
 

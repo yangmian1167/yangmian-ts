@@ -6,11 +6,11 @@ init(0)
 var = ''
 appbid = 'com.more.dayzsurvival.ios'
 
-	升级铁仓key = true
-	升级木仓key = true
-	升级电仓key = true
-	升级粮仓key = true
-	升级水仓key = false
+--	升级铁仓key = true
+--	升级木仓key = true
+--	升级电仓key = true
+--	升级粮仓key = true
+	升级水仓key = true
 	升级油仓key = true
 ----以主城为索引升级
 function game()
@@ -97,11 +97,20 @@ function 全局升级()
 			if d('主界面下') then
 				if d('主界面下_城内') then
 					if 弹出主城 then
-						click(687,1289)
-						弹出主城 = false
+						if d('主界面下_城内_主城') then
+							弹出主城 = false
+							logs('主城定位')
+						elseif d('主界面下_城内_主城天黑了') then
+							return true
+						else
+							logs('主城偏离')
+							click(687,1289)
+						end
 					elseif 找箭头合集() then
 					elseif 城内按钮集合() then
-						return false
+						弹出主城 = true
+						key = 1
+						click(687,1289)
 					elseif 城内建筑集合() then
 					else
 						move(movelist[key])
@@ -112,7 +121,6 @@ function 全局升级()
 				end
 			else
 				if game_tips() then
-					return true
 				elseif tips弹窗() then
 				end	
 			end
@@ -120,7 +128,7 @@ function 全局升级()
 		delay(1)
 	end
 end
-
+--d('建筑升级界面_跳转',true) 
 
 --gamekey = true
 --while true do
@@ -131,10 +139,10 @@ end
 --	end
 --end
 
---d('主界面下')
-game()
 while true do
---全局升级() 
-城内按钮集合()
+全局升级() 
+--城内按钮集合()
+--delay(1)
+--城内建筑集合()
 end
 
