@@ -11,11 +11,46 @@ MyTable = {
     ["timer"]        = 60,
     ["orient"]       = 0,
     ["pagetype"]     = "multi",
-    ["title"]        = "剑与家园",
+    ["titles"]        = "守望黎明第一页,守望黎明第二页,守望黎明第三页,",
     ["cancelname"]   = "取消",
     ["okname"]       = "开始",
     pages            =
     {
+		{
+            {
+                ["type"] = "Label",
+                ["text"] = "主键设置",
+                ["size"] = 20,
+                ["align"] = "center",
+                ["color"] = "0,0,0",
+            },
+			{
+                ["id"] = "main",
+                ["type"] = "RadioGroup",
+                ["list"] = "本地帐号,服务器帐号",
+                ["select"] = "0",
+			},
+			{
+                ["type"] = "Label",
+                ["text"] = "所有者:",
+                ["width"] = 150,
+                ["nowrap"] = 1,
+            },
+            {
+                ["id"] = "whos",
+                ["type"] = "Edit",
+                ["width"] = 400,
+                ["prompt"] = "后台显示帐号",
+                ["text"] = "admin",
+            },   
+			{
+                ["type"] = "Label",
+                ["text"] = "原来的脚本设置功能全部改为服务器台后控制\n http://news.wenfree.cn",
+                ["size"] = 16,
+                ["align"] = "center",
+                ["color"] = "0,0,0",
+            },
+		},
 		{
             {
                 ["type"] = "Label",

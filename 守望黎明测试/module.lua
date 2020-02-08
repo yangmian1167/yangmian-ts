@@ -11,7 +11,7 @@ end
 --找箭头合集
 function 找箭头合集()
 	if(d("tip_向下箭头",true,1))then
-		click(x,y+50);
+		click(x,y+50)
 		return true	
 	elseif(d("tip_向上箭头",true,1))then
 		click(x,y-50);
@@ -19,30 +19,41 @@ function 找箭头合集()
 	elseif d('tip_右下箭头',true)then
 		click(x+50,y+50)
 		return true	
-	elseif d('tip_左下角感叹号',true)then
+	elseif d('tip_左上箭头',true)then
+		click(x-50,y-50)
 		return true	
-	elseif d('tip_左下角感叹号2',true)then
-		return true
+--	elseif d('tip_左下角感叹号',true)then
+--		return true	
+--	elseif d('tip_左下角感叹号2',true)then
+--		return true
 	end
---	logs('找箭头合集结束')
-	return false
 end
 
 
 --城内按钮集合
 function 城内按钮集合()
 	keepScreen(true)
-	if d('主界面下_城内_升级按钮',true) then
+	if d('主界面下_城内_驻扎详情升级急速按钮',true) then
+	elseif d('主界面下_城内_升级按钮',true) then
+		return true
+	elseif d('主界面下_城内_闪光升级按钮',true) then
+		return true
 	elseif d('主界面下_城内_详情升级按钮',true) then
 	elseif d('主界面下_城内_主城升级按钮',true) then
 	elseif d('主界面下_城内_独立详情按钮') then
+		弹出主城 = true
 		return true
-	elseif d('城内提示图标',true) then
+--	elseif d('城内提示图标',true) then
+	elseif d('城内提示图标_造兵完成',true) then
+		return true
+	elseif d('城内提示图标_新闻',true) then
+		return true
+	elseif d('城内提示图标_收货',true) then
+		return true
+	elseif d('城内提示图标_英雄',true) then
 		return true
 	end
 	keepScreen(false)
---	logs('城内按钮集合结束')
-	return false
 end	
 --城内建筑集合
 function 城内建筑集合()
@@ -64,9 +75,13 @@ function 城内建筑集合()
 	elseif 升级电仓key and d('主界面下_城内_仓库电',true) then 
 			升级电仓key = false
 			return true
+--	elseif 升级绿箭头key and d('主界面下_城内_升级小绿标1',true) then 
+--		升级绿箭头key = false
+--		return true
+	elseif 升级绿箭头key and d('主界面下_城内_升级小绿标',true) then 
+--		升级绿箭头key = false
+		return true
 	end
---	logs('城内建筑集合结束')
-	return false
 end
 
 
@@ -90,23 +105,30 @@ function game_tips()
 			elseif d('gametips_返回箭头下',true) then
 			end	
 		else
-			d('gametips_返回箭头下',true)
+			if d('gametips_返回箭头下',true) then
+				弹出主城 = true
+			end
 		end	
 	elseif d('gametips_丰收界面使用',true) then
+		弹出主城 = true
 	elseif d('gametips_新的工程车弹窗',true) then
 		click(687,1289)
 		return true
 	elseif d('gametips_工程车界面') then
 		if d('gametips_工程车界面_派遣',true) then
+			弹出主城 = true
 			return true
 		elseif d('gametips_工程车界面',true) then
 		end	
 	elseif d('建筑升级界面') then
 		if d('建筑升级界面_基地升级界面') then
 			if d('建筑升级界面_跳转',true) then
+				delay(3)
 			end	
 		elseif d('建筑升级界面_跳转',true) then
 			logs('缺少条件')
+			delay(2)
+			return true
 		else
 			if d('建筑升级界面_缺少资源') then
 				logs('缺少资源,统计中...')
@@ -125,12 +147,11 @@ function game_tips()
 				end	
 			else
 				if d('建筑升级界面_升级',true) then
+						return true
 				else 
 					d('建筑升级界面',true)
 				end	
 			end	
 		end
 	end	
-	logs('gametips结束')
-	return false
 end	
