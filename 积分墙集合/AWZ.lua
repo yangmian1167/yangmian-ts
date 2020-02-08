@@ -222,6 +222,7 @@ function getOnlineName()
 			nLog("the result is: " .. result);
 			if tonumber(result) == 1 then
 				local jg = readFile('/var/mobile/iggparams.txt')
+				log(jg)
 				return jg
 			end
 		end	
@@ -299,7 +300,7 @@ end
 
 
 
-
+getOnlineName()
 
 
 nLog('AWZ 加截完成')
