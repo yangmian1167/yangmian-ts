@@ -323,26 +323,8 @@ input = {
     end
 }
 
---用http.get实现下载文件功能
-function downFile(url, path)
-    local sz = require("sz")
-    local cjson = sz.json
-    local http = sz.i82.http
-    local status, headers, body = http.get(url)
-    if status == 200 then
-        file = io.open(path, "w+")
-        if file then
-            file:write(body)
-            file:close()
-            return status;
-        else
-            return -1;
-        end
-    else
-        return status;
-    end
-end
---downFile("http://mu1234.applinzi.com/wechat-reply.txt","/User/Media/TouchSprite/lua/wechat-reply.txt")
+
+
 --检测指定文件是否存在
 function file_exists(file_name)
     local f = io.open(file_name, "r")
@@ -527,15 +509,7 @@ vpn ={
 			end
 		end
 	}
---获取ip地址函数
-function ip()
-	local http = require("szocket.http")
-	local res, code = http.request("http://pv.sohu.com/cityjson?ie=utf-8",30);
-	if code ~= nil then
-		local i,j = string.find(res, '%d+%.%d+%.%d+%.%d+')
-		if i ~= nil and j ~= nil then return string.sub(res,i,j) end
-	end
-end
+
 ---------------VPN---------------
 --展示一个文本框函数
 function boxshow(txt,x1,y1,x2,y2)
@@ -549,37 +523,6 @@ function boxshow(txt,x1,y1,x2,y2)
 	--fwShowTextView("wid","textid","这是一个文本视图","center","FF0000","FFDAB9",0,20,0,0,200,100,0.5)
 end
 
---post函数
-function post(url,arr)
-	local sz = require("sz")
-	local cjson = sz.json
-	local http = sz.i82.http
-	safari = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.111 Safari/537.36'
-	headers = {}
-	headers['User-Agent'] = safari
-	headers['Referer'] = url
-	headers_send = cjson.encode(headers)
-	post_send = cjson.encode(arr)
---	log(post_send)
-	post_escaped = http.build_request(post_send)
-	status_resp, headers_resp, body_resp = http.post(url, 5, headers_send, post_escaped)
-	if status_resp == 200 then
---		log(body_resp)
-		local json = sz.json
-		return json.decode(body_resp)
-	end
-end
-
---get函数
-function get(url)
-	local sz = require("sz")
-	local http = require("szocket.http")
-	local res, code = http.request(url);
-	if code == 200 then
-		local json = sz.json
-		return json.decode(res)
-	end
-end
 
 --小随机函数
 rd = function(min,max)
