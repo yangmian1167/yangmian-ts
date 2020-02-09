@@ -1,6 +1,7 @@
 [res]
 [lib]
 [file]
+AWZ.lua
 ui.lua
 tsp.lua
 module.lua
