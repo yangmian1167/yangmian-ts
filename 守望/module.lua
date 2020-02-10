@@ -104,9 +104,24 @@ function game_tips()
 			elseif d('gametips_英雄招募界面_免费1次',true) then
 			elseif d('gametips_返回箭头下',true) then
 			end	
+		elseif d('gametips_返回箭头下_福利中心') then
+			if d('gametips_返回箭头下_福利中心_每日补给领取',true) then
+			end
+		elseif d('gametips_返回箭头下_活动中心') then
+			if d('gametips_返回箭头下_活动中心_红点',true) then
+			else
+				d('gametips_返回箭头下',true)
+			end
+		elseif d('gametips_返回箭头下_任务界面') then
+			if d('gametips_返回箭头下_任务界面_领取',true) then
+			else
+				d('gametips_返回箭头下',true)	
+			end
+		elseif d('gametips_返回箭头下_一键入盟',true) then
 		else
 			if d('gametips_返回箭头下',true) then
 				弹出主城 = true
+				return true
 			end
 		end	
 	elseif d('gametips_丰收界面使用',true) then
@@ -132,6 +147,7 @@ function game_tips()
 		else
 			if d('建筑升级界面_缺少资源') then
 				logs('缺少资源,统计中...')
+				优升主城_timeline = 0
 				if d('建筑升级界面_缺粮') then
 					升级粮仓key = true
 				end						
@@ -153,5 +169,16 @@ function game_tips()
 				end	
 			end	
 		end
+	elseif 邮件key and d('邮件界面') then
+		if d('邮件界面_一键已读',true) then
+			return true
+		elseif d('邮件界面_主界面') then
+			if d('邮件界面_主界面_有邮件',true) then	
+				return true
+			end	
+		else
+			click(62,42)
+			return true
+		end	
 	end	
 end	

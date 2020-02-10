@@ -1,9 +1,10 @@
 [res]
 [lib]
 [file]
-AWZ.lua
 ui.lua
 tsp.lua
 module.lua
 ip6color.lua
 main.lua
+
+newplayer.lua

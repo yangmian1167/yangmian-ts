@@ -23,7 +23,7 @@
 package.loaded['AWZ'] = nil
 require("TSLib")
 require("AWZ")
-require("ALS")
+--require("ALS")
 require("tsp")
 
 local var={}
@@ -133,7 +133,7 @@ t['skip']={0xf2f2f2,"506|-8|0xff4800,-17|-45|0xf2f2f2",degree,43,1190,713,1319}
 function app()
 	local timeLine = os.time()
 	while os.time() - timeLine < rd(4,4) do
-		if active(jfq.bid,5)then
+		if active(jfq.bid,1)then
 			if d("agree",true,2)then
 			elseif d("skip",true,2)then
 			end
@@ -192,7 +192,34 @@ function main(v)
 					if(idfa_click())then
 						up(jfq.name,'点击成功')
 						if app() then
-							back_pass(task_id,"ok")
+--							back_pass(task_id,"ok")
+						end
+					end
+				end
+			end	
+--		end
+		delay(2)
+	end
+end
+function reg()
+	vpnx()
+	delay(3)
+	if vpn() then
+		delay(3)
+--		if false or checkip()then
+--			if v.json == "回调" then
+--				callback_key = true
+--			end
+			other_txt = ''
+			if awzNew() then
+				delay(4)
+				start()
+				if (idfa_idfaPc())then
+					up(jfq.name,'排重成功')
+					if(idfa_click())then
+						up(jfq.name,'点击成功')
+						if app() then
+--							back_pass(task_id,"ok")
 						end
 					end
 				end
@@ -202,6 +229,10 @@ function main(v)
 	end
 end
 
+for i = 1 , 300 do
+reg()
+
+end
 
 
-	
+
