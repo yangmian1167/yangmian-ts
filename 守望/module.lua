@@ -34,6 +34,8 @@ end
 function 城内按钮集合()
 	keepScreen(true)
 	if d('主界面下_城内_驻扎详情升级急速按钮',true) then
+	elseif 造兵按钮key and d('主界面下_城内_训练按钮',true)or 造兵按钮key and d('主界面下_城内_闪光训练按钮',true) then
+	elseif d('主界面下_城内_运输按钮',true) then
 	elseif d('主界面下_城内_升级按钮',true) then
 		return true
 	elseif d('主界面下_城内_闪光升级按钮',true) then
@@ -114,16 +116,24 @@ function game_tips()
 			end
 		elseif d('gametips_返回箭头下_任务界面') then
 			if d('gametips_返回箭头下_任务界面_领取',true) then
+			elseif d('gametips_返回箭头下_任务界面_宝箱领取',true) then
 			else
 				d('gametips_返回箭头下',true)	
 			end
 		elseif d('gametips_返回箭头下_一键入盟',true) then
+		elseif d('gametips_返回箭头下_联盟礼物界面') then
+			if d('gametips_返回箭头下_联盟礼物界面_领取',true) then
+				return true
+			else
+				d('gametips_返回箭头下',true)
+			end	
 		else
 			if d('gametips_返回箭头下',true) then
 				弹出主城 = true
 				return true
 			end
 		end	
+	elseif d('gametips_资源运输界面运输粮水',true) then
 	elseif d('gametips_丰收界面使用',true) then
 		弹出主城 = true
 	elseif d('gametips_新的工程车弹窗',true) then
@@ -136,7 +146,13 @@ function game_tips()
 		elseif d('gametips_工程车界面',true) then
 		end	
 	elseif d('建筑升级界面') then
-		if d('建筑升级界面_基地升级界面') then
+		if d('建筑升级界面_造兵界面') then
+			if d('建筑升级界面_造兵界面_训练',true) then
+				return true
+			else
+				d('建筑升级界面',true)
+			end	
+		elseif d('建筑升级界面_基地升级界面') then
 			if d('建筑升级界面_跳转',true) then
 				delay(3)
 			end	
@@ -169,7 +185,7 @@ function game_tips()
 				end	
 			end	
 		end
-	elseif 邮件key and d('邮件界面') then
+	elseif d('邮件界面') then
 		if d('邮件界面_一键已读',true) then
 			return true
 		elseif d('邮件界面_主界面') then

@@ -229,10 +229,16 @@ function reg()
 	end
 end
 
-for i = 1 , 300 do
-reg()
 
+
+
+
+while (true) do
+	local ret,errMessage = pcall(reg)
+	if ret then
+	else
+		nLog(errMessage)
+--		sys.alert(errMessage, 3)
+		delay(5)
+	end
 end
-
-
-

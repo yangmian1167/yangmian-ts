@@ -3,12 +3,11 @@ require("tsp")
 require("ip6color")
 require("module")
 require("newplayer")
---require("ui")
---log(UI_v)
+require("ui")
+
 init(0)
 var = ''
 appbid = 'com.more.dayzsurvival.ios'
-
 
 
 
@@ -16,11 +15,8 @@ function 领取()
 	领取_timeline = 2*60
 	领取_timeout = os.time()
 	打开菜单key = true
-	打开邮件key = true
-	打开背包key = true
-	打开联盟key = true
-	任务key = true
-	邮件key = true
+	造兵按钮key = true
+	超时计数key = 1
 	while os.time() - 领取_timeout < 领取_timeline do
 		if active(appbid,5) then
 			if d('主界面下') then
@@ -28,7 +24,9 @@ function 领取()
 					if 找箭头合集() then
 					elseif 城内按钮集合() then
 					elseif 任务key and d('主界面下_城内_任务绿字',true) then
-					elseif d('主界面下_城内_福利红点',true) then
+					elseif 福利中心key and d('主界面下_城内_福利红点',true) then
+					elseif 联盟礼物key and d('主界面下_城内_联盟礼物',true) then
+						联盟礼物key = false
 					elseif 打开菜单key and d('主界面下_城内_打开菜单',true) then
 						打开菜单key = false		
 					elseif 打开邮件key and d('主界面下_城内_打开邮件',true) then
@@ -37,6 +35,14 @@ function 领取()
 						打开背包key = false
 					elseif 打开联盟key and d('主界面下_城内_打开联盟',true) then					
 						打开联盟key = false			
+					elseif 造兵提示按钮key and d('主界面下_城内_造兵提示按钮',true) then
+						造兵提示按钮key = false
+					elseif 粮水缺少按钮key and d('主界面下_城内_粮水缺少按钮',true) then
+						粮水缺少按钮key = false
+					elseif 超时计数key > 5 then
+						return true
+					else	
+						超时计数key = 超时计数key + 1
 					end
 				else
 					click(687,1289)
@@ -51,20 +57,8 @@ function 领取()
 		end
 	delay(1)
 	end
+	return true
 end
-
-领取()
-
-
-
-d('邮件界面')
-
-d('gametips_返回箭头下')
-
-
-
-
-
 
 
 
@@ -112,13 +106,8 @@ function 优升主城()
 end	
 
 
-升级铁仓key = true
-升级木仓key = true
-升级电仓key = true
-升级粮仓key = true
-升级水仓key = true
-升级油仓key = true
-升级绿箭头key = true
+
+
 --城内全局扫描
 function 全局升级()
 	弹出主城 = true
@@ -175,15 +164,15 @@ end
 
 
 
---[[
+--[[]]
 while true do
-	if 优升主城() then
-		 if 全局升级() then
-			nextgame()
-		 end
-	end	 
+	if 领取key and 领取() then 
+	end
+	造兵按钮key = false
+	if 优升主城key and 优升主城() then end
+	if 全局升级key and 全局升级() then end
+	nextgame()	 
 end
-
 --]]
 
 
