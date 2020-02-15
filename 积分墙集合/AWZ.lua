@@ -299,10 +299,6 @@ function getTrueName_awz()
 end
 
 
-
-getOnlineName()
-
-
 nLog('AWZ 加截完成')
 
 

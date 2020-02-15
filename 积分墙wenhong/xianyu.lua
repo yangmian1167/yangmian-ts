@@ -233,7 +233,7 @@ end
 
 
 
-while (true) do
+for i = 1 , 250 do
 	local ret,errMessage = pcall(reg)
 	if ret then
 	else

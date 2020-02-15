@@ -1,6 +1,7 @@
 require("TSLib")
 require("tsp")
 require("nameStr")
+require("AWZ")
 
 
 -- 总的脚本, 用渠道名来区分脚本

@@ -1,5 +1,6 @@
 [res]
 [lib]
 [file]
+tsp.lua
 ui.lua
 main.lua

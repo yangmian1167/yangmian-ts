@@ -1,4 +1,5 @@
 require("TSLib")
+require("tsp")
 local sz = require("sz")
 local json = sz.json
 w,h = getScreenSize();
@@ -69,10 +70,11 @@ MyTable = {
                 ["color"] = "0,0,0",
             },		
 			{
-				["id"] = "sbxx",
-                ["type"] = "RadioGroup",
-                ["text"] = "",
-                 ["list"] = "优升仓库,随机升级", 
+				["id"] = "sbxx3",
+                ["type"] = "Edit",
+                ["align"] = "center",
+                ["prompt"] = "111",
+                ["text"] = "FDSFDS",
             },
 			{
                 ["type"] = "Label",
@@ -112,7 +114,7 @@ else
 	lua_exit()
 end
 
-
+nLog(UI_v.sbxx3)
 
 
 

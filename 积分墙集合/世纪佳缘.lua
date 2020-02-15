@@ -493,12 +493,12 @@ function main(v)
 			if sys.clear_bid(var.appbid)then
 --			if awzNew() then
 				if reg()then
-					if 填资料() then
-						back_pass(task_id,"ok")
-					end
---					if 填资料ios10() then
+--					if 填资料() then
 --						back_pass(task_id,"ok")
---					end	
+--					end
+					if 填资料ios10() then
+						back_pass(task_id,"ok")
+					end	
 				end
 			end	
 --		end
