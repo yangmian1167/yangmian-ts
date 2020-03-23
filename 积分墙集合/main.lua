@@ -174,7 +174,6 @@ function all()
 	
 end
 
-
 --[[]]
 while (true) do
 	local ret,errMessage = pcall(all)
@@ -185,9 +184,6 @@ while (true) do
 		delay(5)
 	end
 end
-
-
-
 --]]
 
 

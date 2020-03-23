@@ -135,7 +135,7 @@ end
 --touchUp(150, 600);  --在坐标 (150, 600) 抬起
 --end	
 function move(value,step,times)
-	local step = step or 13
+	local step = step or 20
 	local times = times or 200
 	if value ~= nil or value ~= '' then
 		if type(value) == 'table' then
@@ -153,6 +153,7 @@ end
 function delay(times)
 	local times = times or 1
 	mSleep(times*1000)
+	log(times..'秒')
 end
 
 --单点模糊比色

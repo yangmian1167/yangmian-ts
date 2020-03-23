@@ -3,14 +3,24 @@ require("TSLib")
 require("tsp")
 
 --get函数
+--function get_lx(url)
+--	local sz = require("sz")
+--	local http = require("szocket.http")
+--	local res, code = http.request(url);
+--	delay(2)
+--	if code == 200 then
+--		return res
+--	end
+--end
 function get_lx(url)
-	local sz = require("sz")
-	local http = require("szocket.http")
-	local res, code = http.request(url);
-	if code == 200 then
+	local sz = require("sz")	
+	local res = httpGet(url);
+--	log(res)
+	if res~= nil or res~= '' then
 		return res
 	end
 end
+
 
 --来信平台
 function _vCode_lx() --来信

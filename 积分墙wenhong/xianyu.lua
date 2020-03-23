@@ -132,7 +132,7 @@ t['skip']={0xf2f2f2,"506|-8|0xff4800,-17|-45|0xf2f2f2",degree,43,1190,713,1319}
 
 function app()
 	local timeLine = os.time()
-	while os.time() - timeLine < rd(4,4) do
+	while os.time() - timeLine < rd(12,15) do
 		if active(jfq.bid,1)then
 			if d("agree",true,2)then
 			elseif d("skip",true,2)then

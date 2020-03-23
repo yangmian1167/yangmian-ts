@@ -7,4 +7,6 @@ module.lua
 ip6color.lua
 main.lua
 
+faker.lua
+
 newplayer.lua

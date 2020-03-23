@@ -123,6 +123,7 @@ function reg()
 				if 手机号 then
 					var.phone = dxcode.getPhone()
 					if #var.phone == 11 then
+						delay(2)
 						click(354,326)
 						input[3](var.phone)
 						手机号 = false
@@ -415,7 +416,18 @@ function up(other)
 	log(post(url,postdate))
 	-- body
 end
-
+--function up(other)
+--	local url = 'http://hb.wenfree.cn/api/Public/idfa/'
+--	local postdate = {}
+--	postdate.service = 'Idfa.Idfa'
+--	postdate.name = '世纪佳缘'
+--	postdate.idfa = var.phone or '1111111'
+--	postdate.password = var.password or '11111111'
+--	postdate.other = other or '111111111'
+--	log(post(url,postdate))
+--	-- body
+--end
+--up('测试')
 --function up(other)
 --	local url = 'http://wenfree.cn/api/Public/idfa/'
 --	local postdate = {}
@@ -483,7 +495,7 @@ function main(v)
 	----------------------------------
 	vpnx()
 	delay(3)
-	if vpn() then
+	if false or vpn() then
 		delay(3)
 --		if false or checkip()then
 --			if v.json == "回调" then
@@ -493,12 +505,12 @@ function main(v)
 			if sys.clear_bid(var.appbid)then
 --			if awzNew() then
 				if reg()then
---					if 填资料() then
---						back_pass(task_id,"ok")
---					end
-					if 填资料ios10() then
+					if 填资料() then
 						back_pass(task_id,"ok")
-					end	
+					end
+--					if 填资料ios10() then
+--						back_pass(task_id,"ok")
+--					end	
 				end
 			end	
 --		end
