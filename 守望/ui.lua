@@ -261,6 +261,7 @@ end
 任务key = false
 粮水缺少按钮key = false
 造兵提示按钮key = false
+造兵按钮key = false
 科技key = false
 for k , v in pairs(综合选项) do
 if v == '0' then
@@ -271,6 +272,7 @@ if v == '1' then
 end
 if v == '2' then
 	造兵提示按钮key = true
+	造兵按钮key = true
 end
 if v == '3' then
 	科技key = true

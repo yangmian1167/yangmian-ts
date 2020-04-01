@@ -15,7 +15,6 @@ function 领取()
 	领取_timeline = 5*60
 	领取_timeout = os.time()
 	联盟礼物key = true
-	造兵按钮key = true
 	运输按钮key = true
 	超时计数key = 1
 	logs('领取')
@@ -238,8 +237,6 @@ function main()
 			nextgame()
 		end	
 	else	
-		造兵按钮key = false
-		运输按钮key = false
 		if 开图key and 开图() then end
 		if 清箱子key and 清箱子() then end
 		if 领取key and 领取() then 	end
@@ -271,8 +268,6 @@ while (true) do
 		delay(5)
 	end
 end
-
-
 
 --]]
 

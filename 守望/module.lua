@@ -63,6 +63,7 @@ function 城内按钮集合()
 	keepScreen(true)
 	if d('主界面下_城内_驻扎详情升级急速按钮',true) then
 	elseif 造兵按钮key and d('主界面下_城内_训练按钮',true)or 造兵按钮key and d('主界面下_城内_闪光训练按钮',true) then
+		造兵按钮key = false
 	elseif 运输按钮key and d('主界面下_城内_运输按钮',true) or 运输按钮key and d('主界面下_城内_运输按钮1',true)then
 		运输按钮key = false
 	elseif d('主界面下_城内_升级按钮',true) or d('主界面下_城内_升级按钮2',true)  then
