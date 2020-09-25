@@ -1,18 +1,8 @@
--- 世纪佳缘-mac
--- sjjy.lua  
-
--- Create By TouchSpriteStudio on 21:25:52   
--- Copyright © TouchSpriteStudio . All rights reserved.
-	
-	
-
-
 
 
 require("TSLib")
 require("tsp")
 require("AWZ")
-require("jiema")
 
 
 
@@ -21,6 +11,90 @@ var.appbid = "com.jiayuan.jiayuaniphone";
 var.phone = ''
 var.password = ''
 t={}
+
+
+function get_lx(url)
+	local sz = require("sz")	
+	local res = httpGet(url);
+--	log(res)
+	if res~= nil or res~= '' then
+		return res
+	end
+end
+--服务器对接取号
+function _Server_get()
+	phone_name = getDeviceName()
+	phone_imei = getDeviceID()
+	log(phone_name)
+	log(phone_imei)
+	delay(2)
+	return{
+		login=(function()
+			return	
+		end),
+		getPhone = (function()
+				RetStr = get_lx('http://sms.wenfree.cn/public/?service=App.Sms.GetPhone'.."&imei="..phone_imei.."&phonename="..phone_name)
+				local sz = require('sz')
+				local cjson = sz.json
+				RetStr = cjson.decode(RetStr)
+				log(RetStr)
+				if RetStr then
+					if RetStr.data.meg == success or RetStr.data.meg == 'success' then
+						number = RetStr.data.phone
+						log(number)
+						local phone_title = (string.sub(number,1,3))
+--						local blackPhone = {'144','141','142','143','144','145','146','147','199','161','162','165','167','170','171'}
+						local blackPhone = {'144','141','142','143','144','145','146','147'}
+--						local blackPhone = {}
+						for k,v in ipairs(blackPhone) do
+							if phone_title == v then
+								local lx_url =	'http://api.cafebay.cn/api/do.php?action=addBlacklist&sid='..PID..'&phone='..number..'&token='..token
+								get_lx(lx_url);
+								log("拉黑->"..number)
+								return false
+							end
+						end
+					end
+				else
+					log(RetStr)
+				end
+				mSleep(3000)
+				return number
+		end),
+		 getMessage=(function()
+			local Msg
+            for i=1,25,1 do
+				mSleep(3000)
+				RetStr = get_lx("http://sms.wenfree.cn/public/?service=App.Sms.GetMessage".."&imei="..phone_imei.."&phonename="..phone_name)
+				local sz = require('sz')
+				local cjson = sz.json
+				RetStr = cjson.decode(RetStr)
+				log(RetStr);
+				if RetStr then
+					if RetStr.data.meg == success or RetStr.data.meg == 'success' then
+						Msg = RetStr.data.sms
+						if type(tonumber(Msg))== "number" then log(Msg); return Msg 
+						else
+							Msg = RetStr.data.sms
+							log(Msg)
+							local i,j = string.find(Msg,"%d+")
+							Msg = string.sub(Msg,i,j)
+							if type(tonumber(Msg))== "number" then log(Msg); return Msg end
+						end
+					end
+				end
+				toast(tostring(RetStr).."\n"..i.."次共25次")
+				mSleep(3000)
+            end
+            return false
+        end),
+	
+	
+	}
+	
+end
+--dxcode = _Server_get()
+--dxcode.getPhone()
 
 sys = {
 	clear_bid = (function(bid)
@@ -65,58 +139,6 @@ function start()
 	jfq.udid = strSplit(info[4],":")[2]
 end
 
-function jm_key()
-	if bid[work]['adid'] == 'yx' then
-		log('有信平台')
-		User = 'zhangvsqaz1go'
-		Pass = '199412'
-		PID = '22996'
-		dxcode = _vCode_yx()
-	elseif bid[work]['adid'] == 'ma' then
-		log('马大帅平台')
-		User = 'zhangvsqaz'
-		Pass = '135246'
-		PID = '56608'
-		dxcode = _vCode_ma()
-	elseif bid[work]['adid'] == 'zj' then
-		log('致敬平台')
-		User = 'zhangvsqaz'
-		Pass = '135246'
-		PID = '10078'
-		dxcode = _vCode_zj()
-
-	elseif bid[work]['adid'] == 'wzy' then
-		log('万众云')
-		User = 'api-GbzRcm'
-		Pass = '199555'
-		PID = '10530'
-		dxcode = _vCode_wzy()
-	elseif bid[work]['adid'] == 'yl' then
-		log('月亮')
-		User = '51135893913'
-		Pass = '199412'
-		PID = '1283'
-		dxcode = _vCode_yl()
-	elseif bid[work]['adid'] == 'lh' then
-		log('蓝狐')
-		User = 'api-SMuo3byY'
-		Pass = '199555'
---		User = 'api-1pj8gnHT'
---		Pass = 'wq000000'
-		PID = '353'
-		dxcode = _vCode_lh()	
-	elseif bid[work]['adid'] == 'lh' then
-		log('蓝狐')
-		User = 'api-1pj8gnHT'
-		Pass = '199555'
---		User = 'api-1pj8gnHT'
---		Pass = 'wq000000'
-		PID = '353'
-		dxcode = _vCode_lh()
-	end
-	dxcode.login()
-end
-
 function rdclicks(x,y,n)
 	if n == 0 then
 		return false
@@ -145,7 +167,7 @@ function reg()
 	
 	while os.time()-timeline < outTimes do
 		if active(var.appbid,5) then
-			if d('填写资料') or d('上传头像_跳过') then
+			if d('填写资料') or d('上传头像_跳过') or d('上传头像_跳过ios10新')then
 				return true
 			elseif d('手机号注册界面') then
 				if 手机号 then
@@ -221,6 +243,7 @@ t['完成']={ 0x2099ff, "11|4|0x1493ff,35|16|0x1c97ff,21|10|0x2b9eff,37|-1|0xa2d
 	
 t['上传头像_跳过']={ 0x363839, "-424|88|0x000000,-417|89|0xfefefe,-361|356|0xd8d8d8,-317|385|0xfefefe", 90, 30, 57, 725, 652 } --多点找色
 t['上传头像_跳过ios10']={ 0x3a3c3d, "-13|-5|0xfefefe,-280|235|0xd8d8d8,-243|262|0xffffff,-220|317|0xd8d8d8", 90, 370, 49, 735, 555 } --多点找色
+t['上传头像_跳过ios10新']={ 0x66686c, "-14|-9|0x66686c,36|5|0x66686c,41|15|0xc5c6c8,42|13|0xe8e8e9", 90, 635, 89, 703, 133 } --多点找色
 local degree = 85
 
 	t['填资料2/完成注册ios10']={ 0xf83d84, "-323|-50|0xf95777,-212|-49|0xf8477f", 90, 120, 713, 601, 854 } --多点找色
@@ -336,7 +359,9 @@ function 填资料()
 					d('完成',true)
 				end	
 			else
-				d('上传头像_跳过',true)
+				if d('上传头像_跳过',true) then
+				elseif d('上传头像_跳过ios10新',true) then
+				end
 			end	
 		end
 		delay(1)
@@ -449,7 +474,9 @@ function 填资料ios10()
 					d('完成',true)
 				end	
 			else
-				d('上传头像_跳过ios10',true)
+				if d('上传头像_跳过ios10',true) then
+				elseif d('上传头像_跳过ios10新',true) then
+				end
 			end	
 		end
 		delay(1)
@@ -468,56 +495,7 @@ function up(other)
 	log(post(url,postdate))
 	-- body
 end
---function up(other)
---	local url = 'http://hb.wenfree.cn/api/Public/idfa/'
---	local postdate = {}
---	postdate.service = 'Idfa.Idfa'
---	postdate.name = '世纪佳缘'
---	postdate.idfa = var.phone or '1111111'
---	postdate.password = var.password or '11111111'
---	postdate.other = other or '111111111'
---	log(post(url,postdate))
---	-- body
---end
---up('测试')
---function up(other)
---	local url = 'http://wenfree.cn/api/Public/idfa/'
---	local postdate = {}
---	postdate.service = 'Idfa.Idfa'
---	postdate.name = '世纪佳缘'
---	postdate.idfa = var.phone
---	postdate.password = var.password
---	postdate.other = other
---	log(post(url,postdate))
---	-- body
---end
 
---require("AWZ")
-
---function all()
---	while true do
---		vpn.off()
---		if  false or vpn.on() then
---			delay(3)
---			dxcode.login()
---			if sys.clear_bid(var.appbid)then
---				if reg()then
---					填资料()
---				end
---			end
---		end
---	end
---end
-
---while (true) do
---	local ret,errMessage = pcall(all)
---	if ret then
---	else
---		log(errMessage)
---		dialog(errMessage, 10)
---		mSleep(2000)
---	end
---end
 
 function back_pass(task_id,success)
 	local url = 'http://wenfree.cn/api/Public/tjj/?service=Tjj.backpass'
@@ -526,7 +504,7 @@ function back_pass(task_id,success)
 	postArr.success = success
 	nLog( post(url,postArr) )
 end
-
+dxcode = _Server_get()
 --[[]]
 function main(v)
 	nLog(v)
@@ -539,34 +517,25 @@ function main(v)
 	bid[work]['appbid']=v.appbid
 	bid[work]['appid']=v.appid
 	nLog("act")
---	jm_key()
-	dxcode = _Server_get()
---	model = tostring(readFile("/var/mobile/model.txt")[1])
---	nLog(model)
---	callback_key = false
---	ip = get_ip()
+
+	
+
 	----------------------------------
 	vpnx()
 	delay(3)
 	if false or vpn() then
 		delay(3)
---		if false or checkip()then
---			if v.json == "回调" then
---				callback_key = true
---			end
-			other_txt = ''
-			if sys.clear_bid(var.appbid)then
---			if awzNew() then
-				if reg()then
+		other_txt = ''
+		if sys.clear_bid(var.appbid)then
+			if reg()then
 --					if 填资料() then
 --						back_pass(task_id,"ok")
 --					end
-					if 填资料ios10() then
-						back_pass(task_id,"ok")
-					end	
-				end
-			end	
---		end
+				if 填资料ios10() then
+					back_pass(task_id,"ok")
+				end	
+			end
+		end	
 		delay(2)
 	end
 end

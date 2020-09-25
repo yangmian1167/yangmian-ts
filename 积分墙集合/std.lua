@@ -195,9 +195,9 @@ function activeapi(name)
 		model = model
 		os_version = strSplit(tb[3],':')[2]
 		udid = strSplit(tb[4],':')[2]
-		if checkidfa(name)then
-			if clickidfa(name)then
-				delay(rd(60,65))
+--		if checkidfa(name)then
+--			if clickidfa(name)then
+--				delay(rd(60,65))
 --				vkey = rd(100,100)
 --				nLog(vkey)
 --				if vkey > 40 then
@@ -207,12 +207,12 @@ function activeapi(name)
 --					nLog('准备试玩')
 --					newplayer(name)
 --				end
-				if activeidfa(name)then
+--				if activeidfa(name)then
 --					up(name,bid[name]['keyword'].."-激活成功")
 					up(name,bid[name]['keyword'].."-awz测试")
-				end
-			end
-		end
+--				end
+--			end
+--		end
 	end
 end
 
@@ -224,7 +224,7 @@ t['实名认证']={ 0x515151, "7|-8|0x515151,-9|-9|0x515151,-320|-11|0xf8663d,-2
 
 function newidfa(name)
 	local TIMEline = os.time()
-	local OUTtime = rd(180,190)
+	local OUTtime = rd(25,28)
 	while os.time()- TIMEline < OUTtime do
 		if active(bid[name]['appbid'],4)then
 			nLog('进入循环')

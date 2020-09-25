@@ -72,19 +72,174 @@ require('tsp')
 
 
 
-function 点击赚钱(x,y)
-	x,y = findMultiColorInRegionFuzzy( 0x007aff, "3|0|0x007aff,7|1|0x007aff,96|3|0x057cff,103|1|0x007aff,105|7|0x007aff,131|1|0x007aff,132|-9|0x007aff", 90, 646, 1133, 1009, 1256)
-	if x ~= -1 and y ~= -1 then
-		touchDown(x,y);    --在坐标 (150, 550)按下
-		mSleep(30);
-		touchUp(x,y);  --在坐标 (150, 600) 抬起
-	end
 
-	x,y = findMultiColorInRegionFuzzy( 0x999999, "-1|4|0x999999,0|10|0x999999,0|14|0x999999,53|14|0x999999,53|21|0x999999,52|24|0x999999,56|21|0xb4b4b4,62|6|0x999999", 90, 23, 616, 311, 742)
-	if x ~= -1 and y ~= -1 then
-		nLog('服务')
-		tap(x,y)
-		mSleep(50)
-	end
+
+--url = 'http://www.ylsmspt.com/yhapi.ashx?act=getPhone&iid=1283&token=ad83d006f68c32e237a955f8d90f9ed1_10216&did=51135893913'
+--url = 'http://sms.wenfree.cn/public/?service=App.Sms.GetPhone&imei=459c7c073e14ddd7d00be24ef241cf41&phonename=%E7%99%BE%E5%90%881'
+--RetStr = httpGet(url)
+--log(RetStr) 
+--				local sz = require('sz')
+--				local cjson = sz.json
+-- RetStr= cjson.decode(RetStr)
+--log(RetStr) 
+
+
+
+
+--服务器对接取号
+function _Server_get()
+	phone_name = getDeviceName()
+	phone_imei = getDeviceID()
+	log(phone_name)
+	log(phone_imei)
+	return{
+		login=(function()
+			return	
+		end),
+		getPhone = (function()
+				RetStr = httpGet('http://sms.wenfree.cn/public/?service=App.Sms.GetPhone'.."&imei="..phone_imei.."&phonename="..phone_name)
+				local sz = require('sz')
+				local cjson = sz.json
+				log(RetStr)
+				RetStr = cjson.decode(RetStr)
+				log(RetStr)
+				if RetStr then
+					if RetStr.data.meg == success or RetStr.data.meg == 'success' then
+						number = RetStr.data.phone
+						log(number)
+						local phone_title = (string.sub(number,1,3))
+--						local blackPhone = {'144','141','142','143','144','145','146','147','199','161','162','165','167','170','171'}
+						local blackPhone = {'144','141','142','143','144','145','146','147'}
+--						local blackPhone = {}
+						for k,v in ipairs(blackPhone) do
+							if phone_title == v then
+								local lx_url =	'http://api.cafebay.cn/api/do.php?action=addBlacklist&sid='..PID..'&phone='..number..'&token='..token
+								get_lx(lx_url);
+								log("拉黑->"..number)
+								return false
+							end
+						end
+					end
+				else
+					log(RetStr)
+				end
+				mSleep(3000)
+				return number
+		end),
+		 getMessage=(function()
+			local Msg
+            for i=1,25,1 do
+				mSleep(3000)
+				RetStr = get_lx("http://sms.wenfree.cn/public/?service=App.Sms.GetMessage".."&imei="..phone_imei.."&phonename="..phone_name)
+				local sz = require('sz')
+				local cjson = sz.json
+				RetStr = cjson.decode(RetStr)
+				log(RetStr);
+				if RetStr then
+					if RetStr.data.meg == success or RetStr.data.meg == 'success' then
+						Msg = RetStr.data.sms
+						if type(tonumber(Msg))== "number" then log(Msg); return Msg 
+						else
+							Msg = RetStr.data.sms
+							log(Msg)
+							local i,j = string.find(Msg,"%d+")
+							Msg = string.sub(Msg,i,j)
+							if type(tonumber(Msg))== "number" then log(Msg); return Msg end
+						end
+					end
+				end
+				toast(tostring(RetStr).."\n"..i.."次共25次")
+				mSleep(3000)
+            end
+            return false
+        end),
+	
+	
+	}
+	
 end
-点击赚钱(x,y)
+
+
+
+
+dxcode = _Server_get()
+
+dxcode.getPhone()
+
+
+
+function dxcode_getPhone()
+	phone_name = getDeviceName()
+	phone_imei = getDeviceID()
+--	log(phone_name)
+--	log(phone_imei)
+--	delay(2)
+	RetStr = httpGet('http://sms.wenfree.cn/public/?service=App.Sms.GetPhone'.."&imei="..phone_imei.."&phonename="..phone_name)
+	local sz = require('sz')
+	local cjson = sz.json
+	log(RetStr)
+	RetStr = cjson.decode(RetStr)
+	log(RetStr)
+	if RetStr then
+		if RetStr.data.meg == success or RetStr.data.meg == 'success' then
+			number = RetStr.data.phone
+			log(number)
+			local phone_title = (string.sub(number,1,3))
+--						local blackPhone = {'144','141','142','143','144','145','146','147','199','161','162','165','167','170','171'}
+			local blackPhone = {'144','141','142','143','144','145','146','147'}
+--						local blackPhone = {}
+			for k,v in ipairs(blackPhone) do
+				if phone_title == v then
+					local lx_url =	'http://api.cafebay.cn/api/do.php?action=addBlacklist&sid='..PID..'&phone='..number..'&token='..token
+					get_lx(lx_url);
+					log("拉黑->"..number)
+					return false
+				end
+			end
+		end
+	else
+		log(RetStr)
+	end
+	mSleep(3000)
+	return number
+end
+--	dxcode_getPhone()
+
+
+
+
+
+
+
+--	phone_name = getDeviceName()
+--	phone_imei = getDeviceID()
+--	log(phone_name)
+--	log(phone_imei)
+
+--	delay(2)
+--	pphone = httpGet('http://sms.wenfree.cn/public/?service=App.Sms.GetPhone'.."&imei="..phone_imei.."&phonename="..phone_name)
+----	pphone = httpGet("http://sms.wenfree.cn/public/?service=App.Sms.GetPhone&imei=459c7c073e14ddd7d00be24ef241cf41&phonename=百合1")
+--	log(pphone)
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+

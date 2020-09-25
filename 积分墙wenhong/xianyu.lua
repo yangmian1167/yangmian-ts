@@ -229,9 +229,9 @@ function reg()
 	end
 end
 
-
-
-
+nLog(frontAppBid())
+info = getOnlineName()
+print_r(info)
 
 for i = 1 , 250 do
 	local ret,errMessage = pcall(reg)

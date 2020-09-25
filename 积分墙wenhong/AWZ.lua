@@ -6,7 +6,8 @@
 
 
 require("TSLib")
-local awzbid = 'AWZ'
+--local awzbid = 'AWZ'
+local awzbid = 'YOY'
 function locks()
 	local flag = deviceIsLock();
 	if flag == 0 then

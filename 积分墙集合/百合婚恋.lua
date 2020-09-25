@@ -51,22 +51,31 @@ sys = {
 function jm_key()
 	if bid[work]['adid'] == 'lx' then
 		log('来信平台')
-		User = 'api-18190-rKpL6bd'
-		Pass = '135246'
+		User = 'api-18190-fElSmFlZyTiG'
+		Pass = '199555'
 		PID = '1770'
 		dxcode = _vCode_lx()
 	elseif bid[work]['adid'] == 'ma' then
 		log('马大帅平台')
 		User = 'zhangvsqaz'
 		Pass = '135246'
-		PID = '7761'
+		PID = '20206'
 		dxcode = _vCode_ma()
 	elseif bid[work]['adid'] == 'zj' then
 		User = 'zhangvsqaz'
 		Pass = '135246'
 		PID = '10203'
 		dxcode = _vCode_zj()
-	end
+	
+	elseif bid[work]['adid'] == 'lh' then
+		log('蓝狐')
+--		User = 'api-SMuo3byY'
+--		Pass = '199555'		
+		User = 'api-1pj8gnHT'
+		Pass = 'wq000000'	
+		PID = '839'
+		dxcode = _vCode_lh()
+	end	
 	dxcode.login()
 end
 
@@ -83,6 +92,10 @@ t['完善信息界面']={0xfc6e27, "156|-11|0xf9f9f9,158|1|0xfc6e27,379|7|0xf9f9
 t['完善信息界面ios10']={ 0x9c9c9c, "-12|3|0xa1a1a1,-12|30|0x8f8f8f,103|0|0x787878,112|30|0x606060", 90, 297, 62, 451, 108 } --多点找色
 	t['完善信息界面-完成注册']={0xffffff, "-315|-43|0xfe7d46,270|42|0xff4971",90,59,1085,711,1252} --多点找色
 
+
+
+
+t['tips_协议更新提示']={ 0x037aff, "-37|-4|0x037aff,-44|-4|0xffffff,-163|-187|0x268dff,-35|-301|0x000000,-24|-300|0x000000", 90, 139, 477, 618, 854 } --多点找色
 --错误信息
 t['已经注册-世纪侍缘']={0xff7e6a, "-444|-308|0xff4e56,-107|-170|0xfef6fb,-293|-141|0xff8989",90,4,43,659,503} --多点找色
 t['已经注册-免费打招呼']={0xff6e1d, "-251|-40|0xff6e1d,242|-36|0xff6e1d,249|41|0xff6e1d,-76|2|0xffffff,250|-869|0xffffff",90,62,96,669,1132} --多点找色
@@ -153,6 +166,7 @@ function reg()
 --					return true
 				end
 				
+			
 			elseif d('基本信息界面') or d('基本信息界面ios10')then
 				d('基本信息界面-随机昵称',true,1)
 				click(633,292)
@@ -165,6 +179,8 @@ function reg()
 				dxcode.addBlack()
 				up('注册过拉黑')
 				return false
+			else
+				d('tips_协议更新提示',true)
 			end
 		end
 		
